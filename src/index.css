@@ -1,0 +1,396 @@
+:root {
+  /* Duolingo Official & Functional Design Tokens */
+  --duo-green: #58CC02;
+  --duo-green-shadow: #46A302;
+  --duo-green-soft: #D7FFB8;
+  --duo-green-text: #46A302;
+
+  --duo-blue: #1CB0F6;
+  --duo-blue-shadow: #168CC5;
+  --duo-blue-soft: #DDF4FF;
+  --duo-blue-text: #168CC5;
+
+  --duo-red: #FF4B4B;
+  --duo-red-shadow: #D33131;
+  --duo-red-soft: #FFDADA;
+  --duo-red-text: #D33131;
+
+  --duo-yellow: #FFC800;
+  --duo-yellow-shadow: #D7A900;
+  --duo-yellow-soft: #FFF5C2;
+
+  --duo-orange: #FF9600;
+  --duo-orange-shadow: #D67E00;
+  --duo-orange-soft: #FFE3BA;
+
+  --duo-purple: #CE82FF;
+  --duo-purple-shadow: #A85ED6;
+  --duo-purple-soft: #F3E1FF;
+
+  --duo-eel: #4B4B4B;
+  --duo-wolf: #777777;
+  --duo-hare: #AFAFAF;
+  --duo-swan: #E5E5E5;
+  --duo-polar: #F7F7F7;
+  --duo-snow: #FFFFFF;
+
+  /* Semantic UI Tokens */
+  --bg-main: #FFFFFF;
+  --bg-subtle: #F7F7F7;
+  --card-bg: #FFFFFF;
+  --card-border: #E5E5E5;
+  --card-border-hover: #CBCBCB;
+
+  --text-primary: #4B4B4B;
+  --text-secondary: #777777;
+  --text-muted: #AFAFAF;
+
+  /* Typography */
+  --font-sans: 'Nunito', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Radii */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-instant: 90ms ease;
+  --transition-fast: 160ms ease;
+  --transition-normal: 240ms ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+}
+
+/* Custom Minimalist & Clearly Visible Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F7F7;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBCBCB;
+  border-radius: 6px;
+  border: 2px solid #F7F7F7;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #AFAFAF;
+}
+
+/* =========================================================
+   DUOLINGO 3D BUTTONS
+   ========================================================= */
+.duo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 90ms ease, box-shadow 90ms ease, filter 120ms ease;
+}
+
+.duo-btn:active:not(:disabled) {
+  transform: translateY(4px);
+}
+
+/* Primary Green (Feather) */
+.duo-btn-primary {
+  background: var(--duo-green);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 var(--duo-green-shadow);
+}
+.duo-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+.duo-btn-primary:active:not(:disabled) {
+  box-shadow: 0 1px 0 var(--duo-green-shadow);
+}
+
+/* Secondary Blue (Macaw) */
+.duo-btn-blue {
+  background: var(--duo-blue);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 var(--duo-blue-shadow);
+}
+.duo-btn-blue:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+.duo-btn-blue:active:not(:disabled) {
+  box-shadow: 0 1px 0 var(--duo-blue-shadow);
+}
+
+/* Secondary White Outline */
+.duo-btn-secondary {
+  background: #FFFFFF;
+  color: var(--duo-blue);
+  border: 2px solid var(--duo-swan);
+  box-shadow: 0 4px 0 var(--duo-swan);
+}
+.duo-btn-secondary:hover:not(:disabled) {
+  background: var(--duo-polar);
+}
+.duo-btn-secondary:active:not(:disabled) {
+  box-shadow: 0 1px 0 var(--duo-swan);
+}
+
+/* Danger Red (Cardinal) */
+.duo-btn-danger {
+  background: var(--duo-red);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 var(--duo-red-shadow);
+}
+.duo-btn-danger:active:not(:disabled) {
+  box-shadow: 0 1px 0 var(--duo-red-shadow);
+}
+
+/* Golden Yellow (Bee) */
+.duo-btn-yellow {
+  background: var(--duo-yellow);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 var(--duo-yellow-shadow);
+}
+.duo-btn-yellow:active:not(:disabled) {
+  box-shadow: 0 1px 0 var(--duo-yellow-shadow);
+}
+
+/* Purple Special */
+.duo-btn-purple {
+  background: var(--duo-purple);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 var(--duo-purple-shadow);
+}
+.duo-btn-purple:active:not(:disabled) {
+  box-shadow: 0 1px 0 var(--duo-purple-shadow);
+}
+
+/* Disabled */
+.duo-btn:disabled {
+  background: #E5E5E5 !important;
+  color: #AFAFAF !important;
+  box-shadow: 0 5px 0 #CBCBCB !important;
+  cursor: not-allowed;
+  transform: none !important;
+  filter: none !important;
+}
+
+/* =========================================================
+   DUOLINGO ANSWER CARDS (Physical selectable tiles)
+   ========================================================= */
+.duo-option-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  padding: 12px 18px;
+  background: #FFFFFF;
+  border: 2px solid var(--duo-swan);
+  border-bottom-width: 4px;
+  border-radius: var(--radius-md);
+  color: var(--duo-eel);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 90ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.duo-option-card:hover:not(.locked) {
+  background: var(--duo-polar);
+}
+
+.duo-option-card:active:not(.locked) {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.duo-option-card.selected {
+  background: var(--duo-blue-soft);
+  border-color: var(--duo-blue);
+  color: var(--duo-blue-text);
+}
+
+.duo-option-card.correct {
+  background: var(--duo-green-soft) !important;
+  border-color: var(--duo-green) !important;
+  color: var(--duo-green-text) !important;
+}
+
+.duo-option-card.wrong {
+  background: var(--duo-red-soft) !important;
+  border-color: var(--duo-red) !important;
+  color: var(--duo-red-text) !important;
+  animation: shakeLight 0.3s ease-in-out;
+}
+
+.duo-option-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 2px solid var(--duo-swan);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--duo-wolf);
+  background: #FFFFFF;
+}
+
+.duo-option-card.selected .duo-option-letter {
+  border-color: var(--duo-blue);
+  color: var(--duo-blue);
+  background: #FFFFFF;
+}
+
+.duo-option-card.correct .duo-option-letter {
+  border-color: var(--duo-green);
+  color: var(--duo-green);
+}
+
+.duo-option-card.wrong .duo-option-letter {
+  border-color: var(--duo-red);
+  color: var(--duo-red);
+}
+
+/* Code Tiles */
+.duo-code-tile {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  background: #FFFFFF;
+  border: 2px solid var(--duo-swan);
+  border-bottom-width: 4px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--duo-eel);
+  cursor: pointer;
+  transition: transform 90ms ease, background 120ms ease;
+}
+
+.duo-code-tile:hover {
+  background: var(--duo-polar);
+}
+
+.duo-code-tile:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.duo-code-tile.placed {
+  background: var(--duo-polar);
+  color: var(--duo-wolf);
+  border-color: #E0E0E0;
+  cursor: default;
+}
+
+/* =========================================================
+   DUOLINGO PROGRESS BAR
+   ========================================================= */
+.duo-progress-bar {
+  flex: 1;
+  height: 16px;
+  background: #E5E5E5;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.duo-progress-fill {
+  height: 100%;
+  background: var(--duo-green);
+  border-radius: inherit;
+  transition: width 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+}
+
+.duo-progress-fill::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 8px;
+  right: 8px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+@keyframes popIn {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes shakeLight {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(88, 204, 2, 0)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(88, 204, 2, 0.5)); }
+}
+
+.animate-pop {
+  animation: popIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.26s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.animate-shake {
+  animation: shakeLight 0.3s ease-in-out;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
