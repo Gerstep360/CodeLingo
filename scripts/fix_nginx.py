@@ -147,22 +147,28 @@ def main():
                 modified = True
         new_lines = final_lines
 
+    # Limpiar cualquier archivo de respaldo previo en sites-enabled o conf.d
+    run_cmd("sudo rm -f /etc/nginx/sites-enabled/*.bak* /etc/nginx/conf.d/*.bak* /etc/nginx/sites-available/*.bak*")
+
+    # Resolver enlace simbólico a la ruta real
+    real_target_file = os.path.realpath(target_file)
+    backup_file = os.path.join("/tmp", os.path.basename(real_target_file) + ".bak_codelingo")
+
     if modified:
-        backup_file = target_file + ".bak_codelingo"
         with open(backup_file, "w") as bf:
             bf.write(full_text)
-        with open(target_file, "w") as out_f:
+        with open(real_target_file, "w") as out_f:
             out_f.writelines(new_lines)
-        print(f"  \033[38;5;82m[OK]\033[0m Archivo {target_file} modificado con éxito (Backup en {backup_file})")
+        print(f"  \033[38;5;82m[OK]\033[0m Archivo {real_target_file} modificado con éxito (Backup seguro en {backup_file})")
     else:
-        print(f"  \033[38;5;82m[OK]\033[0m El archivo {target_file} ya contiene la configuración de CodeLingo.")
+        print(f"  \033[38;5;82m[OK]\033[0m El archivo {real_target_file} ya contiene la configuración de CodeLingo.")
 
     # 4. Probar configuración
     rc, stdout, stderr = run_cmd("sudo nginx -t")
     if rc != 0:
         print(f"  \033[38;5;196m[FALLO]\033[0m Sintaxis Nginx inválida:\n{stderr}")
-        if os.path.exists(target_file + ".bak_codelingo"):
-            run_cmd(f"sudo cp {target_file}.bak_codelingo {target_file}")
+        if os.path.exists(backup_file):
+            run_cmd(f"sudo cp {backup_file} {real_target_file}")
             print("  Cambios revertidos al respaldo.")
         sys.exit(1)
 
