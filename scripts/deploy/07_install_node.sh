@@ -34,7 +34,7 @@ echo -e "  ${Y}[--] No se encontro Node.js funcional. Procediendo con instalacio
 # Ventajas: No toca apt, no sufre por bloqueos de dpkg/unattended-upgrades, se instala en 5 segundos.
 NODE_VERSION="v20.18.0"
 ARCH="linux-x64"
-TARBALL="node-${NODE_VERSION}-${ARCH}.tar.xz"
+TARBALL="node-${NODE_VERSION}-${ARCH}.tar.gz"
 URL="https://nodejs.org/dist/${NODE_VERSION}/${TARBALL}"
 
 echo -e "  • Descargando paquete oficial directo (${NODE_VERSION} LTS para ${ARCH})..."
@@ -43,10 +43,10 @@ mkdir -p /tmp/codelingo_node
     set -e
     cd /tmp/codelingo_node
     if ! curl -fsSL -m 60 "$URL" -o "$TARBALL"; then
-        echo "Error al descargar desde nodejs.org, intentando mirror alternativo..." >&2
+        echo "Mirror alternativo..." >&2
         curl -fsSL -m 60 "https://unofficial-builds.nodejs.org/download/release/${NODE_VERSION}/${TARBALL}" -o "$TARBALL"
     fi
-    tar -xJf "$TARBALL" --strip-components=1 -C /usr/local
+    sudo tar -xzf "$TARBALL" --strip-components=1 -C /usr/local
 ) > /tmp/node_install.log 2>&1 &
 local_pid=$!
 
