@@ -90,7 +90,7 @@ EOF
 
     # 5. Activar configuracion en Nginx
     echo -e "\n${Y}--- [5/5] Asegurando configuracion en Nginx ---${NC}"
-    bash "$(dirname "${BASH_SOURCE[0]}")/03_nginx_config.sh" --silent || true
+    bash "$(dirname "${BASH_SOURCE[0]}")/03_nginx_config.sh" || true
 
     echo -e "\n${G}+--------------------------------------------------------------------------+${NC}"
     echo -e "${G}|  [OK] DESPLIEGUE FINALIZADO CON EXITO                                    |${NC}"

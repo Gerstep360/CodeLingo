@@ -18,6 +18,12 @@ main() {
         echo -e "\n${B}=== [Modulo 03: Configuracion Inteligente Nginx para /CodeLingo] ===${NC}"
     fi
 
+    # Si python3 está disponible, usar el script de reparación quirúrgica
+    if command -v python3 >/dev/null 2>&1 && [ -f "$SCRIPT_DIR/scripts/fix_nginx.py" ]; then
+        sudo python3 "$SCRIPT_DIR/scripts/fix_nginx.py"
+        return $?
+    fi
+
     # 1. Copiar snippet actualizado
     sudo mkdir -p /etc/nginx/snippets
     sudo cp "$SCRIPT_DIR/nginx-codelingo.conf" "$SNIPPET_DEST"
