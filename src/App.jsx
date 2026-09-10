@@ -284,6 +284,20 @@ export function App() {
           display: flex;
           min-height: 0;
         }
+
+        @media (max-width: 768px) {
+          .duo-app-wrapper {
+            flex-direction: column;
+          }
+
+          .duo-center-scrollable {
+            padding-bottom: 74px; /* clearance for mobile bottom nav */
+          }
+
+          .duo-main-viewport {
+            min-height: calc(100vh - 54px);
+          }
+        }
       `}</style>
     </div>
   );

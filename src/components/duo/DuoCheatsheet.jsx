@@ -505,8 +505,35 @@ for (int q=j; q<M[0].length; q++)
         }
 
         @media (max-width: 640px) {
+          .duo-cheatsheet-container {
+            padding: 16px 12px 100px;
+            gap: 20px;
+          }
+
+          .cheatsheet-banner {
+            padding: 16px;
+          }
+
+          .banner-title {
+            font-size: 19px;
+          }
+
           .phrases-grid {
             grid-template-columns: 1fr;
+          }
+
+          .algo-accordion-item {
+            padding: 14px;
+          }
+
+          .item-header {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+          }
+
+          .btn-copy-code {
+            align-self: flex-start;
           }
         }
       `}</style>

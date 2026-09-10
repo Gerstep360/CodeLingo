@@ -5,13 +5,13 @@ import {
   RotateCcw,
   Clock,
   Sparkles,
-  Award,
   Zap,
   CheckCircle2,
   AlertTriangle,
   Download,
-  Upload,
-  Code2
+  Code2,
+  Compass,
+  X
 } from 'lucide-react';
 import { DuoFlameIcon } from './DuoIcons';
 import { CodeOutlineSidebar } from '../CodeOutlineSidebar';
@@ -34,12 +34,19 @@ export function DuoExamMode({
   onOpenCustomModal
 }) {
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
+  const [isOutlineOpen, setIsOutlineOpen] = useState(false);
   const timeOptions = [15, 30, 45, 60];
+
+  const handleSelectFunctionAndCloseMobile = (fn) => {
+    onSelectOutlineFunction(fn);
+    setIsOutlineOpen(false);
+  };
 
   return (
     <div className="duo-exam-page">
       {/* 1. Duolingo 3D Control Header */}
       <header className="duo-exam-header">
+        {/* Left Section: Timer + Start/Pause */}
         <div className="exam-header-left">
           {/* Big 3D Play/Pause Button */}
           <button
@@ -47,8 +54,8 @@ export function DuoExamMode({
             className={`duo-btn ${timer.isRunning ? 'duo-btn-danger' : 'duo-btn-primary'} btn-timer-toggle`}
             onClick={() => (timer.isRunning ? timer.pause() : timer.start())}
           >
-            {timer.isRunning ? <Pause size={18} /> : <Play size={18} fill="#FFFFFF" />}
-            <span>{timer.isRunning ? 'PAUSAR' : 'INICIAR EXAMEN'}</span>
+            {timer.isRunning ? <Pause size={17} /> : <Play size={17} fill="#FFFFFF" />}
+            <span className="btn-timer-label">{timer.isRunning ? 'PAUSAR' : 'INICIAR EXAMEN'}</span>
           </button>
 
           {/* 3D Physical Timer Display */}
@@ -113,15 +120,29 @@ export function DuoExamMode({
           </div>
         </div>
 
-        {/* Right: Exam Mode Switch & Backup Export */}
+        {/* Right: Actions & Toggles */}
         <div className="exam-header-right">
+          {/* Outline Toggle for Mobile & Compact screens */}
+          <button
+            type="button"
+            className={`duo-btn ${isOutlineOpen ? 'duo-btn-primary' : 'duo-btn-secondary'} btn-outline-toggle`}
+            onClick={() => setIsOutlineOpen(!isOutlineOpen)}
+            title="Navegar entre algoritmos y funciones"
+          >
+            <Compass size={15} />
+            <span className="btn-label-text">
+              {isOutlineOpen ? 'Ocultar' : 'Funciones'} ({engine.outlineFunctions?.length || 0})
+            </span>
+          </button>
+
           <button
             type="button"
             className={`duo-btn ${isExamMode ? 'duo-btn-danger' : 'duo-btn-secondary'} btn-mode-toggle`}
             onClick={() => onToggleExamMode(!isExamMode)}
           >
-            <Sparkles size={16} />
-            <span>{isExamMode ? 'MODO EXAMEN (A CIEGAS)' : 'MODO GUÍA (FANTASMA)'}</span>
+            <Sparkles size={15} />
+            <span className="mode-label-desktop">{isExamMode ? 'MODO EXAMEN (A CIEGAS)' : 'MODO GUÍA (FANTASMA)'}</span>
+            <span className="mode-label-mobile">{isExamMode ? 'EXAMEN' : 'GUÍA'}</span>
           </button>
 
           <button
@@ -130,8 +151,8 @@ export function DuoExamMode({
             onClick={duoStorage.exportBackup}
             title="Exportar copia de seguridad en JSON para llevar a la nube"
           >
-            <Download size={15} />
-            <span>Respaldar</span>
+            <Download size={14} />
+            <span className="btn-label-text">Respaldar</span>
           </button>
         </div>
       </header>
@@ -140,17 +161,17 @@ export function DuoExamMode({
       <div className="duo-metrics-bar">
         <div className="duo-metric-card">
           <div className="m-icon-wrap blue">
-            <Zap size={20} color="#FFFFFF" />
+            <Zap size={18} color="#FFFFFF" />
           </div>
           <div className="m-info">
             <span className="m-val">{engine.wpm}</span>
-            <span className="m-label">PALABRAS/MIN (WPM)</span>
+            <span className="m-label">PALABRAS/MIN</span>
           </div>
         </div>
 
         <div className="duo-metric-card">
           <div className="m-icon-wrap green">
-            <CheckCircle2 size={20} color="#FFFFFF" />
+            <CheckCircle2 size={18} color="#FFFFFF" />
           </div>
           <div className="m-info">
             <span className="m-val">{engine.accuracy}%</span>
@@ -160,7 +181,7 @@ export function DuoExamMode({
 
         <div className="duo-metric-card">
           <div className="m-icon-wrap red">
-            <AlertTriangle size={20} color="#FFFFFF" />
+            <AlertTriangle size={18} color="#FFFFFF" />
           </div>
           <div className="m-info">
             <span className="m-val">{engine.totalErrors}</span>
@@ -170,49 +191,68 @@ export function DuoExamMode({
 
         <div className="duo-metric-card">
           <div className="m-icon-wrap orange">
-            <DuoFlameIcon size={22} color="#FFFFFF" />
+            <DuoFlameIcon size={20} color="#FFFFFF" />
           </div>
           <div className="m-info">
             <span className="m-val">{engine.streak}</span>
-            <span className="m-label">RACHA DE TECLAS</span>
+            <span className="m-label">RACHA TECLAS</span>
           </div>
         </div>
       </div>
 
       {/* 3. Single Unified IDE Workspace */}
       <div className="duo-ide-workspace-frame">
-        <CodeOutlineSidebar
-          outlineFunctions={engine.outlineFunctions}
-          activeFunction={activeFunctionName}
-          onSelectFunction={onSelectOutlineFunction}
-        />
+        {/* Desktop or Toggled Outline Sidebar */}
+        <div className={`outline-drawer-wrapper ${isOutlineOpen ? 'drawer-open' : 'drawer-closed'}`}>
+          <div className="drawer-mobile-header">
+            <div className="drawer-title-box">
+              <Compass size={16} color="var(--duo-blue)" />
+              <span>Navegador de Algoritmos</span>
+            </div>
+            <button
+              type="button"
+              className="btn-close-drawer"
+              onClick={() => setIsOutlineOpen(false)}
+            >
+              <X size={16} />
+            </button>
+          </div>
+          <CodeOutlineSidebar
+            outlineFunctions={engine.outlineFunctions}
+            activeFunction={activeFunctionName}
+            onSelectFunction={handleSelectFunctionAndCloseMobile}
+          />
+        </div>
 
-        <CodeEditor
-          targetCode={engine.targetCode}
-          parsedStructure={engine.parsedStructure}
-          typedChars={engine.typedChars}
-          textBeforeCursor={engine.textBeforeCursor}
-          currentIndex={engine.currentIndex}
-          closingStack={engine.closingStack}
-          streak={engine.streak}
-          maxStreak={engine.maxStreak}
-          comboMultiplier={engine.comboMultiplier}
-          comboTierName={engine.comboTierName}
-          comboColor={engine.comboColor}
-          comboEvent={engine.comboEvent}
-          isExamMode={isExamMode}
-          isCompleted={engine.isCompleted}
-          onKeyDown={engine.handleKeyDown}
-          onPasteText={engine.handlePasteText}
-          onInsertText={engine.handleInsertText}
-          snippetTitle={currentSnippet.title}
-          snippetFileName={currentSnippet.fileName || 'Examen1.java'}
-          snippetFilePath={currentSnippet.filePath || 'src/assets/AI/Primer Parcial/Examen1.java'}
-          snippetDescription={currentSnippet.description}
-          snippetCategory={currentSnippet.category}
-          jumpToLineIdx={jumpToLineIdx}
-          onReloadFile={onReloadFile}
-        />
+        {/* The IDE Editor */}
+        <div className="editor-frame-wrapper">
+          <CodeEditor
+            targetCode={engine.targetCode}
+            parsedStructure={engine.parsedStructure}
+            typedChars={engine.typedChars}
+            textBeforeCursor={engine.textBeforeCursor}
+            currentIndex={engine.currentIndex}
+            closingStack={engine.closingStack}
+            streak={engine.streak}
+            maxStreak={engine.maxStreak}
+            comboMultiplier={engine.comboMultiplier}
+            comboTierName={engine.comboTierName}
+            comboColor={engine.comboColor}
+            comboEvent={engine.comboEvent}
+            isExamMode={isExamMode}
+            isCompleted={engine.isCompleted}
+            onKeyDown={engine.handleKeyDown}
+            onPasteText={engine.handlePasteText}
+            onInsertText={engine.handleInsertText}
+            snippetTitle={currentSnippet.title}
+            snippetFileName={currentSnippet.fileName || 'Examen1.java'}
+            snippetFilePath={currentSnippet.filePath || 'src/assets/AI/Primer Parcial/Examen1.java'}
+            snippetDescription={currentSnippet.description}
+            snippetCategory={currentSnippet.category}
+            jumpToLineIdx={jumpToLineIdx}
+            onReloadFile={onReloadFile}
+          />
+        </div>
       </div>
 
       <style>{`
@@ -236,19 +276,21 @@ export function DuoExamMode({
           border-radius: var(--radius-lg);
           padding: 12px 18px;
           box-shadow: 0 4px 0 var(--duo-swan);
-          gap: 16px;
+          gap: 12px;
           flex-wrap: wrap;
         }
 
         .exam-header-left {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
+          flex-wrap: wrap;
         }
 
         .btn-timer-toggle {
-          min-width: 160px;
-          min-height: 44px;
+          min-width: 140px;
+          min-height: 42px;
+          padding: 0 14px;
         }
 
         .timer-pill-wrap {
@@ -262,10 +304,10 @@ export function DuoExamMode({
           background: var(--duo-polar);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-md);
-          padding: 8px 14px;
+          padding: 8px 12px;
           cursor: pointer;
           font-family: var(--font-mono);
-          font-size: 15px;
+          font-size: 14px;
           font-weight: 800;
           color: var(--duo-eel);
           box-shadow: 0 3px 0 var(--duo-swan);
@@ -278,22 +320,22 @@ export function DuoExamMode({
         }
 
         .timer-unit {
-          font-size: 12px;
+          font-size: 11px;
           color: var(--duo-wolf);
           font-family: var(--font-sans);
         }
 
         .duo-timer-dropdown {
           position: absolute;
-          top: 48px;
+          top: 46px;
           left: 0;
           background: #FFFFFF;
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-md);
           box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-          padding: 10px;
+          padding: 8px;
           z-index: 60;
-          width: 220px;
+          width: 210px;
           display: flex;
           flex-direction: column;
           gap: 6px;
@@ -311,7 +353,7 @@ export function DuoExamMode({
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 8px 10px;
+          padding: 7px 9px;
           border-radius: 8px;
           border: 1px solid transparent;
           background: transparent;
@@ -341,23 +383,24 @@ export function DuoExamMode({
         }
 
         .btn-icon-reset {
-          min-height: 44px;
-          padding: 0 14px;
+          min-height: 42px;
+          padding: 0 12px;
         }
 
         .exam-header-center {
           flex: 1;
+          min-width: 200px;
           max-width: 420px;
         }
 
         .duo-snippet-select-box {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
           background: var(--duo-polar);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-md);
-          padding: 4px 12px;
+          padding: 4px 10px;
           box-shadow: 0 2px 0 var(--duo-swan);
         }
 
@@ -377,40 +420,53 @@ export function DuoExamMode({
         .exam-header-right {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .btn-outline-toggle {
+          min-height: 42px;
+          font-size: 12px;
+          padding: 0 12px;
         }
 
         .btn-mode-toggle {
-          min-height: 44px;
+          min-height: 42px;
           font-size: 12px;
+          padding: 0 12px;
+        }
+
+        .mode-label-mobile {
+          display: none;
         }
 
         .btn-export-backup {
-          min-height: 44px;
+          min-height: 42px;
           font-size: 12px;
+          padding: 0 12px;
         }
 
         /* Metrics Bar */
         .duo-metrics-bar {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 14px;
+          gap: 12px;
         }
 
         .duo-metric-card {
           background: #FFFFFF;
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
-          padding: 14px 18px;
+          padding: 12px 14px;
           box-shadow: 0 4px 0 var(--duo-swan);
           display: flex;
           align-items: center;
-          gap: 14px;
+          gap: 12px;
         }
 
         .m-icon-wrap {
-          width: 40px;
-          height: 40px;
+          width: 36px;
+          height: 36px;
           border-radius: var(--radius-md);
           display: flex;
           align-items: center;
@@ -429,7 +485,7 @@ export function DuoExamMode({
         }
 
         .m-val {
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 900;
           color: var(--duo-eel);
           line-height: 1.1;
@@ -447,17 +503,155 @@ export function DuoExamMode({
         .duo-ide-workspace-frame {
           flex: 1;
           display: flex;
+          position: relative;
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           overflow: hidden;
           box-shadow: 0 4px 0 var(--duo-swan);
           background: #FFFFFF;
-          min-height: 580px;
+          min-height: 540px;
         }
 
+        .drawer-mobile-header {
+          display: none;
+        }
+
+        .outline-drawer-wrapper {
+          display: flex;
+          transition: all 200ms ease;
+        }
+
+        .editor-frame-wrapper {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+          height: 100%;
+        }
+
+        /* Tablet & Mobile Responsiveness (< 900px) */
         @media (max-width: 900px) {
           .duo-metrics-bar {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          /* Outline drawer on smaller screens turns into toggleable panel */
+          .outline-drawer-wrapper.drawer-closed {
+            display: none;
+          }
+
+          .outline-drawer-wrapper.drawer-open {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 290px;
+            max-width: 85vw;
+            z-index: 50;
+            background: #FFFFFF;
+            border-right: 2px solid var(--duo-swan);
+            box-shadow: 4px 0 16px rgba(0,0,0,0.15);
+          }
+
+          .drawer-mobile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--duo-polar);
+            border-bottom: 1px solid var(--duo-swan);
+            font-weight: 800;
+            font-size: 13px;
+            color: var(--duo-eel);
+          }
+
+          .drawer-title-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          .btn-close-drawer {
+            background: transparent;
+            border: none;
+            color: var(--duo-wolf);
+            cursor: pointer;
+            padding: 4px;
+          }
+        }
+
+        /* Mobile (< 640px) */
+        @media (max-width: 640px) {
+          .duo-exam-page {
+            padding: 10px 10px 80px;
+            gap: 10px;
+          }
+
+          .duo-exam-header {
+            padding: 10px 12px;
+            gap: 10px;
+          }
+
+          .exam-header-left {
+            width: 100%;
+            justify-content: space-between;
+          }
+
+          .btn-timer-toggle {
+            flex: 1;
+            min-width: 120px;
+          }
+
+          .exam-header-center {
+            width: 100%;
+            max-width: 100%;
+          }
+
+          .exam-header-right {
+            width: 100%;
+            justify-content: space-between;
+          }
+
+          .btn-outline-toggle, .btn-mode-toggle, .btn-export-backup {
+            flex: 1;
+            justify-content: center;
+            padding: 0 8px;
+          }
+
+          .mode-label-desktop {
+            display: none;
+          }
+
+          .mode-label-mobile {
+            display: inline;
+          }
+
+          .duo-metrics-bar {
+            gap: 8px;
+          }
+
+          .duo-metric-card {
+            padding: 8px 10px;
+            gap: 8px;
+          }
+
+          .m-icon-wrap {
+            width: 30px;
+            height: 30px;
+          }
+
+          .m-val {
+            font-size: 17px;
+          }
+
+          .m-label {
+            font-size: 9px;
+          }
+
+          .duo-ide-workspace-frame {
+            min-height: 480px;
           }
         }
       `}</style>

@@ -301,6 +301,33 @@ export function DuoLearningPath({ completedNodeIds = [], activeNodeId = 'node-1-
           min-height: 44px;
           font-size: 14px;
         }
+
+        @media (max-width: 640px) {
+          .duo-learning-path {
+            padding: 16px 12px 100px;
+            gap: 32px;
+          }
+
+          .duo-unit-banner {
+            padding: 14px 16px;
+          }
+
+          .unit-title {
+            font-size: 16px;
+          }
+
+          .unit-sub {
+            font-size: 12px;
+          }
+
+          .node-tooltip-popover {
+            width: 270px;
+            max-width: calc(100vw - 32px);
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 16px;
+          }
+        }
       `}</style>
     </div>
   );

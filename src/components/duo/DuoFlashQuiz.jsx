@@ -361,6 +361,39 @@ export function DuoFlashQuiz({ onCompleteQuiz }) {
           margin-top: 10px;
           min-width: 200px;
         }
+
+        @media (max-width: 640px) {
+          .duo-flash-quiz-container {
+            padding: 16px 12px 100px;
+            gap: 16px;
+          }
+
+          .flash-quiz-banner {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 16px;
+            gap: 14px;
+          }
+
+          .banner-right-score {
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 8px 14px;
+          }
+
+          .flash-card-body {
+            padding: 20px 16px;
+            gap: 16px;
+          }
+
+          .flash-question-text {
+            font-size: 16px;
+          }
+
+          .btn-flash-action {
+            width: 100%;
+          }
+        }
       `}</style>
     </div>
   );

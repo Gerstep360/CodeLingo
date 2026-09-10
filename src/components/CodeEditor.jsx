@@ -1203,6 +1203,47 @@ export function CodeEditor({
           display: inline-block;
           width: 8.4px;
         }
+
+        @media (max-width: 680px) {
+          .editor-top-bar {
+            padding: 8px 12px;
+            gap: 6px;
+          }
+
+          .editor-file-path {
+            display: none;
+          }
+
+          .editor-category-tag {
+            display: none;
+          }
+
+          .snippet-prompt-box {
+            padding: 8px 12px;
+          }
+
+          .prompt-text {
+            font-size: 12px;
+          }
+
+          .line-number {
+            width: 34px;
+            font-size: 11px;
+            padding-right: 6px;
+          }
+
+          .line-code {
+            font-size: 12.5px;
+            line-height: 1.45;
+          }
+
+          .btn-jump-floating {
+            bottom: 20px;
+            right: 14px;
+            padding: 6px 12px;
+            font-size: 11px;
+          }
+        }
       `}</style>
     </div>
   );
