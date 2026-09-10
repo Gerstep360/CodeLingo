@@ -9,7 +9,7 @@
 
 # Variables de entorno y rutas
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TARGET_DIR="/var/www/app/CodeLingo"
+TARGET_DIR="/var/www/CodeLingo"
 SNIPPET_DEST="/etc/nginx/snippets/codelingo.conf"
 SERVER_IP="167.86.106.105"
 
@@ -200,7 +200,7 @@ print_header() {
         taji_status="[OK] Angular (taji) intacto"
     fi
 
-    local web_status="${G}[ACTIVO] Disponible en http://${SERVER_IP}/app/CodeLingo/${NC}"
+    local web_status="${G}[ACTIVO] Disponible en http://${SERVER_IP}/CodeLingo/${NC}"
     if ! is_codelingo_active; then
         web_status="${R}[APAGADO] Modo Mantenimiento (Acceso bloqueado)${NC}"
     fi
@@ -232,7 +232,7 @@ print_menu() {
     echo -e "${B}+----+---------------------------------------------------------------------+${NC}"
     echo -e "${B}|${W}  1 ${B}|${NC}  [>]  ${G}Despliegue Completo${NC} (Compilar React y activar en Nginx)         ${B}|${NC}"
     echo -e "${B}|${W}  2 ${B}|${NC}  [>]  ${CY}Actualizar desde Git${NC} (Git pull + Build + Recargar produccion)   ${B}|${NC}"
-    echo -e "${B}|${W}  3 ${B}|${NC}  [>]  ${B}Configurar Nginx${NC} (Asegurar /app/CodeLingo sin tocar taji)      ${B}|${NC}"
+    echo -e "${B}|${W}  3 ${B}|${NC}  [>]  ${B}Configurar Nginx${NC} (Asegurar /CodeLingo sin tocar taji)          ${B}|${NC}"
     echo -e "${B}|${W}  4 ${B}|${NC}  [!]  ${R}APAGAR SERVIDOR / OCULTAR WEB${NC} (Modo Mantenimiento seguro)       ${B}|${NC}"
     echo -e "${B}|${W}  5 ${B}|${NC}  [*]  ${G}ENCENDER SERVIDOR / ACTIVAR WEB${NC} (Reanudar simulador)            ${B}|${NC}"
     echo -e "${B}|${W}  6 ${B}|${NC}  [?]  ${Y}Diagnostico Integral${NC} (Verificar HTTP 200, Nginx y rutas)        ${B}|${NC}"
@@ -337,8 +337,8 @@ do_turn_off_server() {
 # ==============================================================================
 # CodeLingo - ESTADO: APAGADO / MODO MANTENIMIENTO
 # ==============================================================================
-location ^~ /app/CodeLingo {
-    alias /var/www/app/CodeLingo/dist/;
+location ^~ /CodeLingo {
+    alias /var/www/CodeLingo/dist/;
     index maintenance.html;
     try_files /maintenance.html =503;
 
@@ -352,7 +352,7 @@ EOF
         sudo systemctl reload nginx 2>/dev/null || sudo service nginx reload 2>/dev/null || true
         draw_ascii_progress "Desactivando rutas en Nginx"
         echo -e "\n${Y}[OK] CodeLingo esta ahora APAGADO y FUERA DE LINEA.${NC}"
-        echo -e "  Cualquier intento de acceso a /app/CodeLingo mostrara la pantalla de mantenimiento."
+        echo -e "  Cualquier intento de acceso a /CodeLingo mostrara la pantalla de mantenimiento."
         echo -e "  ${G}Tu aplicacion Angular (taji) en la raiz sigue funcionando sin afectacion.${NC}"
     else
         echo -e "\n${R}[FALLO] Error al recargar Nginx:${NC}"
@@ -369,17 +369,17 @@ do_turn_on_server() {
 # ==============================================================================
 # CodeLingo - ESTADO: ACTIVO / PRODUCCION
 # ==============================================================================
-location ^~ /app/CodeLingo {
-    alias /var/www/app/CodeLingo/dist/;
+location ^~ /CodeLingo {
+    alias /var/www/CodeLingo/dist/;
     index index.html;
-    try_files $uri $uri/ /app/CodeLingo/index.html;
+    try_files $uri $uri/ /CodeLingo/index.html;
 
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
 }
 
-location ^~ /app/CodeLingo/assets/ {
-    alias /var/www/app/CodeLingo/dist/assets/;
+location ^~ /CodeLingo/assets/ {
+    alias /var/www/CodeLingo/dist/assets/;
     expires 1y;
     add_header Cache-Control "public, max-age=31536000, immutable";
     access_log off;
@@ -391,7 +391,7 @@ EOF
         sudo systemctl reload nginx 2>/dev/null || sudo service nginx reload 2>/dev/null || true
         draw_ascii_progress "Reactivando rutas en Nginx"
         echo -e "\n${G}[OK] CodeLingo esta nuevamente ACTIVO y ONLINE.${NC}"
-        echo -e "  Accede en: ${B}http://$SERVER_IP/app/CodeLingo/${NC}"
+        echo -e "  Accede en: ${B}http://$SERVER_IP/CodeLingo/${NC}"
     else
         echo -e "\n${R}[FALLO] Error al recargar Nginx:${NC}"
         cat /tmp/nginx_test.log
@@ -423,8 +423,8 @@ do_full_deploy() {
         return 1
     fi
 
-    echo -e "\n${B}=== [3/5] Compilando frontend React para /app/CodeLingo/ ===${NC}"
-    export VITE_BASE_PATH="/app/CodeLingo/"
+    echo -e "\n${B}=== [3/5] Compilando frontend React para /CodeLingo/ ===${NC}"
+    export VITE_BASE_PATH="/CodeLingo/"
     npm run build > /tmp/codelingo_vite.log 2>&1 &
     local build_pid=$!
     if ! run_ascii_spinner $build_pid "Compilando modulos con Vite"; then
@@ -455,7 +455,7 @@ do_full_deploy() {
     echo -e "\n${G}+--------------------------------------------------------------------------+${NC}"
     echo -e "${G}|  [OK] DESPLIEGUE FINALIZADO CON EXITO                                    |${NC}"
     echo -e "${G}+--------------------------------------------------------------------------+${NC}"
-    echo -e "  URL Activa:    ${B}http://$SERVER_IP/app/CodeLingo/${NC}"
+    echo -e "  URL Activa:    ${B}http://$SERVER_IP/CodeLingo/${NC}"
     echo -e "  Angular taji:  ${G}Operando sin alteraciones en la raiz${NC}"
     echo ""
 }
@@ -474,7 +474,7 @@ do_git_update() {
 
     echo -e "\n${CY}=== [2/3] Recompilando aplicacion ===${NC}"
     detect_node_environment || true
-    export VITE_BASE_PATH="/app/CodeLingo/"
+    export VITE_BASE_PATH="/CodeLingo/"
     npm run build > /tmp/codelingo_vite.log 2>&1 &
     local build_pid=$!
     if ! run_ascii_spinner $build_pid "Compilando nueva version"; then
@@ -587,7 +587,7 @@ do_diagnostics() {
     echo -n "  • Test HTTP Local: "
     if command -v curl >/dev/null 2>&1; then
         local code
-        code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1/app/CodeLingo/ || true)
+        code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1/CodeLingo/ || true)
         if [ "$code" == "200" ]; then
             echo -e "${G}[OK] HTTP 200 (Respuesta exitosa)${NC}"
         else

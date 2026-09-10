@@ -29,26 +29,26 @@ Plataforma interactiva gamificada estilo **Duolingo** diseñada para desarrollar
 
 ## 📦 Despliegue en Servidor (Nginx junto a Angular)
 
-El proyecto está preparado para coexistir pacíficamente con una aplicación Angular u otros servicios en un servidor Nginx, bajo la subruta `/app/CodeLingo`.
+El proyecto está preparado para coexistir pacíficamente con una aplicación Angular u otros servicios en un servidor Nginx, bajo la subruta `/CodeLingo`.
 
 ### Despliegue Automatizado:
 ```bash
 chmod +x install.sh
-./install.sh /var/www/app/CodeLingo
+./install.sh /var/www/CodeLingo
 ```
 
 El script se encarga de:
 1. Instalar dependencias con `npm install`.
-2. Compilar los archivos con `VITE_BASE_PATH="/app/CodeLingo/" npm run build`.
-3. Copiar la carpeta `dist/` a `/var/www/app/CodeLingo`.
+2. Compilar los archivos con `VITE_BASE_PATH="/CodeLingo/" npm run build`.
+3. Copiar la carpeta `dist/` a `/var/www/CodeLingo`.
 4. Copiar la configuración de Nginx (`nginx-codelingo.conf`) y recargar el servicio sin afectar otras aplicaciones.
 
 ### Configuración Nginx (`nginx-codelingo.conf`):
 ```nginx
-location ^~ /app/CodeLingo {
-    alias /var/www/app/CodeLingo/dist;
+location ^~ /CodeLingo {
+    alias /var/www/CodeLingo/dist;
     index index.html;
-    try_files $uri $uri/ /app/CodeLingo/index.html;
+    try_files $uri $uri/ /CodeLingo/index.html;
 
     location ~* \.(?:js|css|svg|woff2?|ttf|eot|png|jpe?g|ico|webp)$ {
         expires 1y;

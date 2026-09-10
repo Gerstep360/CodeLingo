@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Star, Check, Lock, Zap, Sparkles, Play, Award, ChevronRight } from 'lucide-react';
 import { DUO_UNITS } from '../../data/duoLessonsData';
+import { DuoTrophyIcon } from './DuoIcons';
 
 export function DuoLearningPath({ completedNodeIds = [], activeNodeId = 'node-1-1', onStartLesson }) {
   const [selectedNode, setSelectedNode] = useState(null);
@@ -25,30 +26,30 @@ export function DuoLearningPath({ completedNodeIds = [], activeNodeId = 'node-1-
                 <h3 className="unit-title">{unit.title}</h3>
                 <p className="unit-sub">{unit.subtitle}</p>
               </div>
-              <div className="unit-icon-decor">
-                <Sparkles size={28} color="rgba(255,255,255,0.7)" />
+              <div className="unit-banner-icon">
+                <Sparkles size={28} color="rgba(255,255,255,0.85)" />
               </div>
             </div>
 
-            {/* Winding Nodes Path */}
+            {/* Path Nodes List */}
             <div className="duo-nodes-track">
               {unit.nodes.map((node, nodeIdx) => {
                 const isCompleted = completedNodeIds.includes(node.id);
-                const isActive = node.id === activeNodeId && !isCompleted;
-                const isUnlocked = isCompleted || node.id === activeNodeId;
-                const isLocked = !isUnlocked;
-                const xOffset = offsets[(unitIdx * 3 + nodeIdx) % offsets.length];
+                const isActive = node.id === activeNodeId;
+                const isLocked = !isCompleted && !isActive;
+                const isExam = Boolean(node.isFinalExam || node.type === 'final_exam');
+                const xOffset = offsets[nodeIdx % offsets.length];
 
                 return (
                   <div
                     key={node.id}
-                    className="duo-node-slot"
+                    className={`duo-node-slot ${isExam ? 'slot-exam' : ''}`}
                     style={{ transform: `translateX(${xOffset}px)` }}
                   >
                     {/* Node Interactive 3D Circle */}
                     <button
                       type="button"
-                      className={`duo-path-node ${isActive ? 'active animate-pulse-glow' : ''} ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''}`}
+                      className={`duo-path-node ${isActive ? 'active animate-pulse-glow' : ''} ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''} ${isExam ? 'exam-node' : ''}`}
                       onClick={() => handleNodeClick(node, isLocked)}
                       title={node.title}
                     >
@@ -58,6 +59,8 @@ export function DuoLearningPath({ completedNodeIds = [], activeNodeId = 'node-1-
                           <Check size={26} strokeWidth={3} color="#FFFFFF" />
                         ) : isLocked ? (
                           <Lock size={22} color="var(--duo-hare)" />
+                        ) : isExam ? (
+                          <DuoTrophyIcon size={28} />
                         ) : (
                           <Star size={26} fill="#FFFFFF" color="#FFFFFF" />
                         )}
@@ -65,20 +68,22 @@ export function DuoLearningPath({ completedNodeIds = [], activeNodeId = 'node-1-
 
                       {/* Floating Crown / Target ONLY on active uncompleted node */}
                       {isActive && (
-                        <div className="node-crown-badge animate-pop">
-                          <span>START</span>
+                        <div className={`node-crown-badge animate-pop ${isExam ? 'crown-exam' : ''}`}>
+                          <span>{isExam ? 'EXAMEN' : 'START'}</span>
                         </div>
                       )}
                     </button>
 
                     {/* Node Mini Title */}
-                    <span className="node-label-caption">{node.title}</span>
+                    <span className={`node-label-caption ${isExam ? 'label-exam' : ''}`}>{node.title}</span>
 
                     {/* Node Popover Modal Tooltip */}
                     {selectedNode?.id === node.id && (
                       <div className="node-tooltip-popover animate-pop">
                         <div className="popover-header">
-                          <span className="popover-badge">+{node.xp} XP</span>
+                          <span className={`popover-badge ${isExam ? 'popover-exam-badge' : ''}`}>
+                            {isExam ? `🏆 EXAMEN FINAL · +${node.xp} XP` : `+${node.xp} XP`}
+                          </span>
                           <h4 className="popover-title">{node.title}</h4>
                           <p className="popover-desc">{node.shortDesc}</p>
                         </div>
@@ -92,7 +97,7 @@ export function DuoLearningPath({ completedNodeIds = [], activeNodeId = 'node-1-
                             }}
                           >
                             <Play size={16} fill="#FFFFFF" />
-                            <span>{isCompleted ? 'PRACTICAR' : 'EMPEZAR LECCIÓN'}</span>
+                            <span>{isCompleted ? 'PRACTICAR' : isExam ? 'INICIAR EXAMEN' : 'EMPEZAR LECCIÓN'}</span>
                           </button>
                         </div>
                       </div>
@@ -243,6 +248,18 @@ export function DuoLearningPath({ completedNodeIds = [], activeNodeId = 'node-1-
           letter-spacing: 0.5px;
         }
 
+        .node-crown-badge.crown-exam {
+          color: #B58500;
+          border-color: #F59E0B;
+          box-shadow: 0 3px 0 #D97706;
+          background: #FEF3C7;
+        }
+
+        .duo-path-node.exam-node.active {
+          background: #F59E0B;
+          box-shadow: 0 7px 0 #D97706;
+        }
+
         .node-label-caption {
           font-size: 13px;
           font-weight: 800;
@@ -251,6 +268,11 @@ export function DuoLearningPath({ completedNodeIds = [], activeNodeId = 'node-1-
           max-width: 140px;
           text-align: center;
           line-height: 1.2;
+        }
+
+        .node-label-caption.label-exam {
+          color: #B45309;
+          font-weight: 900;
         }
 
         /* Popover Tooltip */

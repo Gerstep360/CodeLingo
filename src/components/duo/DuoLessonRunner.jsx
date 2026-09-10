@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
-import { X, Check, ArrowRight, Sparkles, Award, RotateCcw } from 'lucide-react';
+import { X, Check, ArrowRight, Sparkles, Award, RotateCcw, BookOpen, Copy } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { DuoPartyIcon } from './DuoIcons';
+import { DuoPartyIcon, DuoTrophyIcon } from './DuoIcons';
 import { sounds } from '../../utils/soundEffects';
 
 export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
   const exercises = node?.exercises || [];
+  const [showTheoryModal, setShowTheoryModal] = useState(Boolean(node?.theory));
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOptionIdx, setSelectedOptionIdx] = useState(null);
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const [copiedCode, setCopiedCode] = useState(false);
 
   const currentExercise = exercises[currentIdx];
   const progressPercent = Math.round(((currentIdx + (isAnswerChecked ? 1 : 0)) / exercises.length) * 100);
+
+  const handleCopyCode = (text) => {
+    navigator.clipboard.writeText(text);
+    setCopiedCode(true);
+    setTimeout(() => setCopiedCode(false), 2000);
+  };
 
   const handleSelectOption = (idx) => {
     if (isAnswerChecked) return;
@@ -50,8 +58,8 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
       sounds.playExamComplete();
       try {
         confetti({
-          particleCount: 100,
-          spread: 70,
+          particleCount: 120,
+          spread: 80,
           origin: { y: 0.6 }
         });
       } catch (err) {
@@ -62,7 +70,7 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
 
   const handleFinishAndReturn = () => {
     if (onFinishLesson) {
-      onFinishLesson(node.id, node.xp || 20);
+      onFinishLesson(node.id, node.xp || (node.isFinalExam ? 35 : 20));
     }
     onClose();
   };
@@ -83,19 +91,87 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
 
           {/* Duolingo Rounded Glossy Progress Bar */}
           <div className="duo-progress-bar">
-            <div className="duo-progress-fill" style={{ width: `${progressPercent}%` }} />
+            <div className="duo-progress-fill" style={{ width: `${showTheoryModal ? 0 : progressPercent}%` }} />
           </div>
 
+          {/* Button to Re-view Theory Class */}
+          {node.theory && !showTheoryModal && (
+            <button
+              type="button"
+              className="btn-toggle-theory"
+              onClick={() => setShowTheoryModal(true)}
+              title="Repasar la teoría de esta clase"
+            >
+              <BookOpen size={16} />
+              <span>Clase</span>
+            </button>
+          )}
+
           <span className="lesson-step-counter">
-            {currentIdx + 1}/{exercises.length}
+            {showTheoryModal ? 'Teoría' : `${currentIdx + 1}/${exercises.length}`}
           </span>
         </header>
 
-        {/* Lesson Main Question Body */}
-        {!isFinished && currentExercise && (
+        {/* 1. CLASE TEÓRICA (Aparece primero para fijar conceptos) */}
+        {showTheoryModal && node.theory && (
+          <main className="duo-lesson-main animate-pop">
+            <div className="theory-card-wrapper">
+              <div className={`theory-tag-badge ${node.isFinalExam ? 'badge-exam' : ''}`}>
+                {node.isFinalExam ? <DuoTrophyIcon size={16} /> : <BookOpen size={16} />}
+                <span>{node.isFinalExam ? 'EXAMEN FINAL DE SECCIÓN' : 'CLASE Y TEORÍA'}</span>
+              </div>
+
+              <h2 className="theory-class-title">{node.theory.title || node.title}</h2>
+              <p className="theory-concept-text">{node.theory.concept}</p>
+
+              {/* Code Example if present in Theory */}
+              {node.theory.codeExample && (
+                <div className="theory-code-box">
+                  <div className="theory-code-header">
+                    <span className="code-lang-tag">Java · Estructura de Examen</span>
+                    <button
+                      type="button"
+                      className="btn-theory-copy"
+                      onClick={() => handleCopyCode(node.theory.codeExample)}
+                    >
+                      {copiedCode ? <Check size={13} color="var(--duo-green)" /> : <Copy size={13} />}
+                      <span>{copiedCode ? 'Copiado' : 'Copiar'}</span>
+                    </button>
+                  </div>
+                  <pre><code>{node.theory.codeExample}</code></pre>
+                </div>
+              )}
+
+              {/* Golden Rule Highlight */}
+              {node.theory.goldenRule && (
+                <div className="theory-rule-box">
+                  <div className="rule-title">
+                    <Sparkles size={16} color="#EAB308" />
+                    <span>Regla de Oro de Vargas</span>
+                  </div>
+                  <p className="rule-text">{node.theory.goldenRule}</p>
+                </div>
+              )}
+
+              <button
+                type="button"
+                className="duo-btn duo-btn-primary btn-start-questions"
+                onClick={() => setShowTheoryModal(false)}
+              >
+                <span>{node.isFinalExam ? '¡COMENZAR EL EXAMEN! ➔' : 'ENTENDIDO, ¡A LAS PREGUNTAS! ➔'}</span>
+              </button>
+            </div>
+          </main>
+        )}
+
+        {/* 2. PREGUNTAS DE LA CLASE */}
+        {!showTheoryModal && !isFinished && currentExercise && (
           <main className="duo-lesson-main">
             <div className="lesson-prompt-wrap">
-              <span className="lesson-badge">{node.title}</span>
+              <div className="lesson-badge-row">
+                <span className="lesson-badge">{node.title}</span>
+                {node.isFinalExam && <span className="exam-pill-badge">Examen Final (+35 XP)</span>}
+              </div>
               <h2 className="lesson-question-title">{currentExercise.question}</h2>
             </div>
 
@@ -273,6 +349,175 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
           gap: 20px;
         }
 
+        /* Button to Reopen Theory */
+        .btn-toggle-theory {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          background: var(--duo-blue-soft);
+          color: var(--duo-blue);
+          border: 1px solid #84D8FF;
+          border-radius: 999px;
+          padding: 4px 10px;
+          font-size: 12px;
+          font-weight: 800;
+          cursor: pointer;
+          transition: transform 90ms ease;
+        }
+
+        .btn-toggle-theory:hover {
+          background: #DDF3FF;
+        }
+
+        /* Theory Card Styles */
+        .theory-card-wrapper {
+          background: #FFFFFF;
+          border: 2px solid var(--duo-swan);
+          border-radius: var(--radius-lg);
+          padding: 24px;
+          box-shadow: 0 4px 0 var(--duo-swan);
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .theory-tag-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.8px;
+          text-transform: uppercase;
+          color: var(--duo-blue);
+          background: var(--duo-blue-soft);
+          border: 1px solid #84D8FF;
+          padding: 4px 12px;
+          border-radius: 999px;
+          align-self: flex-start;
+        }
+
+        .theory-tag-badge.badge-exam {
+          color: #B58500;
+          background: var(--duo-yellow-soft);
+          border-color: #FFE58F;
+        }
+
+        .theory-class-title {
+          font-size: 24px;
+          font-weight: 900;
+          color: var(--duo-eel);
+          line-height: 1.2;
+        }
+
+        .theory-concept-text {
+          font-size: 15px;
+          font-weight: 600;
+          color: var(--duo-wolf);
+          line-height: 1.5;
+        }
+
+        .theory-code-box {
+          background: #1E293B;
+          border-radius: var(--radius-md);
+          overflow: hidden;
+          box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .theory-code-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 8px 14px;
+          background: #0F172A;
+          border-bottom: 1px solid #334155;
+        }
+
+        .code-lang-tag {
+          font-size: 11px;
+          font-weight: 800;
+          color: #94A3B8;
+        }
+
+        .btn-theory-copy {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          background: rgba(255,255,255,0.1);
+          color: #E2E8F0;
+          border: 1px solid #475569;
+          border-radius: 6px;
+          padding: 2px 8px;
+          font-size: 11px;
+          cursor: pointer;
+        }
+
+        .btn-theory-copy:hover {
+          background: rgba(255,255,255,0.2);
+        }
+
+        .theory-code-box pre {
+          padding: 14px 16px;
+          margin: 0;
+          overflow-x: auto;
+          color: #F8FAFC;
+          font-family: var(--font-mono);
+          font-size: 13px;
+          line-height: 1.5;
+        }
+
+        .theory-rule-box {
+          background: var(--duo-yellow-soft);
+          border: 2px solid #FFE58F;
+          border-radius: var(--radius-md);
+          padding: 14px 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .rule-title {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          font-weight: 900;
+          color: #946C00;
+          text-transform: uppercase;
+        }
+
+        .rule-text {
+          font-size: 13px;
+          font-weight: 700;
+          color: #594200;
+          line-height: 1.4;
+          margin: 0;
+        }
+
+        .btn-start-questions {
+          width: 100%;
+          min-height: 48px;
+          font-size: 15px;
+          margin-top: 8px;
+        }
+
+        .lesson-badge-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 8px;
+        }
+
+        .exam-pill-badge {
+          font-size: 11px;
+          font-weight: 900;
+          background: var(--duo-yellow-soft);
+          color: #946C00;
+          border: 1px solid #FFE58F;
+          padding: 3px 8px;
+          border-radius: 999px;
+        }
+
         .lesson-badge {
           display: inline-block;
           font-size: 11px;
@@ -284,7 +529,6 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
           padding: 3px 10px;
           border-radius: 999px;
           border: 1px solid #BEE7FF;
-          margin-bottom: 8px;
         }
 
         .lesson-question-title {
