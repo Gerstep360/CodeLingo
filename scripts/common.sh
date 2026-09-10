@@ -106,12 +106,31 @@ is_codelingo_active() {
 # 3. SPINNERS Y BARRAS DE PROGRESO ASCII (CON TIMEOUT PARA EVITAR BUCLES)
 # ------------------------------------------------------------------------------
 run_ascii_spinner() {
-    local pid=$1
-    local label=$2
-    local timeout_secs=${3:-90} # Timeout maximo por defecto 90s
+    local pid="$1"
+    local label="$2"
+    local timeout_secs="${3:-90}" # Timeout maximo por defecto 90s
     local spin_chars=('/' '-' '\' '|')
     local i=0
     local elapsed=0
+
+    # Si no se paso un PID numerico valido
+    if [ -z "$pid" ] || [[ ! "$pid" =~ ^[0-9]+$ ]]; then
+        printf "\r  ${R}[FALLO]${NC} %-32s (PID no valido: '%s')\n" "$label" "$pid"
+        return 1
+    fi
+
+    # Si el proceso ya finalizo instantaneamente
+    if ! kill -0 "$pid" 2>/dev/null; then
+        wait "$pid" 2>/dev/null || true
+        local exit_code=$?
+        if [ $exit_code -eq 0 ]; then
+            printf "\r  ${G}[OK]${NC} %-32s            \n" "$label"
+            return 0
+        else
+            printf "\r  ${R}[FALLO]${NC} %-32s (Codigo: %d)   \n" "$label" "$exit_code"
+            return $exit_code
+        fi
+    fi
 
     while kill -0 "$pid" 2>/dev/null; do
         printf "\r  ${P}[%s]${NC} %-32s ${GRAY}(%2ds)${NC}" "${spin_chars[i]}" "$label..." "$elapsed"
@@ -128,7 +147,7 @@ run_ascii_spinner() {
         fi
     done
 
-    wait "$pid"
+    wait "$pid" 2>/dev/null || true
     local exit_code=$?
     if [ $exit_code -eq 0 ]; then
         printf "\r  ${G}[OK]${NC} %-32s            \n" "$label"
