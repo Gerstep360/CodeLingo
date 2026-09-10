@@ -1,0 +1,3 @@
+# Forzar finales de línea Unix (LF) en scripts bash para servidores Linux
+*.sh text eol=lf
+*.conf text eol=lf
