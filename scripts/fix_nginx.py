@@ -18,6 +18,9 @@ def run_cmd(cmd):
 def main():
     print("\n\033[38;5;39m=== [Diagnóstico y Reparación Quirúrgica de Nginx para CodeLingo] ===\033[0m\n")
 
+    # Limpiar inmediatamente cualquier archivo de respaldo previo para evitar colisiones
+    run_cmd("sudo rm -f /etc/nginx/sites-enabled/*.bak* /etc/nginx/conf.d/*.bak* /etc/nginx/sites-available/*.bak*")
+
     # 1. Asegurar snippet
     script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     snippet_src = os.path.join(script_dir, "nginx-codelingo.conf")
