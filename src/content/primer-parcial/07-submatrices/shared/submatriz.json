@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 2,
+  "id": "submatrices-shared-submatriz",
+  "type": "shared",
+  "title": "Obtener una SubMatriz",
+  "purpose": "Recortar de M el rectángulo comprendido entre (i,j) y (a,b).",
+  "logic": {
+    "idea": "Creo una matriz del tamaño exacto del recorte y copio desde la esquina inicial hasta la esquina final.",
+    "goldenRule": "FILAS = a-i+1; COLUMNAS = b-j+1.",
+    "mentalModel": "Recorto un rectángulo de la matriz original.",
+    "anchors": [
+      {
+        "id": "size",
+        "label": "TAMAÑO",
+        "code": "new Matriz(a-i+1,b-j+1)",
+        "memory": "final - inicio + 1"
+      },
+      {
+        "id": "rows",
+        "label": "RECORRER FILAS",
+        "code": "for(int f=i,x=0;f<=a;f++,x++)",
+        "memory": "f recorre M; x recorre R"
+      },
+      {
+        "id": "cols",
+        "label": "RECORRER COLUMNAS",
+        "code": "for(int c=j,y=0;c<=b;c++,y++)",
+        "memory": "c recorre M; y recorre R"
+      },
+      {
+        "id": "copy",
+        "label": "COPIAR",
+        "code": "R.e[x][y]=M.e[f][c];",
+        "memory": "origen M → destino R"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static Matriz subMatriz(Matriz M,int i,int j,int a,int b)",
+    "target": "static Matriz subMatriz(Matriz M,\n                        int i,int j,\n                        int a,int b){\n\n    Matriz R=\n        new Matriz(a-i+1,b-j+1);\n\n    for(int f=i,x=0;f<=a;f++,x++)\n\n        for(int c=j,y=0;c<=b;c++,y++)\n\n            R.e[x][y]=M.e[f][c];\n\n    return R;\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "submatrix-size",
+      "expected": "new Matriz(a-i+1,b-j+1)",
+      "concept": "rectangle-size",
+      "errorMessage": "El tamaño del recorte es final - inicio + 1 en filas y columnas."
+    },
+    {
+      "id": "row-copy-loop",
+      "expected": "for(int f=i,x=0;f<=a;f++,x++)",
+      "concept": "copy-rows",
+      "errorMessage": "f recorre las filas originales desde i hasta a; x empieza en 0 para R."
+    },
+    {
+      "id": "col-copy-loop",
+      "expected": "for(int c=j,y=0;c<=b;c++,y++)",
+      "concept": "copy-columns",
+      "errorMessage": "c recorre columnas originales desde j hasta b; y empieza en 0 para R."
+    },
+    {
+      "id": "copy-cell",
+      "expected": "R.e[x][y]=M.e[f][c];",
+      "concept": "copy",
+      "errorMessage": "Copias de M[f][c] hacia R[x][y]."
+    }
+  ],
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "trace": {
+    "matrix": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6
+      ],
+      [
+        7,
+        8,
+        9
+      ]
+    ],
+    "input": {
+      "i": 0,
+      "j": 1,
+      "a": 1,
+      "b": 2
+    },
+    "result": [
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        6
+      ]
+    ],
+    "steps": [
+      "Filas = 1-0+1 = 2",
+      "Columnas = 2-1+1 = 2",
+      "Creo R de 2x2",
+      "Copio M[0][1], M[0][2], M[1][1], M[1][2]",
+      "Resultado: [[2,3],[5,6]]"
+    ]
+  },
+  "fromZero": {
+    "title": "Qué representa Matriz",
+    "explanation": "Es una envoltura sencilla alrededor de int[][] para preguntar filas, columnas y elementos.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

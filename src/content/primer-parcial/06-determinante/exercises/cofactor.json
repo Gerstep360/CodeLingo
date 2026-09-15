@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 2,
+  "id": "determinante-cofactor",
+  "classId": "determinante",
+  "type": "variant",
+  "title": "Cofactor",
+  "shortTitle": "Cofactor",
+  "order": 1,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Calcula el cofactor de una posición concreta (i,j).",
+    "goldenRule": "COFACTOR = signo × det(menor).",
+    "mentalModel": "Es el corazón del determinante, pero sin multiplicar por el elemento M(i,j).",
+    "delta": [
+      {
+        "id": "single-position",
+        "type": "extract",
+        "from": "signo * elemento * det(menor)",
+        "after": "signo(i,j) * det(menor(M,i,j))",
+        "reason": "El cofactor de una posición no incluye el valor del elemento en la propia función."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static int cofactor(Matriz M,int i,int j)",
+    "target": "static int cofactor(Matriz M,int i,int j){\n\n    return signo(i,j)\n         * det(menor(M,i,j));\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "cofactor-formula",
+      "expected": "signo(i,j) * det(menor(M,i,j))",
+      "concept": "cofactor",
+      "errorMessage": "COFACTOR usa signo(i,j) × det(menor(M,i,j))."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-line",
+      "prompt": "Escribe la fórmula del cofactor.",
+      "answer": "return signo(i,j)*det(menor(M,i,j));"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Antes de memorizar esta línea, recuerda: un cofactor combina el signo de una posición con el determinante de su menor."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "signo(i,j)",
+        "menor(M,i,j)",
+        "det recursivo"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "Aquí calculamos una sola posición, no sumamos toda una fila o columna.",
+      "why": "Por eso no hay for ni acumulador."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "El cofactor de (i,j) es signo(i,j) * det(menor(M,i,j))."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

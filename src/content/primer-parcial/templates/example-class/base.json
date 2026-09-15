@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "id": "nombre-clase-base",
+  "classId": "nombre-clase",
+  "type": "base",
+  "title": "Algoritmo Base",
+  "shortTitle": "Base",
+  "requires": [
+    "./shared/auxiliar-1.json"
+  ],
+  "logic": {
+    "idea": "Qué construye o resuelve el algoritmo.",
+    "question": "Pregunta mental que te ayuda a recordar qué hace.",
+    "answer": "Respuesta corta y directa.",
+    "goldenRule": "Regla de oro de este algoritmo.",
+    "anchors": [
+      {
+        "id": "anchor-1",
+        "order": 1,
+        "label": "MEDIR / PREPARAR",
+        "memory": "Qué debes pensar aquí.",
+        "code": "linea_clave_1;"
+      },
+      {
+        "id": "anchor-2",
+        "order": 2,
+        "label": "CORTAR / CASO BASE",
+        "memory": "Qué significa esta parte.",
+        "code": "if(condicion){ ... }"
+      },
+      {
+        "id": "anchor-3",
+        "order": 3,
+        "label": "RECORRER",
+        "memory": "Cómo arranca y termina el ciclo.",
+        "code": "for(...)"
+      },
+      {
+        "id": "anchor-4",
+        "order": 4,
+        "label": "AGREGO / ELIJO",
+        "memory": "Qué agrego o qué selecciono.",
+        "code": "L.add(...);"
+      },
+      {
+        "id": "anchor-5",
+        "order": 5,
+        "label": "BAJO / RECURSIÓN",
+        "memory": "Cuál es la llamada que debes recordar.",
+        "code": "metodo(...);"
+      },
+      {
+        "id": "anchor-6",
+        "order": 6,
+        "label": "QUITO / VUELVO",
+        "memory": "Cómo regreso al estado anterior.",
+        "code": "L.removeLast();"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void metodo(parametros)",
+    "target": "PEGAR AQUÍ EL CÓDIGO CANÓNICO COMPLETO EXACTO",
+    "core": "PEGAR AQUÍ SOLO EL BLOQUE MÁS IMPORTANTE"
+  },
+  "criticalFragments": [
+    {
+      "id": "critical-1",
+      "anchor": "anchor-2",
+      "expected": "fragmento exacto esperado",
+      "concept": "concepto-del-error",
+      "errorMessage": "Explicación semántica del error."
+    },
+    {
+      "id": "critical-2",
+      "anchor": "anchor-5",
+      "expected": "llamada recursiva exacta",
+      "concept": "recursive-call",
+      "errorMessage": "Qué confundió el alumno y cómo recordarlo."
+    }
+  ],
+  "trainingSequence": [
+    "observe",
+    "trace",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "guided-typing",
+    "recall",
+    "speedrun"
+  ],
+  "trace": {
+    "input": {
+      "dato": "ejemplo pequeño"
+    },
+    "steps": [
+      "Estado inicial",
+      "Primera decisión",
+      "Llamada recursiva / siguiente paso",
+      "Resultado parcial",
+      "Retroceso / continuación"
+    ]
+  },
+  "recognitionDrills": [
+    {
+      "prompt": "Pregunta rápida de lógica.",
+      "answer": "respuesta"
+    },
+    {
+      "prompt": "Pregunta sobre la parte más fácil de confundir.",
+      "answer": "respuesta",
+      "reason": "Por qué."
+    }
+  ],
+  "masteryRules": {
+    "minimumAccuracy": 0.95,
+    "minimumSuccessfulRecalls": 2,
+    "maximumHintsForMastery": 1
+  }
+}

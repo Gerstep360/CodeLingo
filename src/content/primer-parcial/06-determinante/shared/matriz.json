@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "id": "determinante-shared-matriz",
+  "type": "shared",
+  "title": "Clase Matriz",
+  "purpose": "Representar matrices enteras y proporcionar dimensiones y acceso a elementos.",
+  "code": {
+    "language": "java",
+    "target": "static class Matriz{\n\n    int[][] e;\n\n    Matriz(int f,int c){\n        e=new int[f][c];\n    }\n\n    Matriz(int[][] e){\n        this.e=e;\n    }\n\n    int fil(){\n        return e.length;\n    }\n\n    int col(){\n        return e[0].length;\n    }\n\n    int get(int i,int j){\n        return e[i][j];\n    }\n\n    public String toString(){\n\n        String s=\"\";\n\n        for(int[] f:e){\n            for(int x:f)\n                s+=x+\" \";\n\n            s+=\"\\n\";\n        }\n\n        return s;\n    }\n}"
+  },
+  "memory": {
+    "phrase": "MATRIZ = e[][] + fil + col + get",
+    "anchors": [
+      "int[][] e",
+      "fil() = e.length",
+      "col() = e[0].length",
+      "get(i,j) = e[i][j]"
+    ]
+  },
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "fromZero": {
+    "title": "Qué representa Matriz",
+    "explanation": "Es una envoltura sencilla alrededor de int[][] para preguntar filas, columnas y elementos.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

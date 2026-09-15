@@ -1,17 +1,22 @@
 // ==============================================================================
-// RE-EXPORT DE COMPATIBILIDAD — CODELINGO CURRICULUM
+// RE-EXPORT DE COMPATIBILIDAD — CODELINGO VARGAS MODE (FASE 6)
 // ==============================================================================
-// Todos los temarios, clases y exámenes han sido organizados de forma modular en:
-// 'src/data/curriculum/'
+// Las 7 unidades oficiales del Primer Parcial se alimentan automáticamente
+// de la nueva arquitectura JSON canónica en 'src/content/ia-vargas/'
+// a través del adaptador de currículo.
 // ==============================================================================
 
 export {
   DUO_UNITS,
-  DUO_FLASH_QUIZ_QUESTIONS,
-  DUO_RECOVERY_PHRASES,
-  DUO_GOLDEN_TABLE,
   getAllNodes,
   getNodeById,
   getUnitById,
-  isFinalExamNode
+  isFinalExamNode,
+  getNodeLockStatus
+} from '../content/curriculumAdapter';
+
+export {
+  DUO_FLASH_QUIZ_QUESTIONS,
+  DUO_RECOVERY_PHRASES,
+  DUO_GOLDEN_TABLE
 } from './curriculum';

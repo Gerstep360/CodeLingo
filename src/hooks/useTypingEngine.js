@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { sounds } from '../utils/soundEffects';
 import { parseCodeComments } from '../utils/codeParser';
+import { duoStorage } from '../utils/duoStorage';
 
 const BRACKET_PAIRS = {
   '(': ')',
@@ -65,7 +66,7 @@ function advanceCursorOverAutoClosed(target, startIdx, history, nonTypeableMap, 
   return idx;
 }
 
-export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = null, onFirstKey = null) {
+export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = null, onFirstKey = null, snippetId = 'default') {
   // Parse comments, boilerplate, and structure
   const parsed = parseCodeComments(targetCode);
   const { normalized, isNonTypeableChar, getNextTypeableIndex } = parsed;
@@ -79,17 +80,33 @@ export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = 
   // Initial typeable index (starts at imports if present, or first method)
   const initialIndex = getNextTypeableIndex(0);
 
+  const savedDraft = snippetId ? duoStorage.getEditorDraft(snippetId, isExamMode) : null;
+
   // Core typing state
-  const [typedChars, setTypedChars] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const [totalErrors, setTotalErrors] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [maxStreak, setMaxStreak] = useState(0);
+  const [typedChars, setTypedChars] = useState(() => savedDraft?.typedChars || []);
+  const [currentIndex, setCurrentIndex] = useState(() => (savedDraft?.currentIndex !== undefined ? savedDraft.currentIndex : initialIndex));
+  const [totalErrors, setTotalErrors] = useState(() => savedDraft?.totalErrors || 0);
+  const [streak, setStreak] = useState(() => savedDraft?.streak || 0);
+  const [maxStreak, setMaxStreak] = useState(() => savedDraft?.maxStreak || 0);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [hasStarted, setHasStarted] = useState(() => Boolean(savedDraft?.hasStarted));
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [comboEvent, setComboEvent] = useState(null);
+
+  useEffect(() => {
+    if (!snippetId || isCompleted) return;
+    if (typedChars.length > 0) {
+      duoStorage.saveEditorDraft(snippetId, isExamMode, {
+        typedChars,
+        currentIndex,
+        totalErrors,
+        streak,
+        maxStreak,
+        hasStarted
+      });
+    }
+  }, [snippetId, isExamMode, typedChars, currentIndex, totalErrors, streak, maxStreak, hasStarted, isCompleted]);
 
   // List of functions in the code for non-linear outline jumping
   const [outlineFunctions, setOutlineFunctions] = useState([]);
@@ -188,6 +205,9 @@ export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = 
 
   // Reset engine when target code changes
   const resetEngine = useCallback((newCode = null) => {
+    if (snippetId) {
+      duoStorage.clearEditorDraft(snippetId, isExamMode);
+    }
     const code = (newCode !== null ? newCode : targetCode);
     const newParsed = parseCodeComments(code);
     const startIdx = newParsed.getNextTypeableIndex(0);
@@ -202,7 +222,7 @@ export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = 
     setStartTime(null);
     setEndTime(null);
     setComboEvent(null);
-  }, [targetCode]);
+  }, [targetCode, snippetId, isExamMode]);
 
   // Automatically reset and update typing state when targetCode changes (e.g. file edit or snippet switch)
   const prevCodeRef = useRef(targetCode);
@@ -218,9 +238,9 @@ export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = 
     const milestones = [
       { count: 10, title: '¡BUEN RITMO!', level: 1 },
       { count: 25, title: '¡GRAN RACHA!', level: 2 },
-      { count: 50, title: '¡SUPER COMBO! 🔥', level: 3 },
-      { count: 100, title: '¡MEGA FRENZY! ⚡', level: 4 },
-      { count: 150, title: '¡MODO DIOS! 👑', level: 5 }
+      { count: 50, title: '¡SUPER COMBO!', level: 3 },
+      { count: 100, title: '¡MEGA FRENZY!', level: 4 },
+      { count: 150, title: '¡MODO DIOS!', level: 5 }
     ];
 
     const match = milestones.find((m) => m.count === newStreak);
@@ -549,26 +569,10 @@ export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = 
       }
     }
 
-    // 6. TOLERANCE FOR OPTIONAL SPACE BEFORE '{'
-    if (inputChar === '{' && expectedChar === ' ' && target[currentIdx + 1] === '{') {
-      history.push({
-        char: ' ',
-        isCorrect: true,
-        expected: ' ',
-        isAutoIndented: true,
-        fromIdx: currentIdx
-      });
-      currentIdx++;
-      expectedChar = target[currentIdx];
-    }
-
-    // 7. FLEXIBLE WHITESPACE TOLERANCE
-    // A. Target expects space, but user typed the next character directly
-    if (expectedChar === ' ' && inputChar !== ' ' && currentIdx + 1 < target.length) {
-      const nextChar = target[currentIdx + 1];
-      const isNextLetter = /[a-zA-Z]/.test(nextChar);
-      const isInputLetter = /[a-zA-Z]/.test(inputChar);
-      if (inputChar === nextChar || (isInputLetter && isNextLetter && inputChar.toLowerCase() === nextChar.toLowerCase())) {
+    // 6. OPTIONAL BRACE TOLERANCE
+    // If user types '{' at control header (after ')', 'else', etc.) when target has no brace:
+    if (inputChar === '{' && expectedChar !== '{') {
+      if (expectedChar === ' ' && target[currentIdx + 1] === '{') {
         history.push({
           char: ' ',
           isCorrect: true,
@@ -578,6 +582,49 @@ export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = 
         });
         currentIdx++;
         expectedChar = target[currentIdx];
+      } else {
+        let prevIdx = currentIdx - 1;
+        while (prevIdx >= 0 && (target[prevIdx] === ' ' || target[prevIdx] === '\t' || target[prevIdx] === '\n')) {
+          prevIdx--;
+        }
+        const prevChar = prevIdx >= 0 ? target[prevIdx] : '';
+        if (prevChar === ')' || prevChar === 'e' || prevChar === '>' || expectedChar === '\n' || expectedChar === ' ') {
+          sounds.playKeyClick();
+          return;
+        }
+      }
+    }
+
+    // Harmless closing brace '}' for optional blocks:
+    if (inputChar === '}' && expectedChar !== '}') {
+      sounds.playKeyClick();
+      return;
+    }
+
+    // 7. FLEXIBLE WHITESPACE TOLERANCE
+    // A. Target expects space(s), but user typed the next character directly
+    if (expectedChar === ' ' && inputChar !== ' ') {
+      let skipSpaces = 0;
+      while (currentIdx + skipSpaces < target.length && target[currentIdx + skipSpaces] === ' ') {
+        skipSpaces++;
+      }
+      if (currentIdx + skipSpaces < target.length) {
+        const nextChar = target[currentIdx + skipSpaces];
+        const isNextLetter = /[a-zA-Z]/.test(nextChar);
+        const isInputLetter = /[a-zA-Z]/.test(inputChar);
+        if (inputChar === nextChar || (isInputLetter && isNextLetter && inputChar.toLowerCase() === nextChar.toLowerCase())) {
+          for (let s = 0; s < skipSpaces; s++) {
+            history.push({
+              char: ' ',
+              isCorrect: true,
+              expected: ' ',
+              isAutoIndented: true,
+              fromIdx: currentIdx + s
+            });
+          }
+          currentIdx += skipSpaces;
+          expectedChar = target[currentIdx];
+        }
       }
     }
     // B. User typed space where target has none (harmless extra space)
@@ -585,6 +632,7 @@ export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = 
       sounds.playKeyClick();
       return;
     }
+
 
     // 8. CASE-INSENSITIVE MATCHING FOR VARIABLES AND LETTERS
     const isInputLetter = /[a-zA-Z]/.test(inputChar);
@@ -894,19 +942,19 @@ export function useTypingEngine(targetCode = '', isExamMode = false, onFinish = 
 
   if (streak >= 100) {
     comboMultiplier = 4;
-    comboTierName = '⚡ MEGA FRENZY x4';
+    comboTierName = 'MEGA FRENZY x4';
     comboColor = 'var(--pastel-peach)';
   } else if (streak >= 50) {
     comboMultiplier = 3;
-    comboTierName = '🔥 SUPER x3';
+    comboTierName = 'SUPER x3';
     comboColor = 'var(--pastel-honey)';
   } else if (streak >= 25) {
     comboMultiplier = 2;
-    comboTierName = '✨ RITMO x2';
+    comboTierName = 'RITMO x2';
     comboColor = 'var(--pastel-mint)';
   } else if (streak >= 10) {
     comboMultiplier = 1.5;
-    comboTierName = '⚡ COMBO x1.5';
+    comboTierName = 'COMBO x1.5';
     comboColor = 'var(--pastel-lavender)';
   }
 

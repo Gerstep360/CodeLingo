@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 2,
+  "id": "factores-helper-primo",
+  "type": "shared",
+  "title": "Auxiliar primo",
+  "purpose": "Comprobar si un número es primo para la variante Factores Primos.",
+  "code": {
+    "language": "java",
+    "target": "static boolean primo(int n){\n    for(int i=2;i<n;i++)\n        if(n%i==0)return false;\n    return n>1;\n}"
+  },
+  "memory": {
+    "phrase": "si encuentro divisor entre 2 y n-1, no es primo",
+    "anchors": [
+      "for desde 2",
+      "si n%i==0 → false",
+      "al final return n>1"
+    ]
+  },
+  "criticalFragments": [
+    {
+      "id": "divisor-check",
+      "expected": "if(n%i==0)return false;",
+      "concept": "primality",
+      "errorMessage": "Si n tiene un divisor exacto antes de llegar a n, no es primo."
+    }
+  ],
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "fromZero": {
+    "title": "Qué hace primo()",
+    "explanation": "Busca si n tiene algún divisor entre 2 y n-1. Si encuentra uno, no es primo.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

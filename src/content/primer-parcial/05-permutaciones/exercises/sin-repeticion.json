@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "id": "permut-sr",
+  "classId": "permutaciones",
+  "type": "variant",
+  "title": "Permutación Sin Repetición",
+  "shortTitle": "Permut SR",
+  "order": 1,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "El orden importa, pero un elemento no puede aparecer dos veces en la misma solución.",
+    "goldenRule": "PERMUT SR = k=0 + !contains.",
+    "mentalModel": "Vuelvo a mirar todos los elementos, pero salto los que ya están en L1.",
+    "delta": [
+      {
+        "id": "no-repeat-filter",
+        "type": "add-filter",
+        "added": "if(!L1.contains(L2.get(k)))",
+        "focus": "!contains",
+        "reason": "Evita volver a elegir un valor que ya está en la permutación actual."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void permutSR(LinkedList<Integer>L1, LinkedList<Integer>L2, int r)",
+    "target": "static void permutSR(LinkedList<Integer>L1,\n                     LinkedList<Integer>L2,\n                     int r){\n\n    if(L1.size()==r){\n        System.out.println(L1);\n        return;\n    }\n\n    for(int k=0;k<L2.size();k++)\n        if(!L1.contains(L2.get(k))){\n            L1.add(L2.get(k));\n            permutSR(L1,L2,r);\n            L1.removeLast();\n        }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "loop-zero",
+      "expected": "for(int k=0;k<L2.size();k++)",
+      "concept": "permutation",
+      "errorMessage": "PERMUTACIÓN siempre vuelve a 0. No uses i."
+    },
+    {
+      "id": "contains-filter",
+      "expected": "if(!L1.contains(L2.get(k)))",
+      "concept": "no-repetition",
+      "errorMessage": "SR = SIN repetición → evita elementos ya usados con !contains."
+    },
+    {
+      "id": "recursive-no-i",
+      "expected": "permutSR(L1,L2,r);",
+      "concept": "permutation-recursion",
+      "errorMessage": "La llamada de Permutación no lleva i ni k."
+    },
+    {
+      "id": "undo",
+      "expected": "L1.removeLast();",
+      "concept": "backtracking",
+      "errorMessage": "Falta removeLast(): debes deshacer la elección."
+    }
+  ],
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "for(int k=____;k<L2.size();k++)",
+      "answer": "0"
+    },
+    {
+      "type": "fill-line",
+      "prompt": "Escribe el filtro de Permut SR.",
+      "answer": "if(!L1.contains(L2.get(k)))"
+    },
+    {
+      "type": "contrast",
+      "prompt": "COMBI usa i. PERMUT usa:",
+      "answer": "0"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Permutación significa que el orden sí importa. En SR, además, un elemento no puede repetirse."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "L1.size()==r",
+        "for desde 0",
+        "add/remove",
+        "llamada sin i"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "Agrego el filtro !L1.contains(L2.get(k)).",
+      "why": "Como vuelvo siempre a 0, necesito un filtro para evitar usar otra vez un elemento ya elegido."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Con [1,2,3], r=2 aparecen [1,2] y [2,1], pero nunca [1,1]."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

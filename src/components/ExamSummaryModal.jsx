@@ -171,7 +171,7 @@ export function ExamSummaryModal({
         }
 
         .summary-card {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1px solid var(--card-border);
           border-radius: var(--radius-lg);
           box-shadow: var(--shadow-lg);
@@ -307,7 +307,7 @@ export function ExamSummaryModal({
           display: flex;
           justify-content: space-between;
           padding: 12px 26px;
-          background: #FCFBF9;
+          background: var(--bg-subtle);
           border-top: 1px solid var(--card-border);
           border-bottom: 1px solid var(--card-border);
           font-size: 12px;

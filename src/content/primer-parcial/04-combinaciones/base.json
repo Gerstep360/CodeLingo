@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 2,
+  "id": "combinaciones-base",
+  "classId": "combinaciones",
+  "type": "family-base",
+  "title": "Lógica Base de Combinaciones",
+  "shortTitle": "Lógica Base",
+  "typingEnabled": false,
+  "logic": {
+    "idea": "En una combinación, el orden no crea una solución nueva. Por eso el algoritmo conserva un índice i y el for comienza en k=i.",
+    "goldenRule": "COMBINACIÓN = TENGO i.",
+    "anchors": [
+      {
+        "id": "base-case",
+        "order": 1,
+        "label": "CASO BASE",
+        "memory": "Cuando L1 tiene r elementos, encontré una combinación.",
+        "code": "if(L1.size()==r){ System.out.println(L1); return; }"
+      },
+      {
+        "id": "loop",
+        "order": 2,
+        "label": "RECORRER",
+        "memory": "Combinación empieza desde i.",
+        "code": "for(int k=i;k<L2.size();k++)"
+      },
+      {
+        "id": "choose",
+        "order": 3,
+        "label": "AGREGO",
+        "memory": "k es índice dentro de L2.",
+        "code": "L1.add(L2.get(k));"
+      },
+      {
+        "id": "recurse",
+        "order": 4,
+        "label": "BAJO",
+        "memory": "Aquí está la única diferencia fuerte: SR usa k+1; CR usa k.",
+        "code": "SR → k+1 | CR → k"
+      },
+      {
+        "id": "undo",
+        "order": 5,
+        "label": "QUITO",
+        "memory": "Vuelvo al estado anterior.",
+        "code": "L1.removeLast();"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "template": "static void combinacion(LinkedList<Integer>L1,\n                        LinkedList<Integer>L2,\n                        int r,int i){\n\n    if(L1.size()==r){\n        System.out.println(L1);\n        return;\n    }\n\n    for(int k=i;k<L2.size();k++){\n        L1.add(L2.get(k));\n        // SR: llamada con k+1\n        // CR: llamada con k\n        L1.removeLast();\n    }\n}"
+  },
+  "criticalConcepts": [
+    {
+      "id": "has-i",
+      "expected": "i",
+      "concept": "combination-family",
+      "errorMessage": "COMBINACIÓN lleva i porque no necesita volver a generar el mismo grupo en otro orden."
+    },
+    {
+      "id": "loop-starts-i",
+      "expected": "for(int k=i;k<L2.size();k++)",
+      "concept": "ordered-search",
+      "errorMessage": "Si empiezas en 0 estás pensando como Permutación."
+    },
+    {
+      "id": "sr-vs-cr",
+      "expected": "SR=k+1|CR=k",
+      "concept": "repetition",
+      "errorMessage": "SR avanza con k+1; CR se queda en k para permitir repetir."
+    }
+  ],
+  "trainingSequence": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-trace",
+    "plan-before-code",
+    "line-by-line",
+    "full-code-explained",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "No mostrar recognitionDrills ni huecos antes de completar esta sección.",
+    "chapter1_meaning": {
+      "title": "1. Qué estamos intentando hacer",
+      "explanation": "Una combinación elige elementos donde el orden NO importa. [1,2] y [2,1] representan la misma elección.",
+      "analogy": "Si eliges 2 personas para formar un equipo, elegir Ana y Luis es lo mismo que Luis y Ana. No necesitas guardar ambos órdenes."
+    },
+    "chapter2_words": {
+      "title": "2. Qué significa cada cosa del código",
+      "items": [
+        {
+          "term": "L1",
+          "meaning": "combinación que estoy construyendo"
+        },
+        {
+          "term": "L2",
+          "meaning": "elementos disponibles"
+        },
+        {
+          "term": "r",
+          "meaning": "cantidad exacta de elementos que quiero elegir"
+        },
+        {
+          "term": "i",
+          "meaning": "índice mínimo desde donde puedo seguir"
+        },
+        {
+          "term": "k",
+          "meaning": "índice candidato"
+        }
+      ]
+    },
+    "chapter3_example": {
+      "title": "3. Primero resolvámoslo sin código",
+      "setup": "L2=[1,2,3], r=2",
+      "goal": "Elegir grupos de 2.",
+      "examples": {
+        "SR": [
+          "[1,2]",
+          "[1,3]",
+          "[2,3]"
+        ],
+        "CR": [
+          "[1,1]",
+          "[1,2]",
+          "[1,3]",
+          "[2,2]",
+          "[2,3]",
+          "[3,3]"
+        ]
+      }
+    },
+    "chapter4_plan": {
+      "title": "4. Plan mental antes de programar",
+      "steps": [
+        "El caso base no usa suma ni producto: usa tamaño.",
+        "Cuando L1.size()==r, ya elegí exactamente r elementos.",
+        "El for empieza en i porque no necesito volver hacia atrás y crear el mismo grupo en otro orden.",
+        "SR usa k+1 porque no repite el elemento actual.",
+        "CR usa k porque sí puede repetirlo."
+      ]
+    },
+    "chapter5_lineByLine": {
+      "title": "5. Ahora sí: qué hace cada línea",
+      "lines": [
+        {
+          "code": "if(L1.size()==r)",
+          "explanation": "Termino cuando ya elegí r elementos."
+        },
+        {
+          "code": "for(int k=i;k<L2.size();k++)",
+          "explanation": "Empiezo desde i porque el orden no importa."
+        },
+        {
+          "code": "L1.add(L2.get(k));",
+          "explanation": "Agrego el elemento candidato."
+        },
+        {
+          "code": "SR → k+1",
+          "explanation": "Sin repetición: avanzo."
+        },
+        {
+          "code": "CR → k",
+          "explanation": "Con repetición: puedo quedarme."
+        },
+        {
+          "code": "L1.removeLast();",
+          "explanation": "Deshago."
+        }
+      ]
+    },
+    "chapter6_fullCode": {
+      "title": "6. Código completo",
+      "instruction": "Mostrar el código completo con los anchors resaltados. Todavía no pedir que lo memorice."
+    },
+    "chapter7_imitation": {
+      "title": "7. Primera escritura con ayuda",
+      "instruction": "El alumno copia/reconstruye viendo anchors y puede consultar cada bloque. Los errores explican la lógica, no solo el carácter."
+    }
+  }
+,
+  "trace": {
+  "input": {
+    "L2": [
+      1,
+      2,
+      3
+    ],
+    "r": 2,
+    "variant": "Sin repetición"
+  },
+  "steps": [
+    "L1=[]; i=0; pruebo k=0: elijo 1.",
+    "L1=[1]; bajo con i=k+1=1.",
+    "Pruebo k=1: agrego 2; L1=[1,2].",
+    "L1.size()==r: imprimo [1,2] y regreso.",
+    "Quito 2: L1=[1]; pruebo k=2 y agrego 3.",
+    "Imprimo [1,3]; regreso y quito 3.",
+    "Termina esta rama; regreso y quito 1.",
+    "Desde el nivel inicial elijo 2; bajo desde i=2 y elijo 3: imprimo [2,3].",
+    "No genero [2,1]: el índice solo avanza. Con repetición bajaría con k, permitiendo [1,1]."
+  ]
+}
+}

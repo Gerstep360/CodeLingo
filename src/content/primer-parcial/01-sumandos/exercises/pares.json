@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 2,
+  "id": "sumandos-pares",
+  "classId": "sumandos",
+  "type": "variant",
+  "title": "Sumandos Pares",
+  "shortTitle": "Pares",
+  "order": 2,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Solo se pueden agregar valores pares.",
+    "goldenRule": "PAR = k%2==0",
+    "mentalModel": "Antes de hacer add, pregunto si k es par.",
+    "delta": [
+      {
+        "id": "even-filter",
+        "type": "wrap",
+        "around": "backtracking-block",
+        "added": "if(k%2==0)",
+        "focus": "k%2==0",
+        "reason": "Solo entran al backtracking los candidatos pares."
+      },
+      {
+        "id": "recursive-call",
+        "type": "replace",
+        "before": "sumandos(L,n,k);",
+        "after": "sumPar(L,n,k+1);",
+        "focus": "k+1",
+        "reason": "La versión canónica de este ejercicio avanza con k+1."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void sumPar(LinkedList<Integer>L,int n,int i)",
+    "target": "static void sumPar(LinkedList<Integer>L,int n,int i){\n    int s=suma(L);\n\n    if(s>=n){\n        if(s==n)System.out.println(L);\n        return;\n    }\n\n    for(int k=i;k<=n;k++)\n        if(k%2==0){\n            L.add(k);\n            sumPar(L,n,k+1);\n            L.removeLast();\n        }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "even-filter",
+      "expected": "if(k%2==0)",
+      "concept": "filter-even",
+      "errorMessage": "PARES filtra antes de agregar: k%2==0."
+    },
+    {
+      "id": "recursive-k-plus-one",
+      "expected": "sumPar(L,n,k+1);",
+      "concept": "canonical-recursion",
+      "errorMessage": "En la versión canónica de este ejercicio la llamada usa k+1."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "if(k%2____0)",
+      "answer": "=="
+    },
+    {
+      "type": "fill-line",
+      "prompt": "Escribe el filtro de pares.",
+      "answer": "if(k%2==0)"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Ahora queremos que cada número elegido sea par."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "suma(L)",
+        "corte",
+        "for",
+        "backtracking"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "Antes de agregar k exigimos k%2==0; la versión canónica avanza con k+1.",
+      "why": "El if bloquea cualquier candidato impar."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Para n=6, una solución posible es [2,4]."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

@@ -1,3 +1,4 @@
+import { readProgress, PROGRESS_KEY } from '../learning/progress';
 // LocalStorage and Export/Import Helper for CodeLingo Persistence
 
 const STORAGE_KEYS = {
@@ -82,7 +83,8 @@ export const duoStorage = {
       totalXp: duoStorage.getTotalXp(),
       dailyXp: duoStorage.getDailyXp(),
       exportedAt: new Date().toISOString(),
-      version: '1.0'
+      version: '2.0',
+      learningProgress: readProgress()
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -97,7 +99,10 @@ export const duoStorage = {
   importBackup: (jsonString) => {
     try {
       const parsed = JSON.parse(jsonString);
+      if (parsed.completedNodes && (!Array.isArray(parsed.completedNodes)||parsed.completedNodes.some(id=>typeof id!=='string'))) return false;
+      if (parsed.learningProgress && (typeof parsed.learningProgress!=='object'||Array.isArray(parsed.learningProgress))) return false;
       if (parsed.completedNodes) duoStorage.saveCompletedNodes(parsed.completedNodes);
+      if (parsed.learningProgress) { localStorage.setItem(PROGRESS_KEY,JSON.stringify(parsed.learningProgress));window.dispatchEvent(new Event('learning-progress')); }
       if (parsed.streak !== undefined) duoStorage.saveStreak(parsed.streak);
       if (parsed.totalXp !== undefined) duoStorage.saveTotalXp(parsed.totalXp);
       if (parsed.dailyXp !== undefined) duoStorage.saveDailyXp(parsed.dailyXp);
@@ -105,5 +110,88 @@ export const duoStorage = {
     } catch {
       return false;
     }
+  },
+
+  // Active Lesson Session Persistence
+  getActiveLesson: () => {
+    try {
+      const saved = localStorage.getItem('vargas_active_lesson');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  },
+  saveActiveLesson: (lessonInfo) => {
+    try {
+      localStorage.setItem(
+        'vargas_active_lesson',
+        JSON.stringify({
+          ...lessonInfo,
+          savedAt: Date.now()
+        })
+      );
+    } catch (e) {
+      console.warn('Error saving active lesson', e);
+    }
+  },
+  clearActiveLesson: () => {
+    try {
+      localStorage.removeItem('vargas_active_lesson');
+    } catch {}
+  },
+
+  // Code drafts for training stages
+  getCodeDraft: (lessonId, stageId) => {
+    try {
+      return localStorage.getItem(`vargas_code_draft_${lessonId}_${stageId}`) || '';
+    } catch {
+      return '';
+    }
+  },
+  saveCodeDraft: (lessonId, stageId, code) => {
+    try {
+      if (code !== undefined && code !== null) {
+        localStorage.setItem(`vargas_code_draft_${lessonId}_${stageId}`, code);
+      }
+    } catch {}
+  },
+  clearCodeDraft: (lessonId, stageId) => {
+    try {
+      localStorage.removeItem(`vargas_code_draft_${lessonId}_${stageId}`);
+    } catch {}
+  },
+  clearLessonDrafts: (lessonId) => {
+    try {
+      const prefix = `vargas_code_draft_${lessonId}`;
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(prefix)) {
+          localStorage.removeItem(key);
+        }
+      }
+    } catch {}
+  },
+
+  // Editor drafts for IDE mode
+  getEditorDraft: (snippetId, isExam) => {
+    try {
+      const key = `vargas_editor_draft_${snippetId}_${isExam ? 'exam' : 'guide'}`;
+      const s = localStorage.getItem(key);
+      return s ? JSON.parse(s) : null;
+    } catch {
+      return null;
+    }
+  },
+  saveEditorDraft: (snippetId, isExam, state) => {
+    try {
+      const key = `vargas_editor_draft_${snippetId}_${isExam ? 'exam' : 'guide'}`;
+      localStorage.setItem(key, JSON.stringify(state));
+    } catch {}
+  },
+  clearEditorDraft: (snippetId, isExam) => {
+    try {
+      const key = `vargas_editor_draft_${snippetId}_${isExam ? 'exam' : 'guide'}`;
+      localStorage.removeItem(key);
+    } catch {}
   }
 };

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 2,
+  "id": "mochila",
+  "order": 3,
+  "title": "Mochila",
+  "shortTitle": "Mochila",
+  "subtitle": "Backtracking sobre objetos con peso, color y tamaño",
+  "icon": "briefcase",
+  "color": "purple",
+  "objective": "Aprender desde cero Mochila, entender su lógica, construir el código paso a paso y terminar escribiéndolo de memoria con velocidad.",
+  "mentalModel": {
+    "phrase": "PESO → CORTO → IMPRIMO → RECORRO → AGREGO → BAJO → QUITO",
+    "corePattern": "L1.add(...) → llamada recursiva → L1.removeLast()",
+    "roles": [
+      "L1 = mochila actual / combinación que estoy construyendo",
+      "L2 = objetos disponibles",
+      "max = peso máximo permitido",
+      "i = índice desde donde continúo"
+    ],
+    "recoveryPhrases": [
+      "BASE = L1.add(L2.get(k)) + k+1",
+      "COLOR = x.color.equals(c)",
+      "TAMAÑO = x.tam<=tam",
+      "PESO = x.peso>=a && x.peso<=b"
+    ]
+  },
+  "base": "./base.json",
+  "shared": [
+    "./shared/objeto.json",
+    "./shared/peso.json"
+  ],
+  "exercises": [
+    "./exercises/color.json",
+    "./exercises/tamano.json",
+    "./exercises/peso-rango.json"
+  ],
+  "classExam": {
+    "enabled": true,
+    "randomOrder": true,
+    "includeBase": true,
+    "includeVariants": true,
+    "hints": false,
+    "minimumAccuracy": 0.95,
+    "minimumMastery": 0.85
+  },
+  "speedrun": {
+    "enabled": true,
+    "unlock": {
+      "minimumAccuracy": 0.95,
+      "minimumSuccessfulRecalls": 1
+    }
+  },
+  "relatedClasses": [
+    {
+      "id": "combinaciones",
+      "relation": "index-progresses-with-k-plus-one",
+      "note": "Mochila y Combinación Sin Repetición comparten la idea de avanzar con k+1 para no volver a usar el mismo elemento físico."
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "standaloneLearning": true,
+  "fromZero": {
+    "startHere": "Mochila ya no elige números sueltos: elige objetos completos. Cada objeto tiene peso, color y tamaño.",
+    "everydayAnalogy": "Imagina una mochila real: vas metiendo objetos mientras el peso total no supere max. Después puedes pedir además solo objetos rojos, pequeños o de cierto rango de peso.",
+    "vocabulary": [
+      {
+        "term": "Objeto",
+        "meaning": "elemento con peso, color y tamaño"
+      },
+      {
+        "term": "L1",
+        "meaning": "objetos que ya están dentro de la mochila actual"
+      },
+      {
+        "term": "L2",
+        "meaning": "lista de objetos disponibles"
+      },
+      {
+        "term": "max",
+        "meaning": "peso total máximo permitido"
+      },
+      {
+        "term": "i",
+        "meaning": "índice desde donde sigo buscando"
+      },
+      {
+        "term": "k",
+        "meaning": "índice del objeto que estoy probando"
+      },
+      {
+        "term": "peso(L1)",
+        "meaning": "suma de los pesos de los objetos elegidos"
+      }
+    ],
+    "firstWorkedExample": {
+      "setup": "Objetos: A=(2,rojo,3), B=(4,azul,6), C=(3,rojo,2), max=6",
+      "goal": "Generar combinaciones de objetos que no excedan peso 6.",
+      "examples": [
+        "[A]",
+        "[B]",
+        "[C]",
+        "[A,B]",
+        "[A,C]"
+      ]
+    },
+    "beforeSeeingCode": [
+      "Primero mido el peso total de L1.",
+      "Si supera max, corto.",
+      "Si L1 no está vacía y no se pasó, la combinación actual sirve.",
+      "k es un índice, por eso el objeto es L2.get(k).",
+      "Uso k+1 para no volver a usar el mismo objeto físico."
+    ],
+    "teachingPromise": "No se pregunta nada que todavía no haya sido explicado en esta misma clase."
+  },
+  "lessonOrder": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-simulation",
+    "code-build",
+    "line-by-line",
+    "guided-copy",
+    "guided-rebuild",
+    "variant-lessons",
+    "recall",
+    "speedrun",
+    "class-exam"
+  ]
+}

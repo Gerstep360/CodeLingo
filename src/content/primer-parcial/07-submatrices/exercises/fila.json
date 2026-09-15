@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 2,
+  "id": "submatrices-fila",
+  "classId": "submatrices",
+  "type": "variant",
+  "title": "SubMatrices Fila",
+  "shortTitle": "Fila",
+  "order": 2,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Mostrar solamente las submatrices que tienen una sola fila.",
+    "goldenRule": "FILA = fil()==1.",
+    "mentalModel": "Matriz fila = 1 x N.",
+    "delta": [
+      {
+        "id": "row-filter",
+        "type": "filter-list",
+        "added": "if(M.fil()==1)",
+        "focus": "fil()==1",
+        "reason": "Una matriz fila tiene exactamente una fila."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void filas(LinkedList<Matriz>L)",
+    "target": "static void filas(LinkedList<Matriz>L){\n\n    for(Matriz M:L)\n        if(M.fil()==1)\n            System.out.println(M);\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "row-condition",
+      "expected": "if(M.fil()==1)",
+      "concept": "row-matrix",
+      "errorMessage": "MATRIZ FILA significa una sola fila: fil()==1."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "contrast",
+      "prompt": "Matriz fila = ¿fil()==1 o col()==1?",
+      "answer": "fil()==1"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Una matriz fila tiene exactamente una fila."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "lista L",
+        "for-each"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "Filtro M.fil()==1.",
+      "why": "Puede tener muchas columnas, pero solo una fila."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "1x3 pasa; 3x1 no."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

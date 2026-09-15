@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 2,
+  "id": "fundamentos-desde-cero",
+  "type": "course-foundation",
+  "title": "Fundamentos mínimos para entender los 7 temas",
+  "assumePriorKnowledge": false,
+  "purpose": "Este bloque existe para que CodeLingo pueda enseñar desde cero incluso si el alumno todavía no entiende recursión, LinkedList, índices o matrices.",
+  "teachingRule": "Primero enseñar con ejemplo concreto. Después mostrar código. Las preguntas y ejercicios aparecen recién después de la explicación.",
+  "modules": [
+    {
+      "id": "metodo-parametros",
+      "title": "Qué es un método y qué son los parámetros",
+      "plainLanguage": "Un método es un bloque de código con nombre. Los parámetros son los datos que le entregamos para que trabaje.",
+      "example": {
+        "code": "static int doble(int n){ return n*2; }",
+        "explanation": [
+          "`doble` es el nombre del método.",
+          "`int n` es el dato que recibe.",
+          "`return` devuelve un resultado.",
+          "Si llamo `doble(4)`, el resultado es 8."
+        ]
+      }
+    },
+    {
+      "id": "linkedlist",
+      "title": "LinkedList sin vueltas",
+      "plainLanguage": "Para estos ejercicios, una LinkedList es una lista que vamos modificando mientras exploramos soluciones.",
+      "operations": [
+        {
+          "code": "L.add(x);",
+          "meaning": "agrega x al final"
+        },
+        {
+          "code": "L.removeLast();",
+          "meaning": "quita lo último que agregamos"
+        },
+        {
+          "code": "L.get(k)",
+          "meaning": "obtiene el elemento de la posición k"
+        },
+        {
+          "code": "L.size()",
+          "meaning": "dice cuántos elementos tiene"
+        },
+        {
+          "code": "L.contains(x)",
+          "meaning": "dice si x ya está dentro"
+        }
+      ]
+    },
+    {
+      "id": "for-if",
+      "title": "for e if",
+      "plainLanguage": "`for` prueba varias opciones. `if` decide si una opción sirve o no.",
+      "example": {
+        "code": "for(int k=1;k<=3;k++) if(k%2==0) System.out.println(k);",
+        "explanation": "Prueba 1, 2 y 3; solo imprime 2 porque es par."
+      }
+    },
+    {
+      "id": "recursion",
+      "title": "Recursión desde cero",
+      "plainLanguage": "Una función recursiva es una función que se llama a sí misma para resolver una versión más pequeña o más avanzada del mismo problema.",
+      "keyIdeas": [
+        "Debe existir una condición que detenga la recursión.",
+        "Cada llamada tiene sus propios parámetros.",
+        "Cuando una llamada termina, el programa vuelve exactamente a la línea posterior a la llamada."
+      ],
+      "miniExample": {
+        "code": "static void bajar(int n){ if(n==0)return; System.out.println(n); bajar(n-1); }",
+        "trace": [
+          "bajar(3)",
+          "imprime 3",
+          "bajar(2)",
+          "imprime 2",
+          "bajar(1)",
+          "imprime 1",
+          "bajar(0) → return"
+        ]
+      }
+    },
+    {
+      "id": "backtracking",
+      "title": "Backtracking desde cero",
+      "plainLanguage": "Backtracking significa probar una opción, explorar qué pasa con ella y luego deshacerla para probar otra.",
+      "core": "AGREGO → BAJO → QUITO",
+      "code": "L.add(k); metodo(...); L.removeLast();",
+      "story": [
+        "Elijo una opción.",
+        "La agrego a la solución actual.",
+        "Exploro esa rama con recursión.",
+        "Cuando regreso, quito lo último.",
+        "Pruebo la siguiente opción."
+      ]
+    },
+    {
+      "id": "matrices",
+      "title": "Matrices desde cero",
+      "plainLanguage": "Una matriz es una tabla de números. En Java la representamos con `int[][]`.",
+      "example": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ]
+        ],
+        "explanation": [
+          "Tiene 2 filas.",
+          "Tiene 3 columnas.",
+          "M[0][0] vale 1.",
+          "M[1][2] vale 6."
+        ]
+      }
+    }
+  ]
+}

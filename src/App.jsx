@@ -1,10 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { CustomCodeModal } from './components/CustomCodeModal';
 import { ExamSummaryModal } from './components/ExamSummaryModal';
 import { DuoSidebar } from './components/duo/DuoSidebar';
 import { DuoRightRail } from './components/duo/DuoRightRail';
 import { DuoLearningPath } from './components/duo/DuoLearningPath';
-import { DuoLessonRunner } from './components/duo/DuoLessonRunner';
+import { DuoClassPage } from './components/duo/DuoClassPage';
+import { DuoLessonPage } from './components/duo/DuoLessonPage';
+import LearningHub from './components/training/LearningHub';
 import { DuoFlashQuiz } from './components/duo/DuoFlashQuiz';
 import { DuoCheatsheet } from './components/duo/DuoCheatsheet';
 import { DuoExamMode } from './components/duo/DuoExamMode';
@@ -12,20 +15,34 @@ import { DUO_UNITS } from './data/duoLessonsData';
 import { duoStorage } from './utils/duoStorage';
 import { useTimer } from './hooks/useTimer';
 import { useTypingEngine } from './hooks/useTypingEngine';
+import { useTheme } from './hooks/useTheme';
 import { DEFAULT_SNIPPETS } from './utils/defaultSnippets';
 
 export function App() {
-  // Navigation tabs: 'path' | 'flash' | 'editor' | 'cheatsheet'
-  const [activeTab, setActiveTab] = useState('path');
+  // Theme state ('dark' | 'light')
+  const { theme, toggleTheme, isDark } = useTheme();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Determine active tab from URL
+  let activeTab = 'path';
+  if (location.pathname.startsWith('/practice')) activeTab = 'practice';
+  else if (location.pathname.startsWith('/flash')) activeTab = 'flash';
+  else if (location.pathname.startsWith('/cheatsheet')) activeTab = 'cheatsheet';
+  else if (location.pathname.startsWith('/editor')) activeTab = 'editor';
+  else if (location.pathname.startsWith('/class')) activeTab = 'path';
+  else if (location.pathname.startsWith('/lesson')) activeTab = 'path';
+
+  const handleSelectTab = (tab) => {
+    navigate(`/${tab}`);
+  };
 
   // Duolingo Gamification Persistent States
   const [completedNodes, setCompletedNodes] = useState(() => duoStorage.getCompletedNodes());
   const [duoStreak, setDuoStreak] = useState(() => duoStorage.getStreak());
   const [totalXp, setTotalXp] = useState(() => duoStorage.getTotalXp());
   const [dailyXp, setDailyXp] = useState(() => duoStorage.getDailyXp());
-
-  // Active interactive lesson modal runner
-  const [activeLessonNode, setActiveLessonNode] = useState(null);
 
   // Editor states
   const [snippets, setSnippets] = useState(DEFAULT_SNIPPETS);
@@ -66,7 +83,8 @@ export function App() {
       timer.pause();
       setIsSummaryModalOpen(true);
     },
-    handleFirstKey
+    handleFirstKey,
+    currentSnippetId
   );
 
   const handleReloadFile = useCallback(() => {
@@ -154,77 +172,133 @@ export function App() {
   // Dynamically calculate active node in sequence across all units
   const allDuoNodes = DUO_UNITS.flatMap((u) => u.nodes);
   const nextUncompletedNode = allDuoNodes.find((n) => !completedNodes.includes(n.id));
-  const activeNodeId = nextUncompletedNode ? nextUncompletedNode.id : (allDuoNodes[allDuoNodes.length - 1]?.id || 'node-1-1');
+  const activeNodeId = nextUncompletedNode ? nextUncompletedNode.id : (allDuoNodes[allDuoNodes.length - 1]?.id || 'node-sumandos-base');
+
+  const isLessonRoute = location.pathname.startsWith('/lesson');
+  const activeLesson = duoStorage.getActiveLesson();
 
   return (
-    <div className="duo-app-wrapper">
-      {/* 1. Duolingo Left Navigation Sidebar */}
-      <DuoSidebar
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
-        streak={duoStreak}
-        totalXp={totalXp}
-      />
+    <div className={`duo-app-wrapper ${isLessonRoute ? 'lesson-mode-active' : ''}`}>
+      {/* 1. Duolingo Left Navigation Sidebar (Hidden in focused lesson mode) */}
+      {!isLessonRoute && (
+        <DuoSidebar
+          activeTab={activeTab}
+          onSelectTab={handleSelectTab}
+          streak={duoStreak}
+          totalXp={totalXp}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
+      )}
 
       {/* 2. Main Content Area */}
-      <div className="duo-main-viewport">
-        {activeTab === 'path' && (
-          <div className="duo-center-scrollable">
-            <DuoLearningPath
-              completedNodeIds={completedNodes}
-              activeNodeId={activeNodeId}
-              onStartLesson={(node) => setActiveLessonNode(node)}
-            />
-          </div>
-        )}
-
-        {activeTab === 'flash' && (
-          <div className="duo-center-scrollable">
-            <DuoFlashQuiz onCompleteQuiz={handleQuizComplete} />
-          </div>
-        )}
-
-        {activeTab === 'cheatsheet' && (
-          <div className="duo-center-scrollable">
-            <DuoCheatsheet />
-          </div>
-        )}
-
-        {activeTab === 'editor' && (
-          <DuoExamMode
-            timer={timer}
-            isExamMode={isExamMode}
-            onToggleExamMode={handleToggleExamMode}
-            engine={engine}
-            snippets={snippets}
-            currentSnippetId={currentSnippetId}
-            onSelectSnippet={handleSelectSnippet}
-            currentSnippet={currentSnippet}
-            activeFunctionName={activeFunctionName}
-            onSelectOutlineFunction={handleSelectOutlineFunction}
-            jumpToLineIdx={jumpToLineIdx}
-            onReloadFile={handleReloadFile}
-            onOpenCustomModal={() => setIsCustomModalOpen(true)}
+      <div className={isLessonRoute ? 'duo-lesson-viewport-full' : 'duo-main-viewport'}>
+        <Routes>
+          {/* Root redirect: if there's an ongoing active lesson in storage, resume it! */}
+          <Route
+            path="/"
+            element={
+              <Navigate
+                to={activeLesson?.nodeId ? `/lesson/${activeLesson.nodeId}` : '/path'}
+                replace
+              />
+            }
           />
-        )}
+
+          {/* Learning Path (7 Clases del Primer Parcial) */}
+          <Route
+            path="/path"
+            element={
+              <div className="duo-center-scrollable">
+                <DuoLearningPath
+                  completedNodeIds={completedNodes}
+                  activeNodeId={activeNodeId}
+                  onStartLesson={(node) => navigate(`/lesson/${node.id}`)}
+                  onOpenClass={(classId) => navigate(`/class/${classId}`)}
+                />
+              </div>
+            }
+          />
+
+          {/* Dedicated Individual Class Page (/class/:classId) */}
+          <Route
+            path="/class/:classId"
+            element={<DuoClassPage completedNodeIds={completedNodes} />}
+          />
+
+          {/* Dedicated Fullscreen Interactive Lesson Page (/lesson/:nodeId) */}
+          <Route
+            path="/lesson/:nodeId"
+            element={<DuoLessonPage onFinishLesson={handleFinishLesson} />}
+          />
+
+          {/* Learning Hub (Práctica y Refuerzo) */}
+          <Route
+            path="/practice"
+            element={
+              <div className="duo-center-scrollable">
+                <LearningHub
+                  completedNodes={completedNodes}
+                  onEarnXp={handleQuizComplete}
+                />
+              </div>
+            }
+          />
+
+          {/* Flash Quiz */}
+          <Route
+            path="/flash"
+            element={
+              <div className="duo-center-scrollable">
+                <DuoFlashQuiz onCompleteQuiz={handleQuizComplete} />
+              </div>
+            }
+          />
+
+          {/* Cheatsheet (Guía Mental de Vargas) */}
+          <Route
+            path="/cheatsheet"
+            element={
+              <div className="duo-center-scrollable">
+                <DuoCheatsheet />
+              </div>
+            }
+          />
+
+          {/* Exam Simulator & Java IDE */}
+          <Route
+            path="/editor"
+            element={
+              <DuoExamMode
+                timer={timer}
+                isExamMode={isExamMode}
+                onToggleExamMode={handleToggleExamMode}
+                engine={engine}
+                snippets={snippets}
+                currentSnippetId={currentSnippetId}
+                onSelectSnippet={handleSelectSnippet}
+                currentSnippet={currentSnippet}
+                activeFunctionName={activeFunctionName}
+                onSelectOutlineFunction={handleSelectOutlineFunction}
+                jumpToLineIdx={jumpToLineIdx}
+                onReloadFile={handleReloadFile}
+                onOpenCustomModal={() => setIsCustomModalOpen(true)}
+              />
+            }
+          />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/path" replace />} />
+        </Routes>
       </div>
 
-      {/* 3. Duolingo Right Rail (Visible on learning, quiz and cheatsheet tabs) */}
-      {activeTab !== 'editor' && (
+      {/* 3. Duolingo Right Rail (Visible on learning, class, quiz and cheatsheet tabs) */}
+      {!isLessonRoute && activeTab !== 'editor' && (
         <DuoRightRail
           streak={duoStreak}
           dailyXp={dailyXp}
           targetXp={50}
-          onOpenCheatsheet={() => setActiveTab('cheatsheet')}
-        />
-      )}
-
-      {/* 4. Interactive Fullscreen Lesson Runner Modal */}
-      {activeLessonNode && (
-        <DuoLessonRunner
-          node={activeLessonNode}
-          onClose={() => setActiveLessonNode(null)}
-          onFinishLesson={handleFinishLesson}
+          onOpenCheatsheet={() => navigate('/cheatsheet')}
         />
       )}
 
@@ -255,7 +329,7 @@ export function App() {
         .duo-app-wrapper {
           display: flex;
           min-height: 100vh;
-          background: #FFFFFF;
+          background: var(--bg-main);
         }
 
         .duo-main-viewport {
@@ -263,13 +337,23 @@ export function App() {
           display: flex;
           flex-direction: column;
           min-width: 0;
-          background: #FFFFFF;
+          background: var(--bg-main);
+        }
+
+        .duo-lesson-viewport-full {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+          width: 100%;
+          min-height: 100vh;
+          background: var(--bg-main);
         }
 
         .duo-center-scrollable {
           flex: 1;
           overflow-y: auto;
-          background: #FFFFFF;
+          background: var(--bg-main);
         }
 
         .duo-editor-full-frame {
@@ -286,7 +370,7 @@ export function App() {
         }
 
         @media (max-width: 768px) {
-          .duo-app-wrapper {
+          .duo-app-wrapper:not(.lesson-mode-active) {
             flex-direction: column;
           }
 

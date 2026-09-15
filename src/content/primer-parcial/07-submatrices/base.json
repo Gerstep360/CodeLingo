@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 2,
+  "id": "submatrices-base",
+  "classId": "submatrices",
+  "type": "base",
+  "title": "Lista de todas las SubMatrices",
+  "shortTitle": "Base",
+  "requires": [
+    "./shared/matriz.json",
+    "./shared/submatriz.json"
+  ],
+  "logic": {
+    "idea": "Genera y guarda en una LinkedList todas las submatrices rectangulares posibles de M.",
+    "answer": "i,j eligen dónde comienza el rectángulo; a,b eligen dónde termina.",
+    "goldenRule": "SUBMATRICES = i,j INICIO; a,b FINAL.",
+    "anchors": [
+      {
+        "id": "clear",
+        "order": 1,
+        "label": "LIMPIAR",
+        "memory": "Empiezo con la lista vacía.",
+        "code": "L.clear();"
+      },
+      {
+        "id": "start-row",
+        "order": 2,
+        "label": "FILA INICIAL",
+        "memory": "i puede empezar en cualquier fila.",
+        "code": "for(int i=0;i<M.fil();i++)"
+      },
+      {
+        "id": "start-col",
+        "order": 3,
+        "label": "COLUMNA INICIAL",
+        "memory": "j puede empezar en cualquier columna.",
+        "code": "for(int j=0;j<M.col();j++)"
+      },
+      {
+        "id": "end-row",
+        "order": 4,
+        "label": "FILA FINAL",
+        "memory": "a no puede quedar antes de i.",
+        "code": "for(int a=i;a<M.fil();a++)"
+      },
+      {
+        "id": "end-col",
+        "order": 5,
+        "label": "COLUMNA FINAL",
+        "memory": "b no puede quedar antes de j.",
+        "code": "for(int b=j;b<M.col();b++)"
+      },
+      {
+        "id": "save",
+        "order": 6,
+        "label": "RECORTAR Y GUARDAR",
+        "memory": "Con esas cuatro coordenadas creo una submatriz y la agrego.",
+        "code": "L.add(subMatriz(M,i,j,a,b));"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void subMatrices(Matriz M,LinkedList<Matriz>L)",
+    "target": "static void subMatrices(Matriz M,\n                        LinkedList<Matriz>L){\n\n    L.clear();\n\n    for(int i=0;i<M.fil();i++)\n    for(int j=0;j<M.col();j++)\n    for(int a=i;a<M.fil();a++)\n    for(int b=j;b<M.col();b++)\n\n        L.add(subMatriz(M,i,j,a,b));\n}",
+    "core": "for(int i=0;i<M.fil();i++)\nfor(int j=0;j<M.col();j++)\nfor(int a=i;a<M.fil();a++)\nfor(int b=j;b<M.col();b++)\n    L.add(subMatriz(M,i,j,a,b));"
+  },
+  "criticalFragments": [
+    {
+      "id": "four-loops",
+      "expected": "i,j,a,b",
+      "concept": "rectangle-coordinates",
+      "errorMessage": "Necesitas 4 índices: i,j para inicio y a,b para final."
+    },
+    {
+      "id": "a-starts-i",
+      "expected": "for(int a=i;a<M.fil();a++)",
+      "concept": "valid-end-row",
+      "errorMessage": "a empieza en i porque la fila final no puede quedar antes de la inicial."
+    },
+    {
+      "id": "b-starts-j",
+      "expected": "for(int b=j;b<M.col();b++)",
+      "concept": "valid-end-column",
+      "errorMessage": "b empieza en j porque la columna final no puede quedar antes de la inicial."
+    },
+    {
+      "id": "save-submatrix",
+      "expected": "L.add(subMatriz(M,i,j,a,b));",
+      "concept": "store-result",
+      "errorMessage": "Después de elegir las cuatro coordenadas debes recortar y guardar la submatriz."
+    }
+  ],
+  "trainingSequence": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-trace",
+    "plan-before-code",
+    "line-by-line",
+    "full-code-explained",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "recognitionDrills": [
+    {
+      "prompt": "¿Qué representan i,j?",
+      "answer": "esquina inicial"
+    },
+    {
+      "prompt": "¿Qué representan a,b?",
+      "answer": "esquina final"
+    },
+    {
+      "prompt": "¿Desde dónde empieza a?",
+      "answer": "i"
+    },
+    {
+      "prompt": "¿Desde dónde empieza b?",
+      "answer": "j"
+    }
+  ],
+  "masteryRules": {
+    "minimumAccuracy": 0.95,
+    "minimumSuccessfulRecalls": 2,
+    "maximumHintsForMastery": 1
+  },
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "No mostrar recognitionDrills ni huecos antes de completar esta sección.",
+    "chapter1_meaning": {
+      "title": "1. Qué estamos intentando hacer",
+      "explanation": "Una submatriz es un rectángulo recortado de una matriz original. Aquí trabajamos con submatrices contiguas.",
+      "analogy": "Piensa en seleccionar con el mouse un rectángulo dentro de una hoja de cálculo: eliges la esquina superior izquierda y la esquina inferior derecha."
+    },
+    "chapter2_words": {
+      "title": "2. Qué significa cada cosa del código",
+      "items": [
+        {
+          "term": "i",
+          "meaning": "fila inicial"
+        },
+        {
+          "term": "j",
+          "meaning": "columna inicial"
+        },
+        {
+          "term": "a",
+          "meaning": "fila final"
+        },
+        {
+          "term": "b",
+          "meaning": "columna final"
+        },
+        {
+          "term": "M",
+          "meaning": "matriz original"
+        },
+        {
+          "term": "R",
+          "meaning": "submatriz recortada"
+        },
+        {
+          "term": "L",
+          "meaning": "lista de todas las submatrices generadas"
+        }
+      ]
+    },
+    "chapter3_example": {
+      "title": "3. Primero resolvámoslo sin código",
+      "setup": "M=[[1,2,3],[4,5,6],[7,8,9]], inicio=(0,1), final=(1,2)",
+      "goal": "Recortar ese rectángulo.",
+      "result": [
+        [
+          2,
+          3
+        ],
+        [
+          5,
+          6
+        ]
+      ]
+    },
+    "chapter4_plan": {
+      "title": "4. Plan mental antes de programar",
+      "steps": [
+        "Primero necesito un método que recorte UNA submatriz.",
+        "Su tamaño es final-inicio+1.",
+        "Después, para generar TODAS, pruebo todas las esquinas iniciales i,j.",
+        "Para cada inicio pruebo todas las esquinas finales a,b.",
+        "a empieza en i y b empieza en j para no terminar antes de empezar."
+      ]
+    },
+    "chapter5_lineByLine": {
+      "title": "5. Ahora sí: qué hace cada línea",
+      "lines": [
+        {
+          "code": "L.clear();",
+          "explanation": "Empiezo con la lista vacía."
+        },
+        {
+          "code": "for i",
+          "explanation": "Elijo fila inicial."
+        },
+        {
+          "code": "for j",
+          "explanation": "Elijo columna inicial."
+        },
+        {
+          "code": "for a=i",
+          "explanation": "Elijo fila final desde la inicial hacia abajo."
+        },
+        {
+          "code": "for b=j",
+          "explanation": "Elijo columna final desde la inicial hacia la derecha."
+        },
+        {
+          "code": "L.add(subMatriz(...))",
+          "explanation": "Recorto ese rectángulo y lo guardo."
+        }
+      ]
+    },
+    "chapter6_fullCode": {
+      "title": "6. Código completo",
+      "instruction": "Mostrar el código completo con los anchors resaltados. Todavía no pedir que lo memorice."
+    },
+    "chapter7_imitation": {
+      "title": "7. Primera escritura con ayuda",
+      "instruction": "El alumno copia/reconstruye viendo anchors y puede consultar cada bloque. Los errores explican la lógica, no solo el carácter."
+    }
+  },
+  "trace": {
+    "input": {
+      "M": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    "steps": [
+      "L.clear(): vacío la lista de resultados.",
+      "i=0, j=0: la esquina inicial contiene 1.",
+      "a=0, b=0: recorto [[1]] y lo agrego a L.",
+      "b=1: recorto [[1,2]] y lo agrego a L.",
+      "a=1, b=0: recorto [[1],[3]] y lo agrego a L.",
+      "a=1, b=1: recorto [[1,2],[3,4]] y lo agrego a L.",
+      "j=1: guardo [[2]] y [[2],[4]].",
+      "i=1, j=0: guardo [[3]] y [[3,4]].",
+      "i=1, j=1: guardo [[4]]. Termino con 9 submatrices."
+    ]
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

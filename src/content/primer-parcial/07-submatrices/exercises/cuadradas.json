@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 2,
+  "id": "submatrices-cuadradas",
+  "classId": "submatrices",
+  "type": "variant",
+  "title": "SubMatrices Cuadradas",
+  "shortTitle": "Cuadradas",
+  "order": 1,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Mostrar solamente las submatrices que tengan igual número de filas y columnas.",
+    "goldenRule": "CUADRADA = fil()==col().",
+    "mentalModel": "No cambio cómo genero las submatrices; solamente filtro la lista ya generada.",
+    "delta": [
+      {
+        "id": "square-filter",
+        "type": "filter-list",
+        "added": "if(M.fil()==M.col())",
+        "focus": "fil()==col()",
+        "reason": "Una matriz es cuadrada cuando sus dos dimensiones son iguales."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void cuadradas(LinkedList<Matriz>L)",
+    "target": "static void cuadradas(LinkedList<Matriz>L){\n\n    for(Matriz M:L)\n        if(M.fil()==M.col())\n            System.out.println(M);\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "square-condition",
+      "expected": "if(M.fil()==M.col())",
+      "concept": "square-matrix",
+      "errorMessage": "CUADRADA significa misma cantidad de filas y columnas."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true,
+    "summary": "Primero genero todas; después filtro fil()==col()."
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "if(M.fil()____M.col())",
+      "answer": "=="
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Primero se generan todas las submatrices. Esta consulta solo decide cuáles mostrar."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "lista L ya generada",
+        "for-each sobre Matriz M"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "Filtro M.fil()==M.col().",
+      "why": "Una matriz es cuadrada cuando filas y columnas son iguales."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "2x2 y 3x3 pasan; 1x3 no."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

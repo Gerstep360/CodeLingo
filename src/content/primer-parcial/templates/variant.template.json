@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 2,
+  "id": "nombre-clase-variante",
+  "classId": "nombre-clase",
+  "type": "variant",
+  "title": "Variante",
+  "shortTitle": "Variante",
+  "order": 1,
+  "parent": "../base.json",
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Recordar el base antes de enseñar el cambio.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el esqueleto base; no asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Objetivo nuevo."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "parte igual 1",
+        "parte igual 2"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La idea nueva",
+      "change": "antes → después",
+      "why": "por qué"
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "caso concreto"
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Atenuar lo igual y resaltar el delta."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Aplicar delta por delta."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Con ayudas antes de ocultarlas."
+    }
+  },
+  "logic": {
+    "idea": "Qué cambia.",
+    "goldenRule": "Frase corta.",
+    "mentalModel": "Base + mutación.",
+    "delta": []
+  },
+  "code": {
+    "language": "java",
+    "target": "CÓDIGO CANÓNICO COMPLETO"
+  },
+  "criticalFragments": [],
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ]
+}

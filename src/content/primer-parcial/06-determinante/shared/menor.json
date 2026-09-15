@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 2,
+  "id": "determinante-shared-menor",
+  "type": "shared",
+  "title": "Matriz Menor",
+  "purpose": "Crear una matriz nueva eliminando la fila fi y la columna co.",
+  "logic": {
+    "idea": "Recorro la matriz original y copio todo excepto la fila fi y la columna co.",
+    "goldenRule": "MENOR = salto una fila + salto una columna.",
+    "anchors": [
+      "n=M.fil()",
+      "R de tamaño n-1",
+      "si i!=fi copio fila",
+      "si j!=co copio columna",
+      "a,b son índices de R"
+    ]
+  },
+  "code": {
+    "language": "java",
+    "target": "static Matriz menor(Matriz M,int fi,int co){\n\n    int n=M.fil(),a=0;\n\n    int[][] R=new int[n-1][n-1];\n\n    for(int i=0;i<n;i++)\n\n        if(i!=fi){\n\n            int b=0;\n\n            for(int j=0;j<n;j++)\n\n                if(j!=co)\n                    R[a][b++]=M.get(i,j);\n\n            a++;\n        }\n\n    return new Matriz(R);\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "new-size",
+      "expected": "int[][] R=new int[n-1][n-1];",
+      "concept": "minor-size",
+      "errorMessage": "El menor reduce una fila y una columna, por eso mide n-1 por n-1."
+    },
+    {
+      "id": "skip-row",
+      "expected": "if(i!=fi)",
+      "concept": "remove-row",
+      "errorMessage": "No copies la fila fi."
+    },
+    {
+      "id": "skip-column",
+      "expected": "if(j!=co)",
+      "concept": "remove-column",
+      "errorMessage": "No copies la columna co."
+    }
+  ],
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "fromZero": {
+    "title": "Qué hace menor()",
+    "explanation": "Crea una matriz nueva saltándose exactamente una fila y una columna.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

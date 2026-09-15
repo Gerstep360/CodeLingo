@@ -80,9 +80,9 @@ export function useIDEEngine(targetCode = '', isExamMode = false, onFinish = nul
     const milestones = [
       { count: 10, title: '¡BUEN RITMO!', level: 1 },
       { count: 25, title: '¡GRAN RACHA!', level: 2 },
-      { count: 50, title: '¡SUPER COMBO! 🔥', level: 3 },
-      { count: 100, title: '¡MEGA FRENZY! ⚡', level: 4 },
-      { count: 150, title: '¡MODO DIOS! 👑', level: 5 }
+      { count: 50, title: '¡SUPER COMBO! ', level: 3 },
+      { count: 100, title: '¡MEGA FRENZY! ', level: 4 },
+      { count: 150, title: '¡MODO DIOS! ', level: 5 }
     ];
 
     const match = milestones.find((m) => m.count === newStreak);
@@ -303,19 +303,19 @@ export function useIDEEngine(targetCode = '', isExamMode = false, onFinish = nul
 
   if (streak >= 100) {
     comboMultiplier = 4;
-    comboTierName = '⚡ MEGA FRENZY x4';
+    comboTierName = ' MEGA FRENZY x4';
     comboColor = 'var(--pastel-peach)';
   } else if (streak >= 50) {
     comboMultiplier = 3;
-    comboTierName = '🔥 SUPER x3';
+    comboTierName = ' SUPER x3';
     comboColor = 'var(--pastel-honey)';
   } else if (streak >= 25) {
     comboMultiplier = 2;
-    comboTierName = '✨ RITMO x2';
+    comboTierName = ' RITMO x2';
     comboColor = 'var(--pastel-mint)';
   } else if (streak >= 10) {
     comboMultiplier = 1.5;
-    comboTierName = '⚡ COMBO x1.5';
+    comboTierName = ' COMBO x1.5';
     comboColor = 'var(--pastel-lavender)';
   }
 

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 2,
+  "id": "mochila-shared-objeto",
+  "type": "shared",
+  "title": "Clase Objeto",
+  "purpose": "Representar cada objeto de la mochila mediante peso, color y tamaño.",
+  "code": {
+    "language": "java",
+    "target": "static class Objeto{\n    int peso,tam;\n    String color;\n\n    Objeto(int p,String c,int t){\n        peso=p;\n        color=c;\n        tam=t;\n    }\n\n    public String toString(){\n        return \"(\"+peso+\",\"+color+\",\"+tam+\")\";\n    }\n}"
+  },
+  "memory": {
+    "phrase": "OBJETO = peso + color + tamaño",
+    "anchors": [
+      "int peso,tam",
+      "String color",
+      "constructor recibe p,c,t",
+      "toString muestra los 3 atributos"
+    ]
+  },
+  "criticalFragments": [
+    {
+      "id": "fields",
+      "expected": "int peso,tam;",
+      "concept": "attributes",
+      "errorMessage": "El objeto necesita peso y tamaño como enteros."
+    },
+    {
+      "id": "color-field",
+      "expected": "String color;",
+      "concept": "attributes",
+      "errorMessage": "El color se guarda como String."
+    }
+  ],
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "fromZero": {
+    "title": "Qué representa Objeto",
+    "explanation": "Es una pequeña estructura que guarda juntos peso, color y tamaño.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

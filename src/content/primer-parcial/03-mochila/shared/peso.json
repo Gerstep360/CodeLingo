@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "id": "mochila-shared-peso",
+  "type": "shared",
+  "title": "Auxiliar peso",
+  "purpose": "Sumar el peso de todos los objetos actualmente guardados en L.",
+  "code": {
+    "language": "java",
+    "target": "static int peso(LinkedList<Objeto>L){\n    int s=0;\n    for(Objeto x:L)s+=x.peso;\n    return s;\n}"
+  },
+  "memory": {
+    "phrase": "recorro objetos y acumulo x.peso",
+    "anchors": [
+      "s empieza en 0",
+      "for-each con Objeto x",
+      "s+=x.peso",
+      "return s"
+    ]
+  },
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "fromZero": {
+    "title": "Qué hace peso()",
+    "explanation": "Suma el atributo peso de cada Objeto que está dentro de la lista.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

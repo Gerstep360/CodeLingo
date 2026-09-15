@@ -3,7 +3,7 @@
 class SoundEffectsManager {
   constructor() {
     this.ctx = null;
-    this.isMuted = false;
+    try {this.isMuted = localStorage.getItem('vargas_sound_muted')==='true';} catch {this.isMuted=false;}
   }
 
   ensureContext() {

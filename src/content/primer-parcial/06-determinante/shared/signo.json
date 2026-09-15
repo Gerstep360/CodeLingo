@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 2,
+  "id": "determinante-shared-signo",
+  "type": "shared",
+  "title": "Auxiliar signo",
+  "purpose": "Obtener +1 o -1 para el cofactor de la posición (i,j).",
+  "code": {
+    "language": "java",
+    "target": "static int signo(int i,int j){\n    return (i+j)%2==0 ? 1:-1;\n}"
+  },
+  "memory": {
+    "phrase": "i+j par → +1; impar → -1",
+    "anchors": [
+      "(i+j)%2==0",
+      "par = 1",
+      "impar = -1"
+    ]
+  },
+  "criticalFragments": [
+    {
+      "id": "parity",
+      "expected": "(i+j)%2==0 ? 1:-1",
+      "concept": "cofactor-sign",
+      "errorMessage": "El signo depende de la paridad de i+j."
+    }
+  ],
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "fromZero": {
+    "title": "Qué hace signo()",
+    "explanation": "Decide si el cofactor lleva +1 o -1 mirando si i+j es par o impar.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

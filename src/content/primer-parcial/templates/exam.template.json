@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "nombre-clase-exam",
+  "classId": "nombre-clase",
+  "type": "class-exam",
+  "title": "Examen de Clase",
+  "rules": {
+    "randomOrder": true,
+    "noHints": true,
+    "cleanScreen": true,
+    "showCodeDuringExam": false,
+    "allowRetryAfterFinish": true
+  },
+  "algorithms": [
+    "./base.json",
+    "./exercises/variante-1.json",
+    "./exercises/variante-2.json",
+    "./exercises/variante-3.json"
+  ],
+  "scoring": {
+    "minimumAccuracy": 0.95,
+    "passingMastery": 0.85,
+    "priorities": [
+      "logic",
+      "correct-code",
+      "accuracy",
+      "time"
+    ]
+  },
+  "resultScreen": {
+    "showLogic": true,
+    "showAccuracy": true,
+    "showTime": true,
+    "showCriticalErrors": true,
+    "showWeakAnchors": true,
+    "showTrainMistakesButton": true
+  }
+}

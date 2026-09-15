@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 2,
+  "id": "determinante",
+  "order": 6,
+  "title": "Determinante",
+  "shortTitle": "Det",
+  "subtitle": "Expansión por cofactores con recursión",
+  "icon": "grid-3x3",
+  "color": "red",
+  "objective": "Aprender desde cero Determinante, entender su lógica, construir el código paso a paso y terminar escribiéndolo de memoria con velocidad.",
+  "mentalModel": {
+    "phrase": "BASE 1x1 → SUMA → SIGNO × ELEMENTO × det(MENOR)",
+    "corePattern": "signo(i,j) * M.get(i,j) * det(menor(M,i,j))",
+    "roles": [
+      "M = matriz actual",
+      "i = fila",
+      "j = columna",
+      "menor(M,i,j) = matriz sin fila i ni columna j",
+      "signo(i,j) = +1 o -1 según la posición"
+    ],
+    "recoveryPhrases": [
+      "CASO BASE = matriz 1x1",
+      "MENOR = elimino una fila y una columna",
+      "DETERMINANTE = signo × elemento × det(menor)",
+      "BASE = columna 0",
+      "POR COLUMNA = columna j",
+      "POR FILA = fila i"
+    ]
+  },
+  "base": "./base.json",
+  "shared": [
+    "./shared/matriz.json",
+    "./shared/signo.json",
+    "./shared/menor.json"
+  ],
+  "exercises": [
+    "./exercises/cofactor.json",
+    "./exercises/por-columna.json",
+    "./exercises/por-fila.json"
+  ],
+  "classExam": {
+    "enabled": true,
+    "randomOrder": true,
+    "includeBase": true,
+    "includeVariants": true,
+    "hints": false,
+    "minimumAccuracy": 0.95,
+    "minimumMastery": 0.85
+  },
+  "speedrun": {
+    "enabled": true,
+    "unlock": {
+      "minimumAccuracy": 0.95,
+      "minimumSuccessfulRecalls": 1
+    }
+  },
+  "relatedClasses": [
+    {
+      "id": "submatrices",
+      "relation": "matrix-family",
+      "note": "Determinante y Submatrices comparten la clase Matriz, pero el menor elimina una fila y columna mientras subMatriz recorta un rectángulo."
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "standaloneLearning": true,
+  "fromZero": {
+    "startHere": "Antes del código: una matriz es una tabla de números. El determinante es un número calculado a partir de una matriz cuadrada.",
+    "everydayAnalogy": "Para este examen no necesitas memorizar teoría abstracta: necesitas saber cómo el código descompone una matriz grande en matrices más pequeñas hasta llegar a 1x1.",
+    "vocabulary": [
+      {
+        "term": "M",
+        "meaning": "matriz actual"
+      },
+      {
+        "term": "i",
+        "meaning": "fila"
+      },
+      {
+        "term": "j",
+        "meaning": "columna"
+      },
+      {
+        "term": "signo(i,j)",
+        "meaning": "devuelve +1 o -1 según la posición"
+      },
+      {
+        "term": "menor(M,i,j)",
+        "meaning": "matriz que queda al quitar la fila i y la columna j"
+      },
+      {
+        "term": "det(...)",
+        "meaning": "determinante calculado recursivamente"
+      }
+    ],
+    "firstWorkedExample": {
+      "setup": "M=[[1,2],[3,4]]",
+      "goal": "Calcular el determinante desarrollando por la primera columna.",
+      "result": -2
+    },
+    "beforeSeeingCode": [
+      "La recursión termina cuando la matriz es 1x1.",
+      "Si no es 1x1, acumulo aportes en s.",
+      "El base recorre las filas de la columna 0.",
+      "Cada aporte es signo × elemento × det(menor).",
+      "menor() crea el siguiente problema más pequeño."
+    ],
+    "teachingPromise": "No se pregunta nada que todavía no haya sido explicado en esta misma clase."
+  },
+  "lessonOrder": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-simulation",
+    "code-build",
+    "line-by-line",
+    "guided-copy",
+    "guided-rebuild",
+    "variant-lessons",
+    "recall",
+    "speedrun",
+    "class-exam"
+  ]
+}

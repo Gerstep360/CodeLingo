@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "id": "combi-sr",
+  "classId": "combinaciones",
+  "type": "variant",
+  "title": "Combinación Sin Repetición",
+  "shortTitle": "Combi SR",
+  "order": 1,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "El orden no importa y un elemento no puede volver a utilizarse.",
+    "goldenRule": "COMBI SR = tengo i + k+1.",
+    "mentalModel": "Como no puedo repetir el actual, después de elegir k salto al siguiente.",
+    "delta": [
+      {
+        "id": "recursive-step",
+        "type": "choose",
+        "familyChoice": "SR",
+        "after": "combiSR(L1,L2,r,k+1);",
+        "focus": "k+1",
+        "reason": "k+1 evita reutilizar el elemento actual."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void combiSR(LinkedList<Integer>L1, LinkedList<Integer>L2, int r,int i)",
+    "target": "static void combiSR(LinkedList<Integer>L1,\n                    LinkedList<Integer>L2,\n                    int r,int i){\n\n    if(L1.size()==r){\n        System.out.println(L1);\n        return;\n    }\n\n    for(int k=i;k<L2.size();k++){\n        L1.add(L2.get(k));\n        combiSR(L1,L2,r,k+1);\n        L1.removeLast();\n    }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "base-size",
+      "expected": "if(L1.size()==r)",
+      "concept": "target-size",
+      "errorMessage": "Combinaciones terminan cuando L1.size()==r."
+    },
+    {
+      "id": "loop-i",
+      "expected": "for(int k=i;k<L2.size();k++)",
+      "concept": "combination",
+      "errorMessage": "COMBI usa i. Si pones k=0 estás escribiendo la estructura de Permutación."
+    },
+    {
+      "id": "recursive-k-plus-one",
+      "expected": "combiSR(L1,L2,r,k+1);",
+      "concept": "no-repetition",
+      "errorMessage": "SR = SIN repetición → avanzo → k+1."
+    },
+    {
+      "id": "undo",
+      "expected": "L1.removeLast();",
+      "concept": "backtracking",
+      "errorMessage": "Falta QUITO: removeLast() deshace la elección."
+    }
+  ],
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "combiSR(L1,L2,r,____);",
+      "answer": "k+1"
+    },
+    {
+      "type": "contrast",
+      "prompt": "COMBI SR: ¿for desde i o 0?",
+      "answer": "i"
+    },
+    {
+      "type": "recovery",
+      "prompt": "SIN repetición significa...",
+      "answer": "avanzo con k+1"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Primero recuerda qué significa combinación: el orden no importa. Ahora además no se puede repetir."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "L1.size()==r",
+        "for desde i",
+        "add/remove"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "La recursión usa k+1.",
+      "why": "Después de usar el elemento actual, avanzo al siguiente."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Con [1,2,3], r=2: [1,2], [1,3], [2,3]."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

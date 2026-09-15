@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "clase-a-vs-clase-b",
+  "type": "cross-class-contrast",
+  "title": "Comparación entre familias",
+  "classes": [
+    "clase-a",
+    "clase-b"
+  ],
+  "goldenRule": "Frase que separa rápidamente ambas familias.",
+  "table": [
+    {
+      "algorithm": "Algoritmo A",
+      "rule1": "regla",
+      "rule2": "regla",
+      "memory": "frase"
+    },
+    {
+      "algorithm": "Algoritmo B",
+      "rule1": "regla",
+      "rule2": "regla",
+      "memory": "frase"
+    }
+  ],
+  "rapidDrills": [
+    {
+      "prompt": "Descripción corta",
+      "answer": "Algoritmo correcto"
+    }
+  ]
+}

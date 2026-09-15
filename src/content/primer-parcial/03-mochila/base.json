@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 2,
+  "id": "mochila-base",
+  "classId": "mochila",
+  "type": "base",
+  "title": "Algoritmo Base",
+  "shortTitle": "Base",
+  "requires": [
+    "./shared/objeto.json",
+    "./shared/peso.json"
+  ],
+  "logic": {
+    "idea": "Genera combinaciones de objetos cuyo peso total no supere max.",
+    "answer": "Mide el peso actual de L1, corta si supera max, imprime la combinación actual y luego prueba cada objeto disponible desde el índice i.",
+    "goldenRule": "MOCHILA = objeto por índice + k+1 + add → recursión → removeLast.",
+    "anchors": [
+      {
+        "id": "stop",
+        "order": 1,
+        "label": "CORTAR",
+        "memory": "Si la mochila se pasa de peso, esa rama murió.",
+        "code": "if(peso(L1)>max)return;"
+      },
+      {
+        "id": "show",
+        "order": 2,
+        "label": "IMPRIMIR",
+        "memory": "Si tiene objetos y no se pasó, es una combinación válida.",
+        "code": "if(!L1.isEmpty()) System.out.println(L1);"
+      },
+      {
+        "id": "loop",
+        "order": 3,
+        "label": "RECORRER",
+        "memory": "Los objetos se recorren por índice desde i.",
+        "code": "for(int k=i;k<L2.size();k++)"
+      },
+      {
+        "id": "choose",
+        "order": 4,
+        "label": "AGREGO",
+        "memory": "k es índice, por eso tomo L2.get(k).",
+        "code": "L1.add(L2.get(k));"
+      },
+      {
+        "id": "recurse",
+        "order": 5,
+        "label": "BAJO",
+        "memory": "k+1 evita reutilizar el mismo objeto físico.",
+        "code": "mochila(L1,L2,max,k+1);"
+      },
+      {
+        "id": "undo",
+        "order": 6,
+        "label": "QUITO",
+        "memory": "Deshago la última elección.",
+        "code": "L1.removeLast();"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void mochila(LinkedList<Objeto>L1, LinkedList<Objeto>L2, int max,int i)",
+    "target": "static void mochila(LinkedList<Objeto>L1,\n                    LinkedList<Objeto>L2,\n                    int max,int i){\n\n    if(peso(L1)>max)return;\n\n    if(!L1.isEmpty())\n        System.out.println(L1);\n\n    for(int k=i;k<L2.size();k++){\n        L1.add(L2.get(k));\n        mochila(L1,L2,max,k+1);\n        L1.removeLast();\n    }\n}",
+    "core": "for(int k=i;k<L2.size();k++){\n    L1.add(L2.get(k));\n    mochila(L1,L2,max,k+1);\n    L1.removeLast();\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "capacity-stop",
+      "anchor": "stop",
+      "expected": "if(peso(L1)>max)return;",
+      "concept": "capacity",
+      "errorMessage": "Primero verifica el peso actual. Si supera max, corta la rama."
+    },
+    {
+      "id": "loop-by-index",
+      "anchor": "loop",
+      "expected": "for(int k=i;k<L2.size();k++)",
+      "concept": "index-search",
+      "errorMessage": "Mochila recorre los objetos de L2 por índice desde i."
+    },
+    {
+      "id": "choose-object",
+      "anchor": "choose",
+      "expected": "L1.add(L2.get(k));",
+      "concept": "choose-object",
+      "errorMessage": "Aquí k es índice: debes agregar L2.get(k), no k."
+    },
+    {
+      "id": "recursive-k-plus-one",
+      "anchor": "recurse",
+      "expected": "mochila(L1,L2,max,k+1);",
+      "concept": "no-reuse-object",
+      "errorMessage": "Mochila usa k+1 para no volver a usar el mismo objeto físico."
+    },
+    {
+      "id": "undo",
+      "anchor": "undo",
+      "expected": "L1.removeLast();",
+      "concept": "backtracking",
+      "errorMessage": "Falta QUITO: removeLast() devuelve la mochila al estado anterior."
+    }
+  ],
+  "trainingSequence": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-trace",
+    "plan-before-code",
+    "line-by-line",
+    "full-code-explained",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "trace": {
+    "exampleObjects": [
+      {
+        "peso": 2,
+        "color": "rojo",
+        "tam": 3
+      },
+      {
+        "peso": 4,
+        "color": "azul",
+        "tam": 6
+      },
+      {
+        "peso": 3,
+        "color": "rojo",
+        "tam": 2
+      }
+    ],
+    "max": 6,
+    "steps": [
+      "L1=[] → peso=0",
+      "k=0 → agrego objeto peso 2 → L1=[(2,rojo,3)]",
+      "bajo con i=k+1=1",
+      "k=1 → agrego objeto peso 4 → peso total=6",
+      "la combinación es válida y se imprime",
+      "removeLast() quita el objeto de peso 4",
+      "el ciclo continúa con el siguiente objeto"
+    ]
+  },
+  "recognitionDrills": [
+    {
+      "prompt": "En Mochila, ¿k es un valor o un índice?",
+      "answer": "índice",
+      "reason": "Por eso se usa L2.get(k)."
+    },
+    {
+      "prompt": "¿La llamada recursiva usa k o k+1?",
+      "answer": "k+1",
+      "reason": "No se reutiliza el mismo objeto físico."
+    },
+    {
+      "prompt": "¿Cuál es el patrón central?",
+      "answer": "add → recursión → removeLast"
+    }
+  ],
+  "masteryRules": {
+    "minimumAccuracy": 0.95,
+    "minimumSuccessfulRecalls": 2,
+    "maximumHintsForMastery": 1
+  },
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "No mostrar recognitionDrills ni huecos antes de completar esta sección.",
+    "chapter1_meaning": {
+      "title": "1. Qué estamos intentando hacer",
+      "explanation": "Mochila ya no elige números sueltos: elige objetos completos. Cada objeto tiene peso, color y tamaño.",
+      "analogy": "Imagina una mochila real: vas metiendo objetos mientras el peso total no supere max. Después puedes pedir además solo objetos rojos, pequeños o de cierto rango de peso."
+    },
+    "chapter2_words": {
+      "title": "2. Qué significa cada cosa del código",
+      "items": [
+        {
+          "term": "Objeto",
+          "meaning": "elemento con peso, color y tamaño"
+        },
+        {
+          "term": "L1",
+          "meaning": "objetos que ya están dentro de la mochila actual"
+        },
+        {
+          "term": "L2",
+          "meaning": "lista de objetos disponibles"
+        },
+        {
+          "term": "max",
+          "meaning": "peso total máximo permitido"
+        },
+        {
+          "term": "i",
+          "meaning": "índice desde donde sigo buscando"
+        },
+        {
+          "term": "k",
+          "meaning": "índice del objeto que estoy probando"
+        },
+        {
+          "term": "peso(L1)",
+          "meaning": "suma de los pesos de los objetos elegidos"
+        }
+      ]
+    },
+    "chapter3_example": {
+      "title": "3. Primero resolvámoslo sin código",
+      "setup": "Objetos: A=(2,rojo,3), B=(4,azul,6), C=(3,rojo,2), max=6",
+      "goal": "Generar combinaciones de objetos que no excedan peso 6.",
+      "examples": [
+        "[A]",
+        "[B]",
+        "[C]",
+        "[A,B]",
+        "[A,C]"
+      ]
+    },
+    "chapter4_plan": {
+      "title": "4. Plan mental antes de programar",
+      "steps": [
+        "Primero mido el peso total de L1.",
+        "Si supera max, corto.",
+        "Si L1 no está vacía y no se pasó, la combinación actual sirve.",
+        "k es un índice, por eso el objeto es L2.get(k).",
+        "Uso k+1 para no volver a usar el mismo objeto físico."
+      ]
+    },
+    "chapter5_lineByLine": {
+      "title": "5. Ahora sí: qué hace cada línea",
+      "lines": [
+        {
+          "code": "if(peso(L1)>max)return;",
+          "explanation": "Si la combinación pesa demasiado, dejo esa rama."
+        },
+        {
+          "code": "if(!L1.isEmpty())...",
+          "explanation": "Toda combinación no vacía que no excedió max se imprime."
+        },
+        {
+          "code": "for(int k=i;k<L2.size();k++)",
+          "explanation": "Recorro objetos por índice."
+        },
+        {
+          "code": "L1.add(L2.get(k));",
+          "explanation": "Meto el objeto k."
+        },
+        {
+          "code": "mochila(...,k+1);",
+          "explanation": "Exploro sin reutilizar ese mismo objeto."
+        },
+        {
+          "code": "L1.removeLast();",
+          "explanation": "Lo saco para probar otra opción."
+        }
+      ]
+    },
+    "chapter6_fullCode": {
+      "title": "6. Código completo",
+      "instruction": "Mostrar el código completo con los anchors resaltados. Todavía no pedir que lo memorice."
+    },
+    "chapter7_imitation": {
+      "title": "7. Primera escritura con ayuda",
+      "instruction": "El alumno copia/reconstruye viendo anchors y puede consultar cada bloque. Los errores explican la lógica, no solo el carácter."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

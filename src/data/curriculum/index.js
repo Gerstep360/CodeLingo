@@ -1,44 +1,4 @@
-// ==============================================================================
-// REGISTRO CENTRAL MODULAR DE CURRÍCULO — CODELINGO
-// ==============================================================================
-// Cada unidad es un módulo independiente con Clases (Teoría + Preguntas)
-// y Examen Final de Sección.
-// ==============================================================================
-
-import { UNIT_1_BACKTRACKING } from './unit1_backtracking';
-import { UNIT_2_DESCOMPOSICION } from './unit2_descomposicion';
-import { UNIT_3_MOCHILA } from './unit3_mochila';
-import { UNIT_4_COMBINACIONES } from './unit4_combinaciones';
-import { UNIT_5_MATRICES } from './unit5_matrices';
-
-// Lista ordenada de todas las unidades temáticas modulares
-export const DUO_UNITS = [
-  UNIT_1_BACKTRACKING,
-  UNIT_2_DESCOMPOSICION,
-  UNIT_3_MOCHILA,
-  UNIT_4_COMBINACIONES,
-  UNIT_5_MATRICES,
-];
-
-// Helper: Obtener todos los nodos de todas las unidades ordenados secuencialmente
-export function getAllNodes() {
-  return DUO_UNITS.flatMap((u) => u.nodes);
-}
-
-// Helper: Buscar nodo por ID
-export function getNodeById(nodeId) {
-  return getAllNodes().find((n) => n.id === nodeId) || null;
-}
-
-// Helper: Buscar unidad por ID
-export function getUnitById(unitId) {
-  return DUO_UNITS.find((u) => u.id === unitId) || null;
-}
-
-// Helper: Verificar si un nodo es el examen final de una unidad
-export function isFinalExamNode(node) {
-  return Boolean(node?.isFinalExam || node?.type === 'final_exam');
-}
+export { DUO_UNITS, getAllNodes, getNodeById, getUnitById, isFinalExamNode } from '../../content/curriculumAdapter';
 
 // ------------------------------------------------------------------------------
 // BANCO DE PREGUNTAS: TEST FLASH (10 Preguntas de Rescate Rápido)

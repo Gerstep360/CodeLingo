@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 2,
+  "id": "factores-base",
+  "classId": "factores",
+  "type": "base",
+  "title": "Algoritmo Base",
+  "shortTitle": "Base",
+  "logic": {
+    "idea": "Construye listas cuyo producto sea exactamente n.",
+    "answer": "Calcula el producto parcial, corta al llegar o superar n y solo prueba k si p*k todavía forma una división exacta de n.",
+    "goldenRule": "FACTORES = SUMANDOS con producto + filtro n%(p*k)==0.",
+    "anchors": [
+      {
+        "id": "measure",
+        "order": 1,
+        "label": "MEDIR",
+        "memory": "Primero sé cuánto llevo multiplicado.",
+        "code": "int p=prod(L);"
+      },
+      {
+        "id": "stop",
+        "order": 2,
+        "label": "CORTAR / SOLUCIÓN",
+        "memory": "Si llegué o me pasé, paro. Si fue exacto, imprimo.",
+        "code": "if(p>=n){ if(p==n)System.out.println(L); return; }"
+      },
+      {
+        "id": "loop",
+        "order": 3,
+        "label": "RECORRER",
+        "memory": "Pruebo desde i hasta n.",
+        "code": "for(int k=i;k<=n;k++)"
+      },
+      {
+        "id": "filter",
+        "order": 4,
+        "label": "FILTRAR",
+        "memory": "Solo sigo si p*k divide exactamente a n.",
+        "code": "if(n%(p*k)==0)"
+      },
+      {
+        "id": "choose",
+        "order": 5,
+        "label": "AGREGO",
+        "memory": "Elijo k.",
+        "code": "L.add(k);"
+      },
+      {
+        "id": "recurse",
+        "order": 6,
+        "label": "BAJO",
+        "memory": "BASE usa k porque el mismo factor puede repetirse.",
+        "code": "factores(L,n,k);"
+      },
+      {
+        "id": "undo",
+        "order": 7,
+        "label": "QUITO",
+        "memory": "Vuelvo al estado anterior.",
+        "code": "L.removeLast();"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void factores(LinkedList<Integer>L,int n,int i)",
+    "target": "static void factores(LinkedList<Integer>L,int n,int i){\n    int p=prod(L);\n\n    if(p>=n){\n        if(p==n)System.out.println(L);\n        return;\n    }\n\n    for(int k=i;k<=n;k++)\n        if(n%(p*k)==0){\n            L.add(k);\n            factores(L,n,k);\n            L.removeLast();\n        }\n}",
+    "core": "for(int k=i;k<=n;k++)\n    if(n%(p*k)==0){\n        L.add(k);\n        factores(L,n,k);\n        L.removeLast();\n    }"
+  },
+  "criticalFragments": [
+    {
+      "id": "measure-product",
+      "anchor": "measure",
+      "expected": "int p=prod(L);",
+      "concept": "measure",
+      "errorMessage": "Factores mide PRODUCTO, no suma."
+    },
+    {
+      "id": "stop-condition",
+      "anchor": "stop",
+      "expected": "if(p>=n)",
+      "concept": "pruning",
+      "errorMessage": "El corte de Factores usa p>=n; si p==n imprime."
+    },
+    {
+      "id": "divisibility-filter",
+      "anchor": "filter",
+      "expected": "if(n%(p*k)==0)",
+      "concept": "divisibility",
+      "errorMessage": "Antes de agregar k, verifica que p*k mantenga una división exacta de n."
+    },
+    {
+      "id": "recursive-argument",
+      "anchor": "recurse",
+      "expected": "factores(L,n,k);",
+      "concept": "repetition",
+      "errorMessage": "FACTORES BASE recurre con k porque un factor puede repetirse."
+    },
+    {
+      "id": "undo",
+      "anchor": "undo",
+      "expected": "L.removeLast();",
+      "concept": "backtracking",
+      "errorMessage": "Falta QUITO: removeLast() restaura L antes de probar otro k."
+    }
+  ],
+  "trainingSequence": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-trace",
+    "plan-before-code",
+    "line-by-line",
+    "full-code-explained",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "trace": {
+    "input": {
+      "n": 12,
+      "i": 2
+    },
+    "steps": [
+      "L=[]; p=1",
+      "k=2 → 12%(1*2)==0 → add(2) → L=[2]",
+      "recursión con k=2",
+      "p=2",
+      "k=2 → 12%(2*2)==0 → add(2) → L=[2,2]",
+      "p=4",
+      "k=3 → 12%(4*3)==0 → add(3) → L=[2,2,3]",
+      "p=12 → imprime",
+      "return",
+      "removeLast() → vuelve a [2,2]"
+    ]
+  },
+  "recognitionDrills": [
+    {
+      "prompt": "¿Factores mide suma o producto?",
+      "answer": "producto"
+    },
+    {
+      "prompt": "¿Cuál es el filtro central del algoritmo base?",
+      "answer": "n%(p*k)==0"
+    },
+    {
+      "prompt": "En Factores BASE, ¿recurre con k o k+1?",
+      "answer": "k",
+      "reason": "El factor puede repetirse."
+    }
+  ],
+  "masteryRules": {
+    "minimumAccuracy": 0.95,
+    "minimumSuccessfulRecalls": 2,
+    "maximumHintsForMastery": 1
+  },
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "No mostrar recognitionDrills ni huecos antes de completar esta sección.",
+    "chapter1_meaning": {
+      "title": "1. Qué estamos intentando hacer",
+      "explanation": "Factores hace casi el mismo recorrido que Sumandos, pero ahora no queremos sumar: queremos multiplicar hasta obtener n.",
+      "analogy": "Buscamos distintas maneras ordenadas de descomponer n en factores. Para n=12 pueden aparecer [2,2,3], [2,6], [3,4] y [12]."
+    },
+    "chapter2_words": {
+      "title": "2. Qué significa cada cosa del código",
+      "items": [
+        {
+          "term": "L",
+          "meaning": "factores que llevo elegidos"
+        },
+        {
+          "term": "n",
+          "meaning": "producto objetivo"
+        },
+        {
+          "term": "i",
+          "meaning": "primer factor que puedo probar"
+        },
+        {
+          "term": "k",
+          "meaning": "factor candidato"
+        },
+        {
+          "term": "p",
+          "meaning": "producto actual de L"
+        },
+        {
+          "term": "n%(p*k)==0",
+          "meaning": "significa que p*k todavía encaja exactamente dentro de n"
+        }
+      ]
+    },
+    "chapter3_example": {
+      "title": "3. Primero resolvámoslo sin código",
+      "setup": "n=12, i=2, L=[]",
+      "goal": "Construir factorizaciones cuyo producto sea 12.",
+      "examples": [
+        "[2,2,3]",
+        "[2,6]",
+        "[3,4]",
+        "[12]"
+      ]
+    },
+    "chapter4_plan": {
+      "title": "4. Plan mental antes de programar",
+      "steps": [
+        "El producto vacío debe empezar en 1.",
+        "Calculo p=prod(L).",
+        "Si p llega a n, encontré solución.",
+        "Antes de agregar k, verifico que p*k siga dividiendo exactamente a n.",
+        "Después uso el mismo patrón agregar → bajar → quitar."
+      ]
+    },
+    "chapter5_lineByLine": {
+      "title": "5. Ahora sí: qué hace cada línea",
+      "lines": [
+        {
+          "code": "int p=prod(L);",
+          "explanation": "Calcula el producto actual."
+        },
+        {
+          "code": "if(p>=n)",
+          "explanation": "Si llegué o superé n, corto."
+        },
+        {
+          "code": "if(n%(p*k)==0)",
+          "explanation": "Solo pruebo k si el nuevo producto sigue siendo compatible con n."
+        },
+        {
+          "code": "L.add(k);",
+          "explanation": "Elijo el factor."
+        },
+        {
+          "code": "factores(L,n,k);",
+          "explanation": "Exploro permitiendo repetir k."
+        },
+        {
+          "code": "L.removeLast();",
+          "explanation": "Deshago."
+        }
+      ]
+    },
+    "chapter6_fullCode": {
+      "title": "6. Código completo",
+      "instruction": "Mostrar el código completo con los anchors resaltados. Todavía no pedir que lo memorice."
+    },
+    "chapter7_imitation": {
+      "title": "7. Primera escritura con ayuda",
+      "instruction": "El alumno copia/reconstruye viendo anchors y puede consultar cada bloque. Los errores explican la lógica, no solo el carácter."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

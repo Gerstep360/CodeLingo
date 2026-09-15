@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 2,
+  "id": "permutaciones-base",
+  "classId": "permutaciones",
+  "type": "family-base",
+  "title": "Lógica Base de Permutaciones",
+  "shortTitle": "Lógica Base",
+  "typingEnabled": false,
+  "logic": {
+    "idea": "En una permutación el orden sí importa. Por eso no existe parámetro i y el for siempre comienza en k=0.",
+    "goldenRule": "PERMUTACIÓN = NO TENGO i; VUELVO A 0.",
+    "anchors": [
+      {
+        "id": "base-case",
+        "order": 1,
+        "label": "CASO BASE",
+        "memory": "Cuando L1 tiene r elementos, encontré una permutación.",
+        "code": "if(L1.size()==r){ System.out.println(L1); return; }"
+      },
+      {
+        "id": "loop",
+        "order": 2,
+        "label": "RECORRER",
+        "memory": "Permutación siempre vuelve al inicio.",
+        "code": "for(int k=0;k<L2.size();k++)"
+      },
+      {
+        "id": "filter",
+        "order": 3,
+        "label": "¿FILTRO?",
+        "memory": "SR usa !contains. CR no usa filtro.",
+        "code": "SR → !contains | CR → libre"
+      },
+      {
+        "id": "choose",
+        "order": 4,
+        "label": "AGREGO",
+        "memory": "Agrego L2.get(k).",
+        "code": "L1.add(L2.get(k));"
+      },
+      {
+        "id": "recurse",
+        "order": 5,
+        "label": "BAJO",
+        "memory": "La llamada no lleva i.",
+        "code": "permut...(L1,L2,r);"
+      },
+      {
+        "id": "undo",
+        "order": 6,
+        "label": "QUITO",
+        "memory": "Deshago la elección.",
+        "code": "L1.removeLast();"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "template": "static void permutacion(LinkedList<Integer>L1,\n                         LinkedList<Integer>L2,\n                         int r){\n\n    if(L1.size()==r){\n        System.out.println(L1);\n        return;\n    }\n\n    for(int k=0;k<L2.size();k++){\n        // SR: if(!L1.contains(L2.get(k)))\n        // CR: sin filtro\n        L1.add(L2.get(k));\n        // llamada sin i\n        L1.removeLast();\n    }\n}"
+  },
+  "criticalConcepts": [
+    {
+      "id": "no-i",
+      "expected": "sin parámetro i",
+      "concept": "permutation-family",
+      "errorMessage": "PERMUTACIÓN no lleva i."
+    },
+    {
+      "id": "loop-zero",
+      "expected": "for(int k=0;k<L2.size();k++)",
+      "concept": "order-matters",
+      "errorMessage": "Si empiezas en i estás pensando como Combinación."
+    },
+    {
+      "id": "sr-vs-cr-filter",
+      "expected": "SR=!contains|CR=libre",
+      "concept": "repetition",
+      "errorMessage": "Permut SR evita repetir con !contains; Permut CR no filtra."
+    }
+  ],
+  "trainingSequence": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-trace",
+    "plan-before-code",
+    "line-by-line",
+    "full-code-explained",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "No mostrar recognitionDrills ni huecos antes de completar esta sección.",
+    "chapter1_meaning": {
+      "title": "1. Qué estamos intentando hacer",
+      "explanation": "Una permutación elige elementos donde el orden SÍ importa. [1,2] y [2,1] son soluciones diferentes.",
+      "analogy": "Si tienes dos puestos —primero y segundo— no es lo mismo Ana/Luis que Luis/Ana. Cambiar el orden crea otra solución."
+    },
+    "chapter2_words": {
+      "title": "2. Qué significa cada cosa del código",
+      "items": [
+        {
+          "term": "L1",
+          "meaning": "permutación que estoy construyendo"
+        },
+        {
+          "term": "L2",
+          "meaning": "elementos disponibles"
+        },
+        {
+          "term": "r",
+          "meaning": "longitud exacta de la permutación"
+        },
+        {
+          "term": "k",
+          "meaning": "índice candidato"
+        },
+        {
+          "term": "contains",
+          "meaning": "comprueba si un elemento ya fue usado"
+        }
+      ]
+    },
+    "chapter3_example": {
+      "title": "3. Primero resolvámoslo sin código",
+      "setup": "L2=[1,2,3], r=2",
+      "goal": "Formar secuencias de longitud 2.",
+      "examples": {
+        "SR": [
+          "[1,2]",
+          "[1,3]",
+          "[2,1]",
+          "[2,3]",
+          "[3,1]",
+          "[3,2]"
+        ],
+        "CR": [
+          "[1,1]",
+          "[1,2]",
+          "[1,3]",
+          "[2,1]",
+          "[2,2]",
+          "[2,3]",
+          "[3,1]",
+          "[3,2]",
+          "[3,3]"
+        ]
+      }
+    },
+    "chapter4_plan": {
+      "title": "4. Plan mental antes de programar",
+      "steps": [
+        "El caso base sigue siendo L1.size()==r.",
+        "Aquí NO hay parámetro i.",
+        "El for empieza siempre en 0 porque cada posición puede usar cualquier elemento.",
+        "SR evita repetir con !L1.contains(...).",
+        "CR no necesita filtro porque repetir está permitido."
+      ]
+    },
+    "chapter5_lineByLine": {
+      "title": "5. Ahora sí: qué hace cada línea",
+      "lines": [
+        {
+          "code": "if(L1.size()==r)",
+          "explanation": "Termino al alcanzar longitud r."
+        },
+        {
+          "code": "for(int k=0;k<L2.size();k++)",
+          "explanation": "Siempre vuelvo a 0 porque el orden sí importa."
+        },
+        {
+          "code": "SR → !contains",
+          "explanation": "Sin repetición: evito elementos ya usados."
+        },
+        {
+          "code": "CR → sin filtro",
+          "explanation": "Con repetición: todo candidato sirve."
+        },
+        {
+          "code": "L1.add(...)",
+          "explanation": "Elijo."
+        },
+        {
+          "code": "L1.removeLast()",
+          "explanation": "Deshago."
+        }
+      ]
+    },
+    "chapter6_fullCode": {
+      "title": "6. Código completo",
+      "instruction": "Mostrar el código completo con los anchors resaltados. Todavía no pedir que lo memorice."
+    },
+    "chapter7_imitation": {
+      "title": "7. Primera escritura con ayuda",
+      "instruction": "El alumno copia/reconstruye viendo anchors y puede consultar cada bloque. Los errores explican la lógica, no solo el carácter."
+    }
+  }
+,
+  "trace": {
+  "input": {
+    "L2": [
+      1,
+      2,
+      3
+    ],
+    "r": 2,
+    "variant": "Sin repetición"
+  },
+  "steps": [
+    "L1=[]; k=0: agrego 1.",
+    "L1=[1]; la siguiente llamada vuelve a k=0.",
+    "1 ya está en L1: !contains impide repetirlo.",
+    "k=1: agrego 2; L1=[1,2].",
+    "L1.size()==r: imprimo [1,2] y regreso.",
+    "Quito 2 y pruebo 3: imprimo [1,3].",
+    "Regreso al nivel inicial y quito 1.",
+    "Ahora elijo 2; la llamada vuelve a k=0 y elige 1.",
+    "Imprimo [2,1]: el orden sí importa. Con repetición no usaría !contains."
+  ]
+}
+}

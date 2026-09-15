@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 2,
+  "id": "ia-vargas-primer-parcial",
+  "parcial": 1,
+  "parcialName": "Primer Parcial",
+  "subject": "Inteligencia Artificial",
+  "professor": "Ing. Vargas",
+  "title": "IA — Primer Parcial: Algoritmos Canónicos Vargas",
+  "subtitle": "Curso desde cero: entender → ver funcionar → construir → recordar → escribir rápido",
+  "author": "Ing. Vargas",
+  "description": "Curso completo de los 7 temas del Primer Parcial. No presupone que el alumno ya conoce los algoritmos: cada clase empieza por significado, vocabulario, ejemplo concreto, recorrido manual y construcción gradual del código antes de cualquier prueba de memoria.",
+  "pedagogicalRules": [
+    "No alterar la lógica de los códigos canónicos de referencia.",
+    "Cada clase debe poder aprenderse de manera independiente desde cero.",
+    "Toda palabra técnica usada por primera vez debe definirse.",
+    "Primero explicación y ejemplo; recién después preguntas o ejercicios.",
+    "Las variantes se enseñan como Base + Cambio/Delta, pero primero se recuerda brevemente el base.",
+    "Prioridad: comprensión -> precisión -> recall -> velocidad.",
+    "No desbloquear Speedrun mientras el alumno aún comete errores lógicos críticos."
+  ],
+  "classes": [
+    "01-sumandos",
+    "02-factores",
+    "03-mochila",
+    "04-combinaciones",
+    "05-permutaciones",
+    "06-determinante",
+    "07-submatrices"
+  ],
+  "assumePriorKnowledge": false,
+  "foundation": "./fundamentals.json",
+  "learningPhilosophy": {
+    "principle": "ENSEÑAR PRIMERO, EVALUAR DESPUÉS",
+    "sequence": [
+      "explicar desde cero en lenguaje simple",
+      "definir cada variable y símbolo",
+      "mostrar un ejemplo pequeño resuelto",
+      "hacer una traza visual paso a paso",
+      "construir el código por bloques",
+      "explicar cada línea y por qué existe",
+      "hacer una copia guiada",
+      "reconstruir con ayudas",
+      "retirar ayudas gradualmente",
+      "recuperar de memoria",
+      "recién entonces entrenar velocidad"
+    ],
+    "forbidden": [
+      "hacer preguntas de lógica antes de haber enseñado esa lógica",
+      "usar jerga sin definirla",
+      "mostrar un algoritmo completo y asumir que el alumno entiende recursión",
+      "premiar velocidad cuando todavía hay errores de lógica",
+      "usar multiple choice como método principal de aprendizaje"
+    ]
+  }
+}

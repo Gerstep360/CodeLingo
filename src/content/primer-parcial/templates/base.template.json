@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 2,
+  "id": "nombre-clase-base",
+  "classId": "nombre-clase",
+  "type": "base",
+  "title": "Algoritmo Base",
+  "shortTitle": "Base",
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "No hacer preguntas antes de enseñar.",
+    "chapter1_meaning": {
+      "title": "1. Qué estamos intentando hacer",
+      "explanation": "Explicar sin código y sin jerga."
+    },
+    "chapter2_words": {
+      "title": "2. Qué significa cada cosa",
+      "items": [
+        {
+          "term": "x",
+          "meaning": "definición"
+        }
+      ]
+    },
+    "chapter3_example": {
+      "title": "3. Primero resolvámoslo sin código",
+      "setup": "ejemplo concreto",
+      "steps": [
+        "paso 1",
+        "paso 2"
+      ]
+    },
+    "chapter4_plan": {
+      "title": "4. Plan mental antes de programar",
+      "steps": [
+        "paso mental 1",
+        "paso mental 2"
+      ]
+    },
+    "chapter5_lineByLine": {
+      "title": "5. Qué hace cada línea",
+      "lines": [
+        {
+          "code": "linea;",
+          "explanation": "por qué existe"
+        }
+      ]
+    },
+    "chapter6_fullCode": {
+      "title": "6. Código completo",
+      "instruction": "Mostrarlo explicado, no pedir memoria todavía."
+    },
+    "chapter7_imitation": {
+      "title": "7. Primera escritura con ayuda",
+      "instruction": "Anchors visibles y feedback semántico."
+    }
+  },
+  "logic": {
+    "idea": "Qué resuelve.",
+    "goldenRule": "Regla de oro.",
+    "anchors": [
+      {
+        "id": "a1",
+        "order": 1,
+        "label": "PASO",
+        "memory": "qué pensar",
+        "code": "codigo;"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void metodo(...)",
+    "target": "CÓDIGO CANÓNICO COMPLETO",
+    "core": "BLOQUE CENTRAL"
+  },
+  "criticalFragments": [],
+  "trainingSequence": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-trace",
+    "plan-before-code",
+    "line-by-line",
+    "full-code-explained",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ]
+}

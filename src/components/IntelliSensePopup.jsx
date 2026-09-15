@@ -26,7 +26,7 @@ export function IntelliSensePopup({
     <div className="intellisense-popup animate-pop">
       <div className="intellisense-header">
         <div className="ide-dot-label">
-          <span className="dot-icon">☕</span>
+          <span className="dot-icon"></span>
           <span className="object-name">{triggerData.objectPath}.</span>
           <span className="query-hint">{triggerData.memberQuery || 'métodos'}</span>
         </div>

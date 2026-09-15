@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "id": "mochila-tamano",
+  "classId": "mochila",
+  "type": "variant",
+  "title": "Mochila por Tamaño",
+  "shortTitle": "Tamaño",
+  "order": 2,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Solo se pueden agregar objetos cuyo tamaño sea menor o igual al máximo permitido.",
+    "goldenRule": "TAMAÑO = x.tam<=tam",
+    "mentalModel": "Es Mochila Base con un filtro numérico sobre el atributo tam.",
+    "delta": [
+      {
+        "id": "current-object",
+        "type": "add-line",
+        "added": "Objeto x=L2.get(k);"
+      },
+      {
+        "id": "size-filter",
+        "type": "wrap",
+        "around": "backtracking-block",
+        "added": "if(x.tam<=tam)",
+        "focus": "x.tam<=tam",
+        "reason": "Solo entran objetos cuyo tamaño no supera tam."
+      },
+      {
+        "id": "choose-x",
+        "type": "replace",
+        "before": "L1.add(L2.get(k));",
+        "after": "L1.add(x);"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void mochTam(LinkedList<Objeto>L1, LinkedList<Objeto>L2, int max,int tam,int i)",
+    "target": "static void mochTam(LinkedList<Objeto>L1,\n                    LinkedList<Objeto>L2,\n                    int max,int tam,int i){\n\n    if(peso(L1)>max)return;\n\n    if(!L1.isEmpty())\n        System.out.println(L1);\n\n    for(int k=i;k<L2.size();k++){\n\n        Objeto x=L2.get(k);\n\n        if(x.tam<=tam){\n            L1.add(x);\n            mochTam(L1,L2,max,tam,k+1);\n            L1.removeLast();\n        }\n    }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "size-filter",
+      "expected": "if(x.tam<=tam)",
+      "concept": "attribute-filter",
+      "errorMessage": "TAMAÑO compara el atributo x.tam con el límite tam usando <=."
+    },
+    {
+      "id": "recursive-call",
+      "expected": "mochTam(L1,L2,max,tam,k+1);",
+      "concept": "preserve-filter",
+      "errorMessage": "La recursión conserva tam y avanza con k+1."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-line",
+      "prompt": "Escribe el filtro de tamaño.",
+      "answer": "if(x.tam<=tam)"
+    },
+    {
+      "type": "contrast",
+      "prompt": "COLOR usa equals. TAMAÑO usa:",
+      "answer": "x.tam<=tam"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Ahora el objeto individual debe respetar un límite de tamaño."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "peso total max",
+        "k+1",
+        "backtracking"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "Filtro x.tam<=tam.",
+      "why": "Solo acepto objetos cuyo tamaño no supere el límite."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Con tam=3, un objeto de tamaño 6 se ignora."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

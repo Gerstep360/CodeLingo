@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 2,
+  "id": "factores",
+  "order": 2,
+  "title": "Factores",
+  "shortTitle": "Factores",
+  "subtitle": "Descomposición recursiva mediante producto",
+  "icon": "hash",
+  "color": "blue",
+  "objective": "Aprender desde cero Factores, entender su lógica, construir el código paso a paso y terminar escribiéndolo de memoria con velocidad.",
+  "mentalModel": {
+    "phrase": "MULTIPLICO → CORTO → FILTRO → AGREGO → BAJO → QUITO",
+    "corePattern": "L.add(...) → llamada recursiva → L.removeLast()",
+    "bridgeFromSumandos": "SUMA → PRODUCTO; s → p; además solo pruebo candidatos que mantienen una factorización exacta.",
+    "recoveryPhrases": [
+      "BASE = producto + n%(p*k)==0 + recurre con k",
+      "DIFERENTES = k+1",
+      "PRIMOS = primo(k) && n%(p*k)==0",
+      "RANGO = el for termina en b"
+    ]
+  },
+  "base": "./base.json",
+  "shared": [
+    "./shared/prod.json",
+    "./shared/primo.json"
+  ],
+  "exercises": [
+    "./exercises/diferentes.json",
+    "./exercises/primos.json",
+    "./exercises/rango.json"
+  ],
+  "classExam": {
+    "enabled": true,
+    "randomOrder": true,
+    "includeBase": true,
+    "includeVariants": true,
+    "hints": false,
+    "minimumAccuracy": 0.95,
+    "minimumMastery": 0.85
+  },
+  "speedrun": {
+    "enabled": true,
+    "unlock": {
+      "minimumAccuracy": 0.95,
+      "minimumSuccessfulRecalls": 1
+    }
+  },
+  "relatedClasses": [
+    {
+      "id": "sumandos",
+      "relation": "same-backtracking-shape",
+      "note": "Factores es el primo hermano de Sumandos: cambia suma por producto y agrega la condición de divisibilidad."
+    }
+  ],
+  "compareWith": {
+    "classId": "sumandos",
+    "title": "SUMANDOS → FACTORES",
+    "changes": [
+      {
+        "from": "int s=suma(L);",
+        "to": "int p=prod(L);",
+        "memory": "SUMA → PRODUCTO"
+      },
+      {
+        "from": "s>=n / s==n",
+        "to": "p>=n / p==n",
+        "memory": "s → p"
+      },
+      {
+        "from": "sin filtro obligatorio",
+        "to": "if(n%(p*k)==0)",
+        "memory": "solo sigo si el producto parcial todavía divide exactamente a n"
+      }
+    ]
+  },
+  "assumePriorKnowledge": false,
+  "standaloneLearning": true,
+  "fromZero": {
+    "startHere": "Factores hace casi el mismo recorrido que Sumandos, pero ahora no queremos sumar: queremos multiplicar hasta obtener n.",
+    "everydayAnalogy": "Buscamos distintas maneras ordenadas de descomponer n en factores. Para n=12 pueden aparecer [2,2,3], [2,6], [3,4] y [12].",
+    "vocabulary": [
+      {
+        "term": "L",
+        "meaning": "factores que llevo elegidos"
+      },
+      {
+        "term": "n",
+        "meaning": "producto objetivo"
+      },
+      {
+        "term": "i",
+        "meaning": "primer factor que puedo probar"
+      },
+      {
+        "term": "k",
+        "meaning": "factor candidato"
+      },
+      {
+        "term": "p",
+        "meaning": "producto actual de L"
+      },
+      {
+        "term": "n%(p*k)==0",
+        "meaning": "significa que p*k todavía encaja exactamente dentro de n"
+      }
+    ],
+    "firstWorkedExample": {
+      "setup": "n=12, i=2, L=[]",
+      "goal": "Construir factorizaciones cuyo producto sea 12.",
+      "examples": [
+        "[2,2,3]",
+        "[2,6]",
+        "[3,4]",
+        "[12]"
+      ]
+    },
+    "beforeSeeingCode": [
+      "El producto vacío debe empezar en 1.",
+      "Calculo p=prod(L).",
+      "Si p llega a n, encontré solución.",
+      "Antes de agregar k, verifico que p*k siga dividiendo exactamente a n.",
+      "Después uso el mismo patrón agregar → bajar → quitar."
+    ],
+    "teachingPromise": "No se pregunta nada que todavía no haya sido explicado en esta misma clase."
+  },
+  "lessonOrder": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-simulation",
+    "code-build",
+    "line-by-line",
+    "guided-copy",
+    "guided-rebuild",
+    "variant-lessons",
+    "recall",
+    "speedrun",
+    "class-exam"
+  ]
+}

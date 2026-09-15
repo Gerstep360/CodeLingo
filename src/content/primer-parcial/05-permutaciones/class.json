@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "id": "permutaciones",
+  "order": 5,
+  "title": "Permutaciones",
+  "shortTitle": "Permut",
+  "subtitle": "El orden sí importa: siempre vuelvo a k=0",
+  "icon": "list",
+  "color": "orange",
+  "objective": "Aprender desde cero Permutaciones, entender su lógica, construir el código paso a paso y terminar escribiéndolo de memoria con velocidad.",
+  "mentalModel": {
+    "phrase": "PERMUT = NO TENGO i → VUELVO A 0",
+    "corePattern": "caso base por tamaño → for desde 0 → filtro si hace falta → add → recursión → removeLast",
+    "why": "Como [1,2] y [2,1] son diferentes, cada nivel debe poder volver a considerar cualquier elemento de L2.",
+    "recoveryPhrases": [
+      "PERMUT = NO tengo i",
+      "FOR = k=0",
+      "SR = !contains",
+      "CR = libre"
+    ]
+  },
+  "base": "./base.json",
+  "exercises": [
+    "./exercises/sin-repeticion.json",
+    "./exercises/con-repeticion.json"
+  ],
+  "classExam": {
+    "enabled": true,
+    "randomOrder": true,
+    "includeBase": false,
+    "includeVariants": true,
+    "hints": false,
+    "minimumAccuracy": 0.95,
+    "minimumMastery": 0.85
+  },
+  "speedrun": {
+    "enabled": true,
+    "unlock": {
+      "minimumAccuracy": 0.95,
+      "minimumSuccessfulRecalls": 1
+    }
+  },
+  "relatedClasses": [
+    {
+      "id": "combinaciones",
+      "relation": "contrast-family",
+      "note": "Combinaciones usa i; Permutaciones no tiene i y siempre recorre desde 0."
+    }
+  ],
+  "contrastTable": [
+    {
+      "algorithm": "Permut SR",
+      "loopStart": "k=0",
+      "recursion": "sin i",
+      "filter": "!L1.contains(L2.get(k))",
+      "memory": "NO repite → filtro"
+    },
+    {
+      "algorithm": "Permut CR",
+      "loopStart": "k=0",
+      "recursion": "sin i",
+      "filter": "ninguno",
+      "memory": "SÍ repite → libre"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "standaloneLearning": true,
+  "fromZero": {
+    "startHere": "Una permutación elige elementos donde el orden SÍ importa. [1,2] y [2,1] son soluciones diferentes.",
+    "everydayAnalogy": "Si tienes dos puestos —primero y segundo— no es lo mismo Ana/Luis que Luis/Ana. Cambiar el orden crea otra solución.",
+    "vocabulary": [
+      {
+        "term": "L1",
+        "meaning": "permutación que estoy construyendo"
+      },
+      {
+        "term": "L2",
+        "meaning": "elementos disponibles"
+      },
+      {
+        "term": "r",
+        "meaning": "longitud exacta de la permutación"
+      },
+      {
+        "term": "k",
+        "meaning": "índice candidato"
+      },
+      {
+        "term": "contains",
+        "meaning": "comprueba si un elemento ya fue usado"
+      }
+    ],
+    "firstWorkedExample": {
+      "setup": "L2=[1,2,3], r=2",
+      "goal": "Formar secuencias de longitud 2.",
+      "examples": {
+        "SR": [
+          "[1,2]",
+          "[1,3]",
+          "[2,1]",
+          "[2,3]",
+          "[3,1]",
+          "[3,2]"
+        ],
+        "CR": [
+          "[1,1]",
+          "[1,2]",
+          "[1,3]",
+          "[2,1]",
+          "[2,2]",
+          "[2,3]",
+          "[3,1]",
+          "[3,2]",
+          "[3,3]"
+        ]
+      }
+    },
+    "beforeSeeingCode": [
+      "El caso base sigue siendo L1.size()==r.",
+      "Aquí NO hay parámetro i.",
+      "El for empieza siempre en 0 porque cada posición puede usar cualquier elemento.",
+      "SR evita repetir con !L1.contains(...).",
+      "CR no necesita filtro porque repetir está permitido."
+    ],
+    "teachingPromise": "No se pregunta nada que todavía no haya sido explicado en esta misma clase."
+  },
+  "lessonOrder": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-simulation",
+    "code-build",
+    "line-by-line",
+    "guided-copy",
+    "guided-rebuild",
+    "variant-lessons",
+    "recall",
+    "speedrun",
+    "class-exam"
+  ]
+}

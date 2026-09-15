@@ -1,3 +1,4 @@
+import { getAllAlgorithms } from '../../content/contentLoader';
 import React, { useState } from 'react';
 import { BookOpen, Sparkles, ChevronDown, ChevronUp, Copy, Check, Zap, Award } from 'lucide-react';
 import { DUO_RECOVERY_PHRASES, DUO_GOLDEN_TABLE } from '../../data/duoLessonsData';
@@ -19,130 +20,10 @@ export function DuoCheatsheet() {
     setTimeout(() => setCopiedSection(null), 1600);
   };
 
-  const ALGO_SUMMARIES = [
-    {
-      id: 'sumandos',
-      title: '1. SUMANDOS',
-      goal: 'Sumas de n en orden no decreciente',
-      keyLines: `int s = suma(L);
-if (s > n) return;
-if (s == n) { System.out.println(L); return; }
-for (int k = i; k <= n; k++) {
-    L.add(k);
-    sumandos(L, n, k);  // k permite repetir
-    L.removeLast();
-}`,
-      consultas: [
-        { name: 'C1: r sumandos', code: 'if (s > n || L.size() > r) return;\nif (s == n) { if (L.size() == r) println(L); return; }' },
-        { name: 'C2: contiene x', code: 'if (s == n) { if (L.contains(x)) println(L); return; }' },
-        { name: 'C3: sin repetir', code: 'sumandos(L, n, k + 1);  // k+1 prohíbe repetir' }
-      ]
-    },
-    {
-      id: 'factores',
-      title: '2. FACTORES',
-      goal: 'Factorizaciones no decrecientes cuyo producto es n',
-      keyLines: `int p = prod(L);
-if (p > n) return;
-if (p == n) { System.out.println(L); return; }
-for (int k = i; k <= n; k++) {
-    if (n % k == 0) {  // SOLO divisores
-        L.add(k);
-        factores(L, n, k);
-        L.removeLast();
-    }
-}`,
-      consultas: [
-        { name: 'C1: r factores', code: 'if (p > n || L.size() > r) return;\nif (p == n) { if (L.size() == r) println(L); return; }' },
-        { name: 'C2: contiene x', code: 'if (p == n) { if (L.contains(x)) println(L); return; }' },
-        { name: 'C3: sin repetir', code: 'factores(L, n, k + 1);' }
-      ]
-    },
-    {
-      id: 'mochila',
-      title: '3. MOCHILA & MOCHILA EXACTA',
-      goal: 'Elegir elementos de A tal que suma <= max (o suma == max)',
-      keyLines: `int s = suma(L);
-if (s > max) return;
-if (!L.isEmpty()) System.out.println(L);  // En exacta: if (s == max) { println(L); return; }
-for (int k = i; k < A.size(); k++) {
-    L.add(A.get(k));       // OJO: A.get(k)
-    mochila(L, A, max, k + 1);
-    L.removeLast();
-}`,
-      consultas: [
-        { name: 'C1: suma exacta', code: 'if (s == max) { System.out.println(L); return; }' },
-        { name: 'C2: exactamente r objetos', code: 'if (L.size() == r) { System.out.println(L); return; }' },
-        { name: 'C3: contiene x', code: 'if (L.contains(x)) System.out.println(L);' }
-      ]
-    },
-    {
-      id: 'combinaciones',
-      title: '4. COMBINACIONES (SR & CR)',
-      goal: 'El orden NO importa ([1,2] == [2,1]). Tiene parámetro int i',
-      keyLines: `// Combi SR (Sin Repetición):
-if (L.size() == r) { System.out.println(L); return; }
-for (int k = i; k < A.size(); k++) {
-    L.add(A.get(k));
-    combiSR(L, A, r, k + 1);  // k + 1 = siguiente objeto
-    L.removeLast();
-}
-
-// Combi CR (Con Repetición):
-// Igual pero llama con k en vez de k + 1:
-combiCR(L, A, r, k);`,
-      consultas: [
-        { name: 'C1: suma == x', code: 'if (L.size() == r) { if (suma(L) == x) println(L); return; }' },
-        { name: 'C2: contiene x', code: 'if (L.size() == r) { if (L.contains(x)) println(L); return; }' },
-        { name: 'C3: solo pares', code: 'if (L.size() == r) { if (todosPares(L)) println(L); return; }' }
-      ]
-    },
-    {
-      id: 'permutaciones',
-      title: '5. PERMUTACIONES (SR & CR)',
-      goal: 'El orden SÍ importa ([1,2] != [2,1]). Empieza en k=0, NO tiene i',
-      keyLines: `// Permut SR (Sin Repetición):
-if (L.size() == r) { System.out.println(L); return; }
-for (int k = 0; k < A.size(); k++) {
-    if (!L.contains(A.get(k))) {  // Filtro para no duplicar
-        L.add(A.get(k));
-        permutSR(L, A, r);
-        L.removeLast();
-    }
-}
-
-// Permut CR (Con Repetición):
-// Igual pero SIN el if (!L.contains(...)), libre para repetir`,
-      consultas: [
-        { name: 'C1: empieza con x', code: 'if (L.size() == r) { if (L.getFirst() == x) println(L); return; }' },
-        { name: 'C2: termina con x', code: 'if (L.size() == r) { if (L.getLast() == x) println(L); return; }' },
-        { name: 'C3: contiene x', code: 'if (L.size() == r) { if (L.contains(x)) println(L); return; }' }
-      ]
-    },
-    {
-      id: 'matrices',
-      title: '6. DETERMINANTE Y SUBMATRICES',
-      goal: 'Determinante 1x1 + menores y los 4 bucles (i, j, p, q)',
-      keyLines: `// DETERMINANTE:
-if (M.length == 1) return M[0][0];
-int s = 0;
-for (int i = 0; i < M.length; i++)
-    s += (i % 2 == 0 ? 1 : -1) * M[i][0] * det(menor(M, i, 0));
-return s;
-
-// SUBMATRICES (4 bucles):
-for (int i=0; i<M.length; i++)
-for (int j=0; j<M[0].length; j++)
-for (int p=i; p<M.length; p++)
-for (int q=j; q<M[0].length; q++)
-    mostrar(M, i, j, p, q);`,
-      consultas: [
-        { name: 'C1: cuadradas', code: 'if (p - i == q - j) mostrar(M, i, j, p, q);' },
-        { name: 'C2: suma == x', code: 'if (sumaSub(M, i, j, p, q) == x) mostrar(M, i, j, p, q);' },
-        { name: 'C3: contiene x', code: 'if (contiene(M, i, j, p, q, x)) mostrar(M, i, j, p, q);' }
-      ]
-    }
-  ];
+  const ALGO_SUMMARIES = getAllAlgorithms().filter(a=>a.code?.target).map(a=>({
+    id:a.id,title:a.className+' · '+a.title,goal:a.logic?.idea,keyLines:a.code.target,
+    rules:[a.logic?.goldenRule].filter(Boolean),consultas:(a.logic?.delta||[]).map((d,i)=>({name:d.reason||('Cambio '+(i+1)),code:d.after||d.added||d.before||''}))
+  }));
 
   return (
     <div className="duo-cheatsheet-container">
@@ -209,7 +90,7 @@ for (int q=j; q<M[0].length; q++)
 
       {/* Algorithm Summaries with Consultas */}
       <section className="cs-section">
-        <h3 className="section-heading">📚 Los Algoritmos y sus Consultas de Examen</h3>
+        <h3 className="section-heading"> Los Algoritmos y sus Consultas de Examen</h3>
         <div className="algos-accordion">
           {ALGO_SUMMARIES.map((algo) => (
             <div key={algo.id} className="algo-accordion-item">
@@ -262,7 +143,7 @@ for (int q=j; q<M[0].length; q++)
         }
 
         .cheatsheet-banner {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 24px;
@@ -316,7 +197,7 @@ for (int q=j; q<M[0].length; q++)
         }
 
         .phrase-card {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-md);
           padding: 16px;
@@ -347,7 +228,7 @@ for (int q=j; q<M[0].length; q++)
 
         /* Golden Table */
         .golden-table-wrap {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-md);
           overflow-x: auto;
@@ -405,7 +286,7 @@ for (int q=j; q<M[0].length; q++)
         }
 
         .algo-accordion-item {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 20px;

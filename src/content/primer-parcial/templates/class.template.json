@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 2,
+  "id": "nombre-clase",
+  "order": 1,
+  "title": "Nombre de la clase",
+  "shortTitle": "Nombre corto",
+  "subtitle": "Qué aprenderá desde cero",
+  "icon": "code",
+  "color": "blue",
+  "assumePriorKnowledge": false,
+  "standaloneLearning": true,
+  "objective": "Aprender esta familia desde cero, construir su algoritmo y terminar escribiéndolo de memoria.",
+  "fromZero": {
+    "startHere": "Explicación en lenguaje cotidiano de qué problema resuelve.",
+    "everydayAnalogy": "Analogía concreta.",
+    "vocabulary": [
+      {
+        "term": "variable",
+        "meaning": "qué significa"
+      }
+    ],
+    "firstWorkedExample": {
+      "setup": "datos pequeños",
+      "goal": "qué queremos obtener",
+      "result": "resultado esperado"
+    },
+    "beforeSeeingCode": [
+      "Paso mental 1",
+      "Paso mental 2",
+      "Paso mental 3"
+    ],
+    "teachingPromise": "No preguntar nada que todavía no se haya explicado."
+  },
+  "mentalModel": {
+    "phrase": "PASO → PASO → PASO",
+    "corePattern": "patrón mecánico",
+    "recoveryPhrases": [
+      "BASE = ...",
+      "VARIANTE = ..."
+    ]
+  },
+  "base": "./base.json",
+  "shared": [
+    "./shared/auxiliar.json"
+  ],
+  "exercises": [
+    "./exercises/variante.json"
+  ],
+  "lessonOrder": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-simulation",
+    "code-build",
+    "line-by-line",
+    "guided-copy",
+    "guided-rebuild",
+    "variant-lessons",
+    "recall",
+    "speedrun",
+    "class-exam"
+  ]
+}

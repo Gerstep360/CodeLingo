@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "id": "permut-cr",
+  "classId": "permutaciones",
+  "type": "variant",
+  "title": "Permutación Con Repetición",
+  "shortTitle": "Permut CR",
+  "order": 2,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "El orden importa y cualquier elemento puede volver a utilizarse.",
+    "goldenRule": "PERMUT CR = k=0 + LIBRE.",
+    "mentalModel": "Vuelvo a mirar todo desde 0 y no necesito contains porque repetir está permitido.",
+    "delta": [
+      {
+        "id": "no-filter",
+        "type": "remove-filter",
+        "before": "if(!L1.contains(L2.get(k)))",
+        "after": "sin filtro",
+        "focus": "libre",
+        "reason": "Como la repetición está permitida, todos los elementos pueden entrar."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void permutCR(LinkedList<Integer>L1, LinkedList<Integer>L2, int r)",
+    "target": "static void permutCR(LinkedList<Integer>L1,\n                     LinkedList<Integer>L2,\n                     int r){\n\n    if(L1.size()==r){\n        System.out.println(L1);\n        return;\n    }\n\n    for(int k=0;k<L2.size();k++){\n        L1.add(L2.get(k));\n        permutCR(L1,L2,r);\n        L1.removeLast();\n    }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "loop-zero",
+      "expected": "for(int k=0;k<L2.size();k++)",
+      "concept": "permutation",
+      "errorMessage": "PERMUTACIÓN vuelve a k=0."
+    },
+    {
+      "id": "no-contains",
+      "forbidden": "contains",
+      "concept": "repetition",
+      "errorMessage": "CR permite repetición: no debes usar contains."
+    },
+    {
+      "id": "recursive-no-i",
+      "expected": "permutCR(L1,L2,r);",
+      "concept": "permutation-recursion",
+      "errorMessage": "La llamada no lleva i ni k."
+    },
+    {
+      "id": "undo",
+      "expected": "L1.removeLast();",
+      "concept": "backtracking",
+      "errorMessage": "Falta removeLast()."
+    }
+  ],
+  "compareWith": {
+    "id": "permut-sr",
+    "onlyImportantDifference": "!contains vs libre"
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "contrast",
+      "prompt": "PERMUT SR = !contains | PERMUT CR = ?",
+      "answer": "libre"
+    },
+    {
+      "type": "fill-token",
+      "prompt": "for(int k=____;k<L2.size();k++)",
+      "answer": "0"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Permutación con repetición: el orden importa y ahora repetir está permitido."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "L1.size()==r",
+        "for desde 0",
+        "llamada sin i",
+        "add/remove"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "No hay filtro contains.",
+      "why": "Cualquier elemento puede elegirse en cada posición."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Con [1,2,3], r=2 aparecen [1,1], [1,2], [2,1], [2,2], etc."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

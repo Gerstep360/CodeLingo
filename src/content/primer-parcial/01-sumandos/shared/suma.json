@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "id": "sumandos-helper-suma",
+  "type": "shared",
+  "title": "Auxiliar suma",
+  "purpose": "Calcular la suma actual de los elementos de L.",
+  "code": {
+    "language": "java",
+    "target": "static int suma(LinkedList<Integer>L){\n    int s=0;\n    for(int x:L)s+=x;\n    return s;\n}"
+  },
+  "memory": {
+    "phrase": "recorro L y acumulo en s",
+    "anchors": [
+      "s empieza en 0",
+      "for-each sobre L",
+      "s+=x",
+      "return s"
+    ]
+  },
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "fromZero": {
+    "title": "Qué hace suma()",
+    "explanation": "Recorre L y acumula todos sus números en s. Empieza en 0 porque 0 es el neutro de la suma.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

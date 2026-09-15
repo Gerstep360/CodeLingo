@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 2,
+  "id": "factores-primos",
+  "classId": "factores",
+  "type": "variant",
+  "title": "Factores Primos",
+  "shortTitle": "Primos",
+  "order": 2,
+  "parent": "../base.json",
+  "requires": [
+    "../shared/primo.json"
+  ],
+  "logic": {
+    "idea": "Solo se pueden agregar factores que además sean números primos.",
+    "goldenRule": "PRIMOS = primo(k) && divisibilidad",
+    "mentalModel": "El filtro base sigue ahí, pero antes también pregunto si k es primo.",
+    "delta": [
+      {
+        "id": "prime-filter",
+        "type": "replace",
+        "before": "if(n%(p*k)==0)",
+        "after": "if(primo(k) && n%(p*k)==0)",
+        "focus": "primo(k)",
+        "reason": "La rama solo se explora cuando k es primo y además sirve para la factorización exacta."
+      },
+      {
+        "id": "recursive-name",
+        "type": "replace",
+        "before": "factores(L,n,k);",
+        "after": "facPrimos(L,n,k);",
+        "focus": "k",
+        "reason": "La variante mantiene k porque un factor primo puede repetirse, por ejemplo 2 en 12=2*2*3."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void facPrimos(LinkedList<Integer>L,int n,int i)",
+    "target": "static void facPrimos(LinkedList<Integer>L,int n,int i){\n    int p=prod(L);\n\n    if(p>=n){\n        if(p==n)System.out.println(L);\n        return;\n    }\n\n    for(int k=i;k<=n;k++)\n        if(primo(k) && n%(p*k)==0){\n            L.add(k);\n            facPrimos(L,n,k);\n            L.removeLast();\n        }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "prime-and-divisibility",
+      "expected": "if(primo(k) && n%(p*k)==0)",
+      "concept": "prime-filter",
+      "errorMessage": "PRIMOS conserva la divisibilidad y agrega primo(k). Necesitas las dos condiciones."
+    },
+    {
+      "id": "recursive-k",
+      "expected": "facPrimos(L,n,k);",
+      "concept": "prime-repetition",
+      "errorMessage": "PRIMOS recurre con k: un primo sí puede repetirse en la factorización."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "if(________ && n%(p*k)==0)",
+      "answer": "primo(k)"
+    },
+    {
+      "type": "contrast",
+      "prompt": "FACTORES BASE filtra divisibilidad. PRIMOS añade:",
+      "answer": "primo(k)"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Ahora solo aceptamos factores que además sean primos."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "prod(L)",
+        "p>=n",
+        "divisibilidad",
+        "recursión con k"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "El filtro pasa a primo(k) && n%(p*k)==0.",
+      "why": "Necesitamos que k sea primo y que todavía encaje en la factorización."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Para 12, [2,2,3] sirve; [3,4] no porque 4 no es primo."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

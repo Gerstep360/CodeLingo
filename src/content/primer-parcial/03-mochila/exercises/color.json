@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 2,
+  "id": "mochila-color",
+  "classId": "mochila",
+  "type": "variant",
+  "title": "Mochila por Color",
+  "shortTitle": "Color",
+  "order": 1,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Solo se pueden agregar objetos cuyo color sea igual al color solicitado.",
+    "goldenRule": "COLOR = x.color.equals(c)",
+    "mentalModel": "Es la Mochila Base, pero antes de agregar convierto L2.get(k) en x y filtro por color.",
+    "delta": [
+      {
+        "id": "current-object",
+        "type": "add-line",
+        "added": "Objeto x=L2.get(k);",
+        "reason": "Guardar el objeto actual en x hace más fácil consultar sus atributos."
+      },
+      {
+        "id": "color-filter",
+        "type": "wrap",
+        "around": "backtracking-block",
+        "added": "if(x.color.equals(c))",
+        "focus": "x.color.equals(c)",
+        "reason": "Solo los objetos del color pedido entran al backtracking."
+      },
+      {
+        "id": "choose-x",
+        "type": "replace",
+        "before": "L1.add(L2.get(k));",
+        "after": "L1.add(x);",
+        "reason": "x ya representa L2.get(k)."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void mochColor(LinkedList<Objeto>L1, LinkedList<Objeto>L2, int max,String c,int i)",
+    "target": "static void mochColor(LinkedList<Objeto>L1,\n                      LinkedList<Objeto>L2,\n                      int max,String c,int i){\n\n    if(peso(L1)>max)return;\n\n    if(!L1.isEmpty())\n        System.out.println(L1);\n\n    for(int k=i;k<L2.size();k++){\n\n        Objeto x=L2.get(k);\n\n        if(x.color.equals(c)){\n            L1.add(x);\n            mochColor(L1,L2,max,c,k+1);\n            L1.removeLast();\n        }\n    }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "current-object",
+      "expected": "Objeto x=L2.get(k);",
+      "concept": "object-alias",
+      "errorMessage": "Primero guarda el objeto actual en x."
+    },
+    {
+      "id": "color-filter",
+      "expected": "if(x.color.equals(c))",
+      "concept": "attribute-filter",
+      "errorMessage": "COLOR compara String con equals: x.color.equals(c)."
+    },
+    {
+      "id": "recursive-call",
+      "expected": "mochColor(L1,L2,max,c,k+1);",
+      "concept": "preserve-filter",
+      "errorMessage": "La recursión debe conservar c y avanzar con k+1."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-line",
+      "prompt": "Escribe el filtro de color.",
+      "answer": "if(x.color.equals(c))"
+    },
+    {
+      "type": "fill-token",
+      "prompt": "x.color.________(c)",
+      "answer": "equals"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "La mochila base acepta cualquier objeto. Esta variante acepta solo objetos de un color."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "peso total",
+        "max",
+        "for desde i",
+        "k+1",
+        "removeLast"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "Guardo x=L2.get(k) y filtro x.color.equals(c).",
+      "why": "String se compara con equals."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Si c='rojo', los objetos azules ni siquiera entran al backtracking."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

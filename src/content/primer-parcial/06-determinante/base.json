@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 2,
+  "id": "determinante-base",
+  "classId": "determinante",
+  "type": "base",
+  "title": "Determinante Base",
+  "shortTitle": "Base",
+  "requires": [
+    "./shared/matriz.json",
+    "./shared/signo.json",
+    "./shared/menor.json"
+  ],
+  "logic": {
+    "idea": "Calcula el determinante recursivamente por expansión de cofactores usando la primera columna.",
+    "answer": "Si la matriz es 1x1 devuelve su único valor. Si no, recorre las filas de la columna 0 y acumula signo × elemento × determinante del menor.",
+    "goldenRule": "DET BASE = columna 0.",
+    "anchors": [
+      {
+        "id": "base-case",
+        "order": 1,
+        "label": "CASO BASE",
+        "memory": "Si ya quedó 1x1, termino.",
+        "code": "if(M.fil()==1) return M.get(0,0);"
+      },
+      {
+        "id": "accumulator",
+        "order": 2,
+        "label": "ACUMULAR",
+        "memory": "El determinante total empieza en 0.",
+        "code": "int s=0;"
+      },
+      {
+        "id": "loop",
+        "order": 3,
+        "label": "RECORRER FILAS",
+        "memory": "Base desarrolla por columna 0.",
+        "code": "for(int i=0;i<M.fil();i++)"
+      },
+      {
+        "id": "cofactor-expansion",
+        "order": 4,
+        "label": "COFACTOR",
+        "memory": "SIGNO × ELEMENTO × det(MENOR).",
+        "code": "s += signo(i,0) * M.get(i,0) * det(menor(M,i,0));"
+      },
+      {
+        "id": "return",
+        "order": 5,
+        "label": "RETORNAR",
+        "memory": "Devuelvo la suma acumulada.",
+        "code": "return s;"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static int det(Matriz M)",
+    "target": "static int det(Matriz M){\n\n    if(M.fil()==1)\n        return M.get(0,0);\n\n    int s=0;\n\n    for(int i=0;i<M.fil();i++)\n\n        s += signo(i,0)\n           * M.get(i,0)\n           * det(menor(M,i,0));\n\n    return s;\n}",
+    "core": "s += signo(i,0) * M.get(i,0) * det(menor(M,i,0));"
+  },
+  "criticalFragments": [
+    {
+      "id": "base-1x1",
+      "expected": "if(M.fil()==1)",
+      "concept": "recursion-base",
+      "errorMessage": "La recursión termina cuando la matriz queda en 1x1."
+    },
+    {
+      "id": "column-zero",
+      "expected": "signo(i,0)",
+      "concept": "base-column",
+      "errorMessage": "DET BASE desarrolla por la primera columna: j=0."
+    },
+    {
+      "id": "element-zero",
+      "expected": "M.get(i,0)",
+      "concept": "base-column",
+      "errorMessage": "El elemento también debe tomarse de la columna 0."
+    },
+    {
+      "id": "recursive-minor",
+      "expected": "det(menor(M,i,0))",
+      "concept": "recursive-cofactor",
+      "errorMessage": "La llamada recursiva debe calcular el determinante del menor de esa misma posición."
+    }
+  ],
+  "trainingSequence": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-trace",
+    "plan-before-code",
+    "line-by-line",
+    "full-code-explained",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "trace": {
+    "matrix": [
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "steps": [
+      "M es 2x2, no entra al caso base",
+      "i=0, columna 0 → signo(0,0)=+1, elemento=1",
+      "menor(M,0,0) deja [4]",
+      "det([4])=4",
+      "aporte = +1*1*4 = 4",
+      "i=1 → signo(1,0)=-1, elemento=3",
+      "menor(M,1,0) deja [2]",
+      "det([2])=2",
+      "aporte = -1*3*2 = -6",
+      "resultado = 4-6 = -2"
+    ]
+  },
+  "recognitionDrills": [
+    {
+      "prompt": "¿Cuál es el caso base?",
+      "answer": "M.fil()==1"
+    },
+    {
+      "prompt": "¿Por qué columna desarrolla det()?",
+      "answer": "0"
+    },
+    {
+      "prompt": "Completa la idea: signo × elemento × ...",
+      "answer": "det(menor)"
+    }
+  ],
+  "masteryRules": {
+    "minimumAccuracy": 0.95,
+    "minimumSuccessfulRecalls": 2,
+    "maximumHintsForMastery": 1
+  },
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "No mostrar recognitionDrills ni huecos antes de completar esta sección.",
+    "chapter1_meaning": {
+      "title": "1. Qué estamos intentando hacer",
+      "explanation": "Antes del código: una matriz es una tabla de números. El determinante es un número calculado a partir de una matriz cuadrada.",
+      "analogy": "Para este examen no necesitas memorizar teoría abstracta: necesitas saber cómo el código descompone una matriz grande en matrices más pequeñas hasta llegar a 1x1."
+    },
+    "chapter2_words": {
+      "title": "2. Qué significa cada cosa del código",
+      "items": [
+        {
+          "term": "M",
+          "meaning": "matriz actual"
+        },
+        {
+          "term": "i",
+          "meaning": "fila"
+        },
+        {
+          "term": "j",
+          "meaning": "columna"
+        },
+        {
+          "term": "signo(i,j)",
+          "meaning": "devuelve +1 o -1 según la posición"
+        },
+        {
+          "term": "menor(M,i,j)",
+          "meaning": "matriz que queda al quitar la fila i y la columna j"
+        },
+        {
+          "term": "det(...)",
+          "meaning": "determinante calculado recursivamente"
+        }
+      ]
+    },
+    "chapter3_example": {
+      "title": "3. Primero resolvámoslo sin código",
+      "setup": "M=[[1,2],[3,4]]",
+      "goal": "Calcular el determinante desarrollando por la primera columna.",
+      "result": -2
+    },
+    "chapter4_plan": {
+      "title": "4. Plan mental antes de programar",
+      "steps": [
+        "La recursión termina cuando la matriz es 1x1.",
+        "Si no es 1x1, acumulo aportes en s.",
+        "El base recorre las filas de la columna 0.",
+        "Cada aporte es signo × elemento × det(menor).",
+        "menor() crea el siguiente problema más pequeño."
+      ]
+    },
+    "chapter5_lineByLine": {
+      "title": "5. Ahora sí: qué hace cada línea",
+      "lines": [
+        {
+          "code": "if(M.fil()==1)",
+          "explanation": "Caso base: una matriz 1x1 ya no se puede reducir más."
+        },
+        {
+          "code": "return M.get(0,0);",
+          "explanation": "El determinante de 1x1 es su único valor."
+        },
+        {
+          "code": "int s=0;",
+          "explanation": "Acumulador del determinante."
+        },
+        {
+          "code": "for(int i=0;i<M.fil();i++)",
+          "explanation": "Recorro filas de la columna 0."
+        },
+        {
+          "code": "signo(i,0)",
+          "explanation": "Obtengo + o - de esa posición."
+        },
+        {
+          "code": "M.get(i,0)",
+          "explanation": "Tomo el elemento."
+        },
+        {
+          "code": "det(menor(M,i,0))",
+          "explanation": "Calculo recursivamente el determinante de la matriz pequeña."
+        },
+        {
+          "code": "return s;",
+          "explanation": "Devuelvo la suma de aportes."
+        }
+      ]
+    },
+    "chapter6_fullCode": {
+      "title": "6. Código completo",
+      "instruction": "Mostrar el código completo con los anchors resaltados. Todavía no pedir que lo memorice."
+    },
+    "chapter7_imitation": {
+      "title": "7. Primera escritura con ayuda",
+      "instruction": "El alumno copia/reconstruye viendo anchors y puede consultar cada bloque. Los errores explican la lógica, no solo el carácter."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

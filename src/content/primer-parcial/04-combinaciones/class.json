@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 2,
+  "id": "combinaciones",
+  "order": 4,
+  "title": "Combinaciones",
+  "shortTitle": "Combi",
+  "subtitle": "El orden no importa: SR usa k+1 y CR usa k",
+  "icon": "shuffle",
+  "color": "yellow",
+  "objective": "Aprender desde cero Combinaciones, entender su lógica, construir el código paso a paso y terminar escribiéndolo de memoria con velocidad.",
+  "mentalModel": {
+    "phrase": "COMBI = TENGO i",
+    "corePattern": "caso base por tamaño → for desde i → add → recursión → removeLast",
+    "why": "Como el orden no importa, no vuelvo al principio de L2: continúo desde i.",
+    "recoveryPhrases": [
+      "COMBI = tengo i",
+      "SR = k+1",
+      "CR = k",
+      "AMBAS = add → recursión → removeLast"
+    ]
+  },
+  "base": "./base.json",
+  "exercises": [
+    "./exercises/sin-repeticion.json",
+    "./exercises/con-repeticion.json"
+  ],
+  "classExam": {
+    "enabled": true,
+    "randomOrder": true,
+    "includeBase": false,
+    "includeVariants": true,
+    "hints": false,
+    "minimumAccuracy": 0.95,
+    "minimumMastery": 0.85
+  },
+  "speedrun": {
+    "enabled": true,
+    "unlock": {
+      "minimumAccuracy": 0.95,
+      "minimumSuccessfulRecalls": 1
+    }
+  },
+  "relatedClasses": [
+    {
+      "id": "permutaciones",
+      "relation": "contrast-family",
+      "note": "Combinaciones usa i porque el orden no importa; Permutaciones vuelve siempre a k=0 porque el orden sí importa."
+    },
+    {
+      "id": "mochila",
+      "relation": "shared-index-progress",
+      "note": "Combi SR y Mochila comparten el avance k+1 para no reutilizar el elemento actual."
+    }
+  ],
+  "contrastTable": [
+    {
+      "algorithm": "Combi SR",
+      "loopStart": "k=i",
+      "recursion": "k+1",
+      "filter": "ninguno",
+      "memory": "NO repite → avanzo"
+    },
+    {
+      "algorithm": "Combi CR",
+      "loopStart": "k=i",
+      "recursion": "k",
+      "filter": "ninguno",
+      "memory": "SÍ repite → me quedo"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "standaloneLearning": true,
+  "fromZero": {
+    "startHere": "Una combinación elige elementos donde el orden NO importa. [1,2] y [2,1] representan la misma elección.",
+    "everydayAnalogy": "Si eliges 2 personas para formar un equipo, elegir Ana y Luis es lo mismo que Luis y Ana. No necesitas guardar ambos órdenes.",
+    "vocabulary": [
+      {
+        "term": "L1",
+        "meaning": "combinación que estoy construyendo"
+      },
+      {
+        "term": "L2",
+        "meaning": "elementos disponibles"
+      },
+      {
+        "term": "r",
+        "meaning": "cantidad exacta de elementos que quiero elegir"
+      },
+      {
+        "term": "i",
+        "meaning": "índice mínimo desde donde puedo seguir"
+      },
+      {
+        "term": "k",
+        "meaning": "índice candidato"
+      }
+    ],
+    "firstWorkedExample": {
+      "setup": "L2=[1,2,3], r=2",
+      "goal": "Elegir grupos de 2.",
+      "examples": {
+        "SR": [
+          "[1,2]",
+          "[1,3]",
+          "[2,3]"
+        ],
+        "CR": [
+          "[1,1]",
+          "[1,2]",
+          "[1,3]",
+          "[2,2]",
+          "[2,3]",
+          "[3,3]"
+        ]
+      }
+    },
+    "beforeSeeingCode": [
+      "El caso base no usa suma ni producto: usa tamaño.",
+      "Cuando L1.size()==r, ya elegí exactamente r elementos.",
+      "El for empieza en i porque no necesito volver hacia atrás y crear el mismo grupo en otro orden.",
+      "SR usa k+1 porque no repite el elemento actual.",
+      "CR usa k porque sí puede repetirlo."
+    ],
+    "teachingPromise": "No se pregunta nada que todavía no haya sido explicado en esta misma clase."
+  },
+  "lessonOrder": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-simulation",
+    "code-build",
+    "line-by-line",
+    "guided-copy",
+    "guided-rebuild",
+    "variant-lessons",
+    "recall",
+    "speedrun",
+    "class-exam"
+  ]
+}

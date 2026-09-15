@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "nombre-clase-variante",
+  "classId": "nombre-clase",
+  "type": "variant",
+  "title": "Nombre de la Variante",
+  "shortTitle": "Variante",
+  "order": 1,
+  "parent": "../base.json",
+  "requires": [],
+  "logic": {
+    "idea": "Qué cambia en esta variante.",
+    "goldenRule": "Frase corta para recordar solamente el cambio.",
+    "mentalModel": "Es el algoritmo base + ESTA MUTACIÓN.",
+    "delta": [
+      {
+        "id": "delta-1",
+        "type": "replace",
+        "before": "línea del algoritmo base",
+        "after": "línea de esta variante",
+        "focus": "parte exacta que cambia",
+        "reason": "Por qué cambia."
+      },
+      {
+        "id": "delta-2",
+        "type": "add-filter",
+        "added": "if(condicion)",
+        "focus": "condicion",
+        "reason": "Qué restringe esta condición."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void variante(parametros)",
+    "target": "PEGAR AQUÍ EL CÓDIGO CANÓNICO COMPLETO DE LA VARIANTE"
+  },
+  "criticalFragments": [
+    {
+      "id": "critical-delta",
+      "expected": "fragmento exacto que distingue esta variante",
+      "concept": "variation",
+      "errorMessage": "Feedback específico si el alumno escribe la versión base u otra variante."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true,
+    "summary": "BASE → CAMBIO PRINCIPAL"
+  },
+  "trainingSequence": [
+    "compare-delta",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "order-blocks",
+    "ghost-30",
+    "ghost-60",
+    "guided-typing",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "línea con ____",
+      "answer": "token"
+    },
+    {
+      "type": "fill-line",
+      "prompt": "Escribe la línea crítica.",
+      "answer": "línea exacta;"
+    },
+    {
+      "type": "contrast",
+      "prompt": "BASE = X | VARIANTE = ?",
+      "answer": "Y"
+    }
+  ]
+}

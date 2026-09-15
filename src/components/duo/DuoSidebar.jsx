@@ -1,12 +1,20 @@
 import React from 'react';
-import { Compass, Zap, Terminal, BookOpen } from 'lucide-react';
+import { Compass, Zap, Terminal, BookOpen, Target, Moon, Sun } from 'lucide-react';
 import { DuoOwlIcon, DuoFlameIcon, DuoTrophyIcon } from './DuoIcons';
 
-export function DuoSidebar({ activeTab, onSelectTab, streak = 4, totalXp = 120 }) {
+export function DuoSidebar({
+  activeTab,
+  onSelectTab,
+  streak = 4,
+  totalXp = 120,
+  theme = 'dark',
+  onToggleTheme
+}) {
   const navItems = [
     { id: 'path', label: 'Aprender', icon: Compass, badge: null },
+    { id: 'practice', label: 'Practicar', icon: Target, badge: null },
     { id: 'flash', label: 'Test Flash', icon: Zap, badge: '10 Q' },
-    { id: 'editor', label: 'Modo Examen', icon: Terminal, badge: 'Java' },
+    { id: 'editor', label: 'Taller Java', icon: Terminal, badge: 'Java' },
     { id: 'cheatsheet', label: 'Guía Mental', icon: BookOpen, badge: 'Vargas' },
   ];
 
@@ -27,6 +35,17 @@ export function DuoSidebar({ activeTab, onSelectTab, streak = 4, totalXp = 120 }
             <DuoTrophyIcon size={15} />
             <span>{totalXp}</span>
           </div>
+          {onToggleTheme && (
+            <button
+              type="button"
+              className="mobile-theme-btn"
+              onClick={onToggleTheme}
+              title={theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
+              aria-label={theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro'}
+            >
+              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+          )}
         </div>
       </header>
 
@@ -75,6 +94,21 @@ export function DuoSidebar({ activeTab, onSelectTab, streak = 4, totalXp = 120 }
             <span className="stat-val">{totalXp}</span>
             <span className="stat-label">XP Total</span>
           </div>
+          {onToggleTheme && (
+            <button
+              type="button"
+              className="duo-theme-toggle"
+              onClick={onToggleTheme}
+              title={theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro'}
+            >
+              <span className="duo-theme-toggle-icon">
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </span>
+              <span className="duo-theme-toggle-label">
+                {theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
+              </span>
+            </button>
+          )}
         </div>
       </aside>
 
@@ -108,7 +142,7 @@ export function DuoSidebar({ activeTab, onSelectTab, streak = 4, totalXp = 120 }
           height: 100vh;
           position: sticky;
           top: 0;
-          background: #FFFFFF;
+          background: var(--bg-main);
           border-right: 2px solid var(--duo-swan);
           display: flex;
           flex-direction: column;
@@ -277,7 +311,7 @@ export function DuoSidebar({ activeTab, onSelectTab, streak = 4, totalXp = 120 }
             left: 0;
             right: 0;
             height: 54px;
-            background: #FFFFFF;
+            background: var(--bg-main);
             border-bottom: 2px solid var(--duo-swan);
             padding: 0 16px;
             z-index: 50;
@@ -301,6 +335,19 @@ export function DuoSidebar({ activeTab, onSelectTab, streak = 4, totalXp = 120 }
             display: flex;
             align-items: center;
             gap: 10px;
+          }
+
+          .mobile-theme-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            border: 1.5px solid var(--duo-swan);
+            background: var(--duo-polar);
+            color: var(--duo-yellow);
+            cursor: pointer;
           }
 
           .mobile-stat-pill {
@@ -337,7 +384,7 @@ export function DuoSidebar({ activeTab, onSelectTab, streak = 4, totalXp = 120 }
             left: 0;
             right: 0;
             height: 60px;
-            background: #FFFFFF;
+            background: var(--bg-main);
             border-top: 2px solid var(--duo-swan);
             z-index: 90;
             padding-bottom: env(safe-area-inset-bottom);

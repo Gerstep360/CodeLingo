@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "nombre-clase-shared-auxiliar",
+  "type": "shared",
+  "title": "Nombre del Auxiliar",
+  "purpose": "Para qué existe este método, clase o estructura auxiliar.",
+  "logic": {
+    "idea": "Explicación de una sola frase.",
+    "goldenRule": "Regla rápida para recordarlo."
+  },
+  "code": {
+    "language": "java",
+    "target": "PEGAR AQUÍ EL CÓDIGO CANÓNICO COMPLETO DEL AUXILIAR"
+  },
+  "memory": {
+    "phrase": "Frase mecánica corta.",
+    "anchors": [
+      "paso 1",
+      "paso 2",
+      "paso 3"
+    ]
+  },
+  "criticalFragments": [
+    {
+      "id": "critical-shared",
+      "expected": "fragmento importante",
+      "concept": "helper",
+      "errorMessage": "Qué debe recordar el alumno."
+    }
+  ],
+  "trainingSequence": [
+    "observe",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ]
+}

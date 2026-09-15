@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "id": "mochila-peso-rango",
+  "classId": "mochila",
+  "type": "variant",
+  "title": "Mochila por Rango de Peso",
+  "shortTitle": "Peso",
+  "order": 3,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Solo se pueden agregar objetos cuyo peso individual esté entre a y b, además de respetar el peso total max.",
+    "goldenRule": "PESO = x.peso>=a && x.peso<=b",
+    "mentalModel": "max controla la mochila completa; a y b controlan cada objeto individual.",
+    "delta": [
+      {
+        "id": "current-object",
+        "type": "add-line",
+        "added": "Objeto x=L2.get(k);"
+      },
+      {
+        "id": "weight-range-filter",
+        "type": "wrap",
+        "around": "backtracking-block",
+        "added": "if(x.peso>=a && x.peso<=b)",
+        "focus": "x.peso>=a && x.peso<=b",
+        "reason": "El objeto individual debe estar dentro del rango permitido."
+      },
+      {
+        "id": "choose-x",
+        "type": "replace",
+        "before": "L1.add(L2.get(k));",
+        "after": "L1.add(x);"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void mochPeso(LinkedList<Objeto>L1, LinkedList<Objeto>L2, int max,int a,int b,int i)",
+    "target": "static void mochPeso(LinkedList<Objeto>L1,\n                     LinkedList<Objeto>L2,\n                     int max,int a,int b,int i){\n\n    if(peso(L1)>max)return;\n\n    if(!L1.isEmpty())\n        System.out.println(L1);\n\n    for(int k=i;k<L2.size();k++){\n\n        Objeto x=L2.get(k);\n\n        if(x.peso>=a && x.peso<=b){\n            L1.add(x);\n            mochPeso(L1,L2,max,a,b,k+1);\n            L1.removeLast();\n        }\n    }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "weight-range-filter",
+      "expected": "if(x.peso>=a && x.peso<=b)",
+      "concept": "attribute-range",
+      "errorMessage": "PESO usa las dos comparaciones: >=a y <=b."
+    },
+    {
+      "id": "capacity-still-exists",
+      "expected": "if(peso(L1)>max)return;",
+      "concept": "total-capacity",
+      "errorMessage": "El rango del objeto no reemplaza max. La mochila total todavía debe respetar max."
+    },
+    {
+      "id": "recursive-call",
+      "expected": "mochPeso(L1,L2,max,a,b,k+1);",
+      "concept": "preserve-range",
+      "errorMessage": "La recursión conserva max, a y b, y avanza con k+1."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-line",
+      "prompt": "Escribe el filtro de peso individual.",
+      "answer": "if(x.peso>=a && x.peso<=b)"
+    },
+    {
+      "type": "contrast",
+      "prompt": "¿Qué controla max y qué controlan a,b?",
+      "answer": "max = peso total; a,b = peso individual"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Aquí hay dos controles distintos: max controla toda la mochila; a y b controlan cada objeto."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "peso(L1)>max",
+        "k+1",
+        "backtracking"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "Filtro x.peso>=a && x.peso<=b.",
+      "why": "El objeto debe caer dentro del rango individual y la combinación completa no debe superar max."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Con a=2,b=4,max=6, un objeto de peso 5 se rechaza aunque la mochila esté vacía."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

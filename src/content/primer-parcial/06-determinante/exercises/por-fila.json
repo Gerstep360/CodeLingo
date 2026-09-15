@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "id": "determinante-por-fila",
+  "classId": "determinante",
+  "type": "variant",
+  "title": "Determinante por Fila",
+  "shortTitle": "Por fila",
+  "order": 3,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Calcula el determinante desarrollando por cualquier fila i.",
+    "goldenRule": "POR FILA = i fijo, recorro j.",
+    "mentalModel": "Aquí giro la lógica del ciclo: la fila se queda fija y avanzo por las columnas.",
+    "delta": [
+      {
+        "id": "parameter-i",
+        "type": "add-parameter",
+        "added": "int i",
+        "reason": "i indica la fila elegida."
+      },
+      {
+        "id": "loop-switch",
+        "type": "replace",
+        "before": "for(int i=0;i<M.fil();i++)",
+        "after": "for(int j=0;j<M.col();j++)",
+        "focus": "recorrer columnas",
+        "reason": "Como la fila i queda fija, el ciclo recorre j."
+      },
+      {
+        "id": "position",
+        "type": "replace",
+        "after": "signo(i,j), M.get(i,j), menor(M,i,j)",
+        "reason": "Todos usan la posición de la fila fija i y columna variable j."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static int detFila(Matriz M,int i)",
+    "target": "static int detFila(Matriz M,int i){\n\n    if(M.fil()==1)\n        return M.get(0,0);\n\n    int s=0;\n\n    for(int j=0;j<M.col();j++)\n\n        s += signo(i,j)\n           * M.get(i,j)\n           * det(menor(M,i,j));\n\n    return s;\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "loop-columns",
+      "expected": "for(int j=0;j<M.col();j++)",
+      "concept": "fixed-row",
+      "errorMessage": "Por fila: i queda fijo y recorres columnas con j."
+    },
+    {
+      "id": "selected-row",
+      "expected": "signo(i,j) * M.get(i,j) * det(menor(M,i,j))",
+      "concept": "selected-row",
+      "errorMessage": "Usa la misma posición (i,j) en signo, elemento y menor."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true,
+    "summary": "fila i fija; j recorre columnas"
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "contrast",
+      "prompt": "POR COLUMNA recorre i. POR FILA recorre:",
+      "answer": "j"
+    },
+    {
+      "type": "fill-line",
+      "prompt": "Escribe el ciclo de detFila.",
+      "answer": "for(int j=0;j<M.col();j++)"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Ahora la fila i queda fija y lo que cambia es la columna j."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "caso 1x1",
+        "s=0",
+        "signo*elemento*det(menor)"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "El ciclo pasa a for(int j=0;j<M.col();j++).",
+      "why": "Desarrollar por fila significa recorrer todas las columnas de esa fila."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Si i=1, se usan (1,0), (1,1), (1,2)..."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

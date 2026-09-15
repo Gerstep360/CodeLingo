@@ -260,7 +260,7 @@ export function DuoExamMode({
           flex: 1;
           display: flex;
           flex-direction: column;
-          background: #FFFFFF;
+          background: var(--bg-main);
           padding: 16px 20px;
           gap: 16px;
           min-height: 100vh;
@@ -271,7 +271,7 @@ export function DuoExamMode({
           display: flex;
           align-items: center;
           justify-content: space-between;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 12px 18px;
@@ -329,7 +329,7 @@ export function DuoExamMode({
           position: absolute;
           top: 46px;
           left: 0;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-md);
           box-shadow: 0 8px 24px rgba(0,0,0,0.12);
@@ -454,7 +454,7 @@ export function DuoExamMode({
         }
 
         .duo-metric-card {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 12px 14px;
@@ -508,7 +508,7 @@ export function DuoExamMode({
           border-radius: var(--radius-lg);
           overflow: hidden;
           box-shadow: 0 4px 0 var(--duo-swan);
-          background: #FFFFFF;
+          background: var(--card-bg);
           min-height: 540px;
         }
 
@@ -550,7 +550,7 @@ export function DuoExamMode({
             width: 290px;
             max-width: 85vw;
             z-index: 50;
-            background: #FFFFFF;
+            background: var(--card-bg);
             border-right: 2px solid var(--duo-swan);
             box-shadow: 4px 0 16px rgba(0,0,0,0.15);
           }

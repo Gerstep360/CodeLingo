@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 2,
+  "id": "sumandos-diferentes",
+  "classId": "sumandos",
+  "type": "variant",
+  "title": "Sumandos Diferentes",
+  "shortTitle": "Diferentes",
+  "order": 1,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Cada valor usado debe ser diferente; el mismo sumando no puede repetirse.",
+    "goldenRule": "NO REPETIR = k+1",
+    "mentalModel": "Base con una sola mutación: avanzo al siguiente valor.",
+    "delta": [
+      {
+        "id": "recursive-call",
+        "type": "replace",
+        "before": "sumandos(L,n,k);",
+        "after": "sumDif(L,n,k+1);",
+        "focus": "k+1",
+        "reason": "Al llamar con k+1, la siguiente recursión empieza después del valor actual y no puede volver a usarlo."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void sumDif(LinkedList<Integer>L,int n,int i)",
+    "target": "static void sumDif(LinkedList<Integer>L,int n,int i){\n    int s=suma(L);\n\n    if(s>=n){\n        if(s==n)System.out.println(L);\n        return;\n    }\n\n    for(int k=i;k<=n;k++){\n        L.add(k);\n        sumDif(L,n,k+1);\n        L.removeLast();\n    }\n}"
+  },
+  "criticalFragments": [
+    {
+      "id": "recursive-k-plus-one",
+      "expected": "sumDif(L,n,k+1);",
+      "concept": "no-repetition",
+      "errorMessage": "DIFERENTES necesita k+1. Si usas k vuelves a permitir repetir el mismo valor."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "sumDif(L,n,____);",
+      "answer": "k+1"
+    },
+    {
+      "type": "contrast",
+      "prompt": "BASE = k | DIFERENTES = ?",
+      "answer": "k+1"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Ya viste el base. Ahora cambia una sola idea: un número usado no puede repetirse."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "suma(L)",
+        "corte s>=n",
+        "for desde i",
+        "add",
+        "removeLast"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "La llamada pasa de k a k+1.",
+      "why": "k+1 obliga a la siguiente llamada a empezar después del valor actual."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Para n=4, [2,2] ya no aparece porque 2 no puede repetirse."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

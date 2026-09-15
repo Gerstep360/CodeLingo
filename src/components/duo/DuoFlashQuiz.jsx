@@ -122,7 +122,7 @@ export function DuoFlashQuiz({ onCompleteQuiz }) {
           {isAnswerChecked && (
             <div className="flash-explanation-box animate-slide-up">
               <div className="exp-title">
-                {question.options[selectedIdx]?.isCorrect ? '✓ ¡Correcto!' : '✕ Ojo a este detalle:'}
+                {question.options[selectedIdx]?.isCorrect ? ' ¡Correcto!' : ' Ojo a este detalle:'}
               </div>
               <p className="exp-body">{question.answerDetail}</p>
             </div>
@@ -165,8 +165,8 @@ export function DuoFlashQuiz({ onCompleteQuiz }) {
           </p>
           <p className="finish-advice">
             {score >= 8
-              ? '🎉 ¡Excelente! Tienes el mapa mental claro en tu cabeza. ¡A por el 100 en el examen!'
-              : '💡 Te recomendamos repasar la Guía Mental y volver a probar este test antes de entrar al examen.'}
+              ? ' ¡Excelente! Tienes el mapa mental claro en tu cabeza. ¡A por el 100 en el examen!'
+              : ' Te recomendamos repasar la Guía Mental y volver a probar este test antes de entrar al examen.'}
           </p>
 
           <button
@@ -191,7 +191,7 @@ export function DuoFlashQuiz({ onCompleteQuiz }) {
         }
 
         .flash-quiz-banner {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 24px;
@@ -255,7 +255,7 @@ export function DuoFlashQuiz({ onCompleteQuiz }) {
 
         /* Card Body */
         .flash-card-body {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 28px 24px;
@@ -328,7 +328,7 @@ export function DuoFlashQuiz({ onCompleteQuiz }) {
 
         /* Finish Card */
         .flash-finish-card {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 40px 24px;

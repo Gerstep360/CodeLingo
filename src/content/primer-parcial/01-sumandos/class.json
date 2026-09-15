@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 2,
+  "id": "sumandos",
+  "order": 1,
+  "title": "Sumandos",
+  "shortTitle": "Sumandos",
+  "subtitle": "Descomposición recursiva mediante suma",
+  "icon": "plus",
+  "color": "green",
+  "objective": "Aprender desde cero Sumandos, entender su lógica, construir el código paso a paso y terminar escribiéndolo de memoria con velocidad.",
+  "mentalModel": {
+    "phrase": "SUMO → CORTO → RECORRO → AGREGO → BAJO → QUITO",
+    "corePattern": "L.add(...) → llamada recursiva → L.removeLast()",
+    "story": "Mido cuánto llevo. Si llegué o me pasé, corto. Si todavía puedo seguir, pruebo un k, lo agrego, bajo por esa rama y luego lo quito para probar otro.",
+    "recoveryPhrases": [
+      "BASE = recurre con k",
+      "DIFERENTES = k+1",
+      "PARES = filtro k%2==0 y recurre k+1",
+      "RANGO = el for termina en b"
+    ]
+  },
+  "base": "./base.json",
+  "shared": [
+    "./shared/suma.json"
+  ],
+  "exercises": [
+    "./exercises/diferentes.json",
+    "./exercises/pares.json",
+    "./exercises/rango.json"
+  ],
+  "classExam": {
+    "enabled": true,
+    "randomOrder": true,
+    "includeBase": true,
+    "includeVariants": true,
+    "hints": false,
+    "minimumAccuracy": 0.95,
+    "minimumMastery": 0.85
+  },
+  "speedrun": {
+    "enabled": true,
+    "unlock": {
+      "minimumAccuracy": 0.95,
+      "minimumSuccessfulRecalls": 1
+    }
+  },
+  "relatedClasses": [
+    {
+      "id": "factores",
+      "relation": "same-backtracking-shape",
+      "note": "Factores conserva la estructura general de Sumandos, cambiando suma por producto y agregando condición de divisibilidad."
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "standaloneLearning": true,
+  "fromZero": {
+    "startHere": "Vamos a aprender Sumandos sin asumir que sabes recursión. El objetivo es construir listas de números que sumen exactamente n.",
+    "everydayAnalogy": "Piensa que necesitas formar una cantidad exacta usando números permitidos. Vas agregando números; si te pasas, esa rama ya no sirve.",
+    "vocabulary": [
+      {
+        "term": "L",
+        "meaning": "lista que contiene la solución que estamos construyendo"
+      },
+      {
+        "term": "n",
+        "meaning": "suma objetivo"
+      },
+      {
+        "term": "i",
+        "meaning": "menor valor que puedo probar en esta llamada"
+      },
+      {
+        "term": "k",
+        "meaning": "valor candidato que está probando el for"
+      },
+      {
+        "term": "s",
+        "meaning": "suma actual de L"
+      }
+    ],
+    "firstWorkedExample": {
+      "setup": "n=4, i=1, L=[]",
+      "goal": "Encontrar listas ordenadas cuya suma sea 4.",
+      "examples": [
+        "[1,1,1,1]",
+        "[1,1,2]",
+        "[1,3]",
+        "[2,2]",
+        "[4]"
+      ]
+    },
+    "beforeSeeingCode": [
+      "Primero necesito saber cuánto suma L.",
+      "Si la suma llegó a n, imprimo.",
+      "Si llegó o se pasó, regreso.",
+      "Si todavía falta, pruebo un k.",
+      "Agrego k, exploro, y al volver lo quito."
+    ],
+    "teachingPromise": "No se pregunta nada que todavía no haya sido explicado en esta misma clase."
+  },
+  "lessonOrder": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-simulation",
+    "code-build",
+    "line-by-line",
+    "guided-copy",
+    "guided-rebuild",
+    "variant-lessons",
+    "recall",
+    "speedrun",
+    "class-exam"
+  ]
+}

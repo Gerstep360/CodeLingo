@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "nombre-clase",
+  "order": 1,
+  "title": "Nombre completo de la clase",
+  "shortTitle": "Nombre corto",
+  "subtitle": "Qué aprende el alumno en esta familia de algoritmos",
+  "icon": "code",
+  "color": "blue",
+  "objective": "Reconstruir el algoritmo base y sus variantes entendiendo qué partes se mantienen y qué partes cambian.",
+  "mentalModel": {
+    "phrase": "PASO 1 → PASO 2 → PASO 3 → PASO 4",
+    "corePattern": "PATRÓN CENTRAL DEL ALGORITMO",
+    "roles": [
+      "parametro1 = qué representa",
+      "parametro2 = qué representa",
+      "parametro3 = qué representa"
+    ],
+    "recoveryPhrases": [
+      "BASE = regla corta",
+      "VARIANTE 1 = cambio corto",
+      "VARIANTE 2 = cambio corto",
+      "VARIANTE 3 = cambio corto"
+    ]
+  },
+  "base": "./base.json",
+  "shared": [
+    "./shared/auxiliar-1.json"
+  ],
+  "exercises": [
+    "./exercises/variante-1.json",
+    "./exercises/variante-2.json",
+    "./exercises/variante-3.json"
+  ],
+  "classExam": {
+    "enabled": true,
+    "randomOrder": true,
+    "includeBase": true,
+    "includeVariants": true,
+    "hints": false,
+    "minimumAccuracy": 0.95,
+    "minimumMastery": 0.85
+  },
+  "speedrun": {
+    "enabled": true,
+    "unlock": {
+      "minimumAccuracy": 0.95,
+      "minimumSuccessfulRecalls": 1
+    }
+  },
+  "relatedClasses": [
+    {
+      "id": "otra-clase",
+      "relation": "tipo-de-relacion",
+      "note": "Cómo se parece o contrasta con esta clase."
+    }
+  ],
+  "contrastTable": [
+    {
+      "algorithm": "Base",
+      "change": "regla base",
+      "memory": "frase corta"
+    },
+    {
+      "algorithm": "Variante 1",
+      "change": "cambio respecto al base",
+      "memory": "frase corta"
+    }
+  ]
+}

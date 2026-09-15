@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 2,
+  "id": "factores-helper-prod",
+  "type": "shared",
+  "title": "Auxiliar prod",
+  "purpose": "Calcular el producto actual de los elementos de L.",
+  "code": {
+    "language": "java",
+    "target": "static int prod(LinkedList<Integer>L){\n    int p=1;\n    for(int x:L)p*=x;\n    return p;\n}"
+  },
+  "memory": {
+    "phrase": "producto empieza en 1",
+    "anchors": [
+      "p empieza en 1",
+      "for-each sobre L",
+      "p*=x",
+      "return p"
+    ]
+  },
+  "criticalFragments": [
+    {
+      "id": "initial-product",
+      "expected": "int p=1;",
+      "concept": "product-identity",
+      "errorMessage": "El producto debe empezar en 1, no en 0."
+    }
+  ],
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ],
+  "fromZero": {
+    "title": "Qué hace prod()",
+    "explanation": "Recorre L y multiplica todos sus números en p. Empieza en 1 porque 1 es el neutro del producto.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

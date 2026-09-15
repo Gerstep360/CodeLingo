@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "id": "sumandos-rango",
+  "classId": "sumandos",
+  "type": "variant",
+  "title": "Sumandos entre A y B",
+  "shortTitle": "Rango",
+  "order": 3,
+  "parent": "../base.json",
+  "logic": {
+    "idea": "Solo se prueban sumandos dentro de un rango. El parámetro i se inicia con A y b representa el límite superior.",
+    "goldenRule": "RANGO = i empieza en A y el for termina en b",
+    "mentalModel": "No necesito un if extra: limito directamente el for.",
+    "delta": [
+      {
+        "id": "signature-b",
+        "type": "add-parameter",
+        "added": "int b",
+        "reason": "b guarda el límite superior del rango."
+      },
+      {
+        "id": "loop-end",
+        "type": "replace",
+        "before": "k<=n",
+        "after": "k<=b",
+        "focus": "b",
+        "reason": "El for solo recorre hasta el límite superior permitido."
+      },
+      {
+        "id": "recursive-call",
+        "type": "replace",
+        "before": "sumandos(L,n,k);",
+        "after": "sumRango(L,n,k,b);",
+        "focus": "k,b",
+        "reason": "La recursión conserva el límite b."
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "signature": "static void sumRango(LinkedList<Integer>L,int n,int i,int b)",
+    "target": "static void sumRango(LinkedList<Integer>L,int n,int i,int b){\n    int s=suma(L);\n\n    if(s>=n){\n        if(s==n)System.out.println(L);\n        return;\n    }\n\n    for(int k=i;k<=b;k++){\n        L.add(k);\n        sumRango(L,n,k,b);\n        L.removeLast();\n    }\n}"
+  },
+  "callExample": {
+    "code": "sumRango(L,12,2,6);",
+    "meaning": {
+      "n": 12,
+      "A": 2,
+      "B": 6
+    }
+  },
+  "criticalFragments": [
+    {
+      "id": "loop-range",
+      "expected": "for(int k=i;k<=b;k++)",
+      "concept": "range",
+      "errorMessage": "RANGO termina en b, no en n."
+    },
+    {
+      "id": "recursive-preserve-b",
+      "expected": "sumRango(L,n,k,b);",
+      "concept": "preserve-range",
+      "errorMessage": "La recursión debe conservar b para mantener el mismo límite superior."
+    }
+  ],
+  "compareWithBase": {
+    "showBeforeAfter": true,
+    "highlightOnlyDeltaFirst": true
+  },
+  "trainingSequence": [
+    "base-recap",
+    "variant-goal",
+    "what-stays",
+    "delta-explained",
+    "worked-example",
+    "base-vs-variant",
+    "build-from-base",
+    "guided-copy",
+    "guided-rebuild",
+    "recognize",
+    "fill-token",
+    "fill-line",
+    "ghost-30",
+    "ghost-60",
+    "recall",
+    "speedrun"
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "for(int k=i;k<=____;k++)",
+      "answer": "b"
+    },
+    {
+      "type": "fill-line",
+      "prompt": "Escribe la llamada recursiva de rango.",
+      "answer": "sumRango(L,n,k,b);"
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "teachBeforePractice": {
+    "rule": "Explicar la variante antes de pedir completarla.",
+    "step1_baseRecap": {
+      "title": "1. Recordatorio del base",
+      "instruction": "Mostrar el código base completo o su esqueleto con una explicación breve. No asumir que el alumno lo recuerda."
+    },
+    "step2_newGoal": {
+      "title": "2. Qué pide ahora esta variante",
+      "explanation": "Ahora los números permitidos deben estar entre A y B."
+    },
+    "step3_whatStays": {
+      "title": "3. Qué NO cambia",
+      "items": [
+        "suma(L)",
+        "corte",
+        "add-rec-remove"
+      ]
+    },
+    "step4_change": {
+      "title": "4. La única idea nueva",
+      "change": "i empieza con A y el for termina en b en vez de n.",
+      "why": "El propio rango del for impide probar valores fuera de A..B."
+    },
+    "step5_workedExample": {
+      "title": "5. Ejemplo resuelto",
+      "example": "Si A=2 y B=4, nunca se prueba 1 ni 5."
+    },
+    "step6_compareCode": {
+      "title": "6. Base vs variante",
+      "instruction": "Mostrar ambos códigos lado a lado, atenuar lo idéntico y resaltar únicamente los deltas."
+    },
+    "step7_buildTogether": {
+      "title": "7. Construirla juntos",
+      "instruction": "Partir del base y aplicar cada delta uno por uno mostrando el código resultante después de cada cambio."
+    },
+    "step8_firstAttempt": {
+      "title": "8. Primera práctica",
+      "instruction": "Primero escribir con anchors y delta visibles. Recién después ocultar ayudas."
+    }
+  },
+  "canonicalSource": "ExamenVargas.java"
+}

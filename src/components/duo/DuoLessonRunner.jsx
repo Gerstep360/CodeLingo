@@ -1,10 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Check, ArrowRight, Sparkles, Award, RotateCcw, BookOpen, Copy } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DuoPartyIcon, DuoTrophyIcon } from './DuoIcons';
 import { sounds } from '../../utils/soundEffects';
+import { getAlgorithmById, getClassById } from '../../content/contentLoader';
+import { TrainingRunner } from '../training/TrainingRunner';
+import ExamRunner from '../training/ExamRunner';
 
 export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
+  if (node?.nodeRole==='exam'||node?.nodeRole==='speedrun') return <ClassChallenge key={node.id} node={node} onClose={onClose} onFinishLesson={onFinishLesson}/>;
+  const lessonData = getAlgorithmById(node?.rawAlgorithmId);
+  if (lessonData) return <TrainingRunner
+    classData={getClassById(node.classId)}
+    lessonData={lessonData}
+    onClose={onClose}
+    onComplete={result => onFinishLesson?.(node.id, result.earnedXp)}
+  />;
+  return <LegacyLessonRunner key={node?.id} node={node} onClose={onClose} onFinishLesson={onFinishLesson} />;
+}
+
+function ClassChallenge({node,onClose,onFinishLesson}) {
+  const classData=getClassById(node.classId);
+  const lessons=[classData?.base,...(classData?.variants||[])].filter(a=>a?.code?.target).map(a=>({...a,classId:classData.id}));
+  const [index,setIndex]=useState(0);
+  const [earned,setEarned]=useState(0);
+  const advance=useRef(false);
+  if(node.nodeRole==='exam')return <ExamRunner lessons={lessons} title={'Examen de '+classData.title} duration={classData.exam?.timeLimitSeconds||300} onClose={onClose} onComplete={summary=>{if(summary.passed)onFinishLesson?.(node.id,50);}}/>;
+  if(!lessons[index])return null;
+  return <TrainingRunner key={lessons[index].id} classData={classData} lessonData={{...lessons[index],trainingSequence:['speedrun']}} onComplete={result=>{
+    setEarned(earned+result.earnedXp);advance.current=true;
+    if(index+1===lessons.length)onFinishLesson?.(node.id,earned+result.earnedXp);
+  }} onClose={()=>{if(advance.current&&index+1<lessons.length){setIndex(index+1);advance.current=false;}else onClose();}}/>;
+}
+
+function LegacyLessonRunner({ node, onClose, onFinishLesson }) {
   const exercises = node?.exercises || [];
   const [showTheoryModal, setShowTheoryModal] = useState(Boolean(node?.theory));
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -158,7 +187,7 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
                 className="duo-btn duo-btn-primary btn-start-questions"
                 onClick={() => setShowTheoryModal(false)}
               >
-                <span>{node.isFinalExam ? '¡COMENZAR EL EXAMEN! ➔' : 'ENTENDIDO, ¡A LAS PREGUNTAS! ➔'}</span>
+                <span>{node.isFinalExam ? '¡COMENZAR EL EXAMEN!' : 'ENTENDIDO, ¡A LAS PREGUNTAS!'}</span>
               </button>
             </div>
           </main>
@@ -255,7 +284,7 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
                 <div className="feedback-feedback-content animate-slide-up">
                   <div className="feedback-text-col">
                     <div className="feedback-title">
-                      {isCorrect ? '✓ ¡Excelente respuesta!' : '✕ Solución explicada:'}
+                      {isCorrect ? ' ¡Excelente respuesta!' : ' Solución explicada:'}
                     </div>
                     <div className="feedback-explanation">
                       {currentExercise.explanation}
@@ -292,7 +321,7 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
         .duo-lesson-modal-overlay {
           position: fixed;
           inset: 0;
-          background: #FFFFFF;
+          background: var(--bg-main);
           z-index: 100;
           display: flex;
           flex-direction: column;
@@ -371,7 +400,7 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
 
         /* Theory Card Styles */
         .theory-card-wrapper {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 24px;
@@ -602,7 +631,7 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
         }
 
         .stat-card {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-md);
           padding: 16px;
@@ -645,7 +674,7 @@ export function DuoLessonRunner({ node, onClose, onFinishLesson }) {
           bottom: 0;
           left: 0;
           right: 0;
-          background: #FFFFFF;
+          background: var(--bg-main);
           border-top: 2px solid var(--duo-swan);
           padding: 18px 24px;
           z-index: 105;

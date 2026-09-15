@@ -112,7 +112,7 @@ export function DuoRightRail({ streak = 4, dailyXp = 35, targetXp = 50, onOpenCh
         }
 
         .duo-card {
-          background: #FFFFFF;
+          background: var(--card-bg, #FFFFFF);
           border: 2px solid var(--duo-swan);
           border-radius: var(--radius-lg);
           padding: 20px;

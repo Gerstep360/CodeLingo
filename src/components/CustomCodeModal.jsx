@@ -171,7 +171,7 @@ export function Counter() {
         }
 
         .modal-card {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1px solid var(--card-border);
           border-radius: var(--radius-lg);
           box-shadow: var(--shadow-lg);
@@ -296,7 +296,7 @@ export function Counter() {
 
         .form-input:focus {
           border-color: var(--pastel-lavender);
-          background: #FFFFFF;
+          background: var(--card-bg);
         }
 
         .form-textarea {
@@ -315,7 +315,7 @@ export function Counter() {
 
         .form-textarea:focus {
           border-color: var(--pastel-lavender);
-          background: #FFFFFF;
+          background: var(--card-bg);
         }
 
         .form-error-text {

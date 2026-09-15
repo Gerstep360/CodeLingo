@@ -89,7 +89,7 @@ export function CodeOutlineSidebar({ outlineFunctions, activeFunction, onSelectF
       <style>{`
         .ide-outline-panel {
           width: 270px;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border-right: 1px solid var(--card-border);
           display: flex;
           flex-direction: column;
@@ -128,7 +128,7 @@ export function CodeOutlineSidebar({ outlineFunctions, activeFunction, onSelectF
           gap: 6px;
           padding: 8px 12px;
           border-bottom: 1px solid var(--card-border);
-          background: #FFFFFF;
+          background: var(--bg-subtle);
         }
 
         .outline-search-input {
@@ -239,7 +239,7 @@ export function CodeOutlineSidebar({ outlineFunctions, activeFunction, onSelectF
           padding: 3px 6px;
           border-radius: var(--radius-sm);
           border: 1px solid var(--card-border);
-          background: #FFFFFF;
+          background: var(--card-bg);
           font-size: 10px;
           font-weight: 600;
           color: var(--text-secondary);

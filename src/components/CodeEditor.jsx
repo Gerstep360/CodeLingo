@@ -440,7 +440,7 @@ export function CodeEditor({
             }}
             title="Volver a la posición de escritura activa"
           >
-            <span>📍 Ir a donde escribo</span>
+            <span> Ir a donde escribo</span>
             <kbd className="jump-kbd">↵</kbd>
           </button>
         )}
@@ -671,7 +671,7 @@ export function CodeEditor({
           flex: 1;
           display: flex;
           flex-direction: column;
-          background: #FFFFFF;
+          background: var(--bg-main);
           border-left: 1px solid var(--card-border);
           overflow: hidden;
         }
@@ -704,17 +704,17 @@ export function CodeEditor({
           font-family: var(--font-mono);
           font-size: 11px;
           color: var(--text-muted);
-          background: #F1F5F9;
+          background: var(--bg-subtle);
           padding: 2px 8px;
           border-radius: var(--radius-sm);
-          border: 1px solid #E2E8F0;
+          border: 1px solid var(--card-border);
         }
 
         .btn-reload-file {
           display: flex;
           align-items: center;
           gap: 5px;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1px solid var(--card-border);
           border-radius: var(--radius-full);
           padding: 4px 10px;
@@ -770,7 +770,7 @@ export function CodeEditor({
           align-items: center;
           gap: 5px;
           padding: 4px 9px;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1px solid var(--card-border);
           border-radius: var(--radius-full);
           font-size: 11px;
@@ -790,7 +790,7 @@ export function CodeEditor({
           top: 34px;
           right: 0;
           width: 210px;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1px solid var(--card-border);
           border-radius: var(--radius-md);
           box-shadow: var(--shadow-lg);
@@ -905,7 +905,7 @@ export function CodeEditor({
           align-items: center;
           justify-content: space-between;
           padding: 8px 18px;
-          background: #FCFBF9;
+          background: var(--bg-subtle);
           border-bottom: 1px solid var(--card-border);
           font-size: 11px;
           gap: 10px;
@@ -945,13 +945,13 @@ export function CodeEditor({
           overflow-y: auto;
           overflow-x: auto;
           padding: 14px 0;
-          background: #FFFFFF;
+          background: var(--bg-main);
           cursor: text;
           user-select: none;
         }
 
         .editor-viewport.unfocused {
-          background: #FAF9F6;
+          background: var(--bg-subtle);
         }
 
         .hidden-keystroke-capture {
@@ -972,7 +972,7 @@ export function CodeEditor({
           display: flex;
           align-items: center;
           gap: 6px;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1.5px solid var(--pastel-lavender-border);
           color: var(--pastel-lavender);
           font-size: 11px;
@@ -1015,7 +1015,7 @@ export function CodeEditor({
           display: flex;
           align-items: center;
           gap: 6px;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1px solid var(--pastel-lavender-border);
           color: var(--pastel-lavender);
           font-size: 12px;
@@ -1051,9 +1051,9 @@ export function CodeEditor({
         }
 
         .code-line.comment-full-line {
-          background: #FAF9F6;
-          border-top: 1px dashed #EFECE6;
-          border-bottom: 1px dashed #EFECE6;
+          background: var(--bg-subtle);
+          border-top: 1px dashed var(--card-border);
+          border-bottom: 1px dashed var(--card-border);
         }
 
         .code-line.class-boilerplate-line {
@@ -1129,9 +1129,9 @@ export function CodeEditor({
           transition: opacity 0.12s ease;
         }
 
-        /* TYPED CODE: Crisp, bold, solid dark slate text */
+        /* TYPED CODE: Crisp, bold, solid theme-adaptive text */
         .char-typed.correct {
-          color: #0F172A;
+          color: var(--text-primary);
           font-style: normal;
           font-weight: 700;
         }
@@ -1145,7 +1145,7 @@ export function CodeEditor({
         }
 
         .char-typed.exam-correct {
-          color: #0F172A;
+          color: var(--text-primary);
           font-weight: 700;
           font-style: normal;
         }

@@ -74,7 +74,7 @@ export function AICoachPanel({ targetCode, currentIndex, isExamMode }) {
       <style>{`
         .ai-coach-card {
           margin: 0 28px 14px 28px;
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1px solid var(--pastel-lavender-border);
           border-radius: var(--radius-lg);
           box-shadow: var(--shadow-sm);
@@ -106,7 +106,7 @@ export function AICoachPanel({ targetCode, currentIndex, isExamMode }) {
           width: 32px;
           height: 32px;
           border-radius: var(--radius-md);
-          background: #FFFFFF;
+          background: var(--card-bg);
           color: var(--pastel-lavender);
           border: 1px solid var(--pastel-lavender-border);
           display: flex;
@@ -132,7 +132,7 @@ export function AICoachPanel({ targetCode, currentIndex, isExamMode }) {
         .ai-concept-pill {
           font-size: 10px;
           font-weight: 700;
-          background: #FFFFFF;
+          background: var(--card-bg);
           color: var(--text-secondary);
           border: 1px solid var(--card-border);
           padding: 1px 6px;
@@ -184,7 +184,7 @@ export function AICoachPanel({ targetCode, currentIndex, isExamMode }) {
         }
 
         .ai-cheat-box {
-          background: #FFFFFF;
+          background: var(--card-bg);
           border: 1px solid var(--card-border);
           border-radius: var(--radius-md);
           padding: 8px 12px;

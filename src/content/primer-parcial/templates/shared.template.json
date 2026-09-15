@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "id": "nombre-shared",
+  "type": "shared",
+  "title": "Auxiliar",
+  "purpose": "Para qué sirve.",
+  "fromZero": {
+    "title": "Qué hace este auxiliar",
+    "explanation": "Explicación sin asumir conocimiento.",
+    "beforeCode": "Mostrar primero un ejemplo ejecutado.",
+    "practiceRule": "Después del ejemplo, explicar línea por línea y recién entonces pedir escritura."
+  },
+  "code": {
+    "language": "java",
+    "target": "CÓDIGO CANÓNICO"
+  },
+  "trainingSequence": [
+    "meaning-from-zero",
+    "concrete-example",
+    "line-by-line",
+    "guided-copy",
+    "fill-token",
+    "fill-line",
+    "recall"
+  ]
+}

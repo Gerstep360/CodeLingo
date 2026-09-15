@@ -63,6 +63,65 @@
   --transition-normal: 240ms ease;
 }
 
+/* =========================================================
+   DUOLINGO DARK THEME DESIGN TOKENS
+   ========================================================= */
+[data-theme="dark"],
+.dark,
+body.dark-mode {
+  --bg-main: #131F24;
+  --bg-subtle: #0E161A;
+  --card-bg: #1A282F;
+  --card-border: #2B3B44;
+  --card-border-hover: #3C505D;
+
+  --duo-swan: #2B3B44;
+  --duo-polar: #1A282F;
+  --duo-snow: #131F24;
+  --duo-eel: #F1F5F9;
+  --duo-wolf: #94A3B8;
+  --duo-hare: #64748B;
+
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  --duo-green: #58CC02;
+  --duo-green-shadow: #46A302;
+  --duo-green-soft: rgba(88, 204, 2, 0.22);
+  --duo-green-text: #78E820;
+
+  --duo-blue: #1CB0F6;
+  --duo-blue-shadow: #168CC5;
+  --duo-blue-soft: rgba(28, 176, 246, 0.2);
+  --duo-blue-text: #58CCFF;
+
+  --duo-red: #FF4B4B;
+  --duo-red-shadow: #D33131;
+  --duo-red-soft: rgba(255, 75, 75, 0.22);
+  --duo-red-text: #FF7B7B;
+
+  --duo-yellow: #FFC800;
+  --duo-yellow-shadow: #D7A900;
+  --duo-yellow-soft: rgba(255, 200, 0, 0.2);
+
+  --duo-orange: #FF9600;
+  --duo-orange-shadow: #D67E00;
+  --duo-orange-soft: rgba(255, 150, 0, 0.2);
+
+  --duo-purple: #CE82FF;
+  --duo-purple-shadow: #A85ED6;
+  --duo-purple-soft: rgba(206, 130, 255, 0.22);
+
+  /* IDE Accents in Dark Mode */
+  --pastel-lavender-bg: rgba(168, 85, 247, 0.18);
+  --pastel-lavender-border: rgba(168, 85, 247, 0.35);
+  --pastel-mint-bg: rgba(34, 197, 94, 0.18);
+  --pastel-mint-border: rgba(34, 197, 94, 0.35);
+  --pastel-peach-bg: rgba(249, 115, 22, 0.18);
+  --pastel-peach-border: rgba(249, 115, 22, 0.35);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -87,21 +146,64 @@ button, input, textarea, select {
   font-family: inherit;
 }
 
+/* Disable code ligatures globally so <= and >= never become math glyphs ≤ and ≥ */
+code, pre, textarea, kbd, samp, .duo-code-tile, .code-workbench, [class*="code-"] {
+  font-variant-ligatures: none !important;
+  font-feature-settings: "liga" 0, "calt" 0 !important;
+}
+
 /* Custom Minimalist & Clearly Visible Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #F7F7F7;
+  background: var(--bg-subtle, #F7F7F7);
 }
 ::-webkit-scrollbar-thumb {
-  background: #CBCBCB;
+  background: var(--card-border, #CBCBCB);
   border-radius: 6px;
-  border: 2px solid #F7F7F7;
+  border: 2px solid var(--bg-subtle, #F7F7F7);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #AFAFAF;
+  background: var(--card-border-hover, #AFAFAF);
+}
+
+/* Theme Toggle Button Component */
+.duo-theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--duo-swan);
+  background: var(--duo-polar);
+  color: var(--duo-eel);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 140ms ease;
+  user-select: none;
+}
+
+.duo-theme-toggle:hover {
+  border-color: var(--duo-blue);
+  color: var(--duo-blue);
+  background: var(--duo-blue-soft);
+}
+
+.duo-theme-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--duo-yellow);
+}
+
+.duo-theme-toggle-label {
+  flex: 1;
+  text-align: left;
 }
 
 /* =========================================================
@@ -158,7 +260,7 @@ button, input, textarea, select {
 
 /* Secondary White Outline */
 .duo-btn-secondary {
-  background: #FFFFFF;
+  background: var(--card-bg, #FFFFFF);
   color: var(--duo-blue);
   border: 2px solid var(--duo-swan);
   box-shadow: 0 4px 0 var(--duo-swan);
@@ -219,7 +321,7 @@ button, input, textarea, select {
   gap: 14px;
   min-height: 58px;
   padding: 12px 18px;
-  background: #FFFFFF;
+  background: var(--card-bg, #FFFFFF);
   border: 2px solid var(--duo-swan);
   border-bottom-width: 4px;
   border-radius: var(--radius-md);
@@ -270,13 +372,13 @@ button, input, textarea, select {
   font-size: 13px;
   font-weight: 800;
   color: var(--duo-wolf);
-  background: #FFFFFF;
+  background: var(--bg-subtle, #FFFFFF);
 }
 
 .duo-option-card.selected .duo-option-letter {
   border-color: var(--duo-blue);
   color: var(--duo-blue);
-  background: #FFFFFF;
+  background: var(--bg-subtle, #FFFFFF);
 }
 
 .duo-option-card.correct .duo-option-letter {
@@ -294,7 +396,7 @@ button, input, textarea, select {
   display: inline-flex;
   align-items: center;
   padding: 8px 14px;
-  background: #FFFFFF;
+  background: var(--card-bg, #FFFFFF);
   border: 2px solid var(--duo-swan);
   border-bottom-width: 4px;
   border-radius: 10px;

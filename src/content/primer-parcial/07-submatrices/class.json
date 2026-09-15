@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "id": "submatrices",
+  "order": 7,
+  "title": "Lista de SubMatrices",
+  "shortTitle": "SubMatrices",
+  "subtitle": "Generar todas las submatrices y filtrarlas por forma",
+  "icon": "layout-grid",
+  "color": "cyan",
+  "objective": "Aprender desde cero Lista de SubMatrices, entender su lógica, construir el código paso a paso y terminar escribiéndolo de memoria con velocidad.",
+  "mentalModel": {
+    "phrase": "INICIO (i,j) → FINAL (a,b) → RECORTO → GUARDO",
+    "corePattern": "4 for: i, j, a desde i, b desde j",
+    "roles": [
+      "i = fila inicial",
+      "j = columna inicial",
+      "a = fila final",
+      "b = columna final",
+      "M = matriz original",
+      "L = lista donde se guardan todas las submatrices"
+    ],
+    "recoveryPhrases": [
+      "SUBMATRIZ = esquina inicial (i,j) + esquina final (a,b)",
+      "a empieza en i",
+      "b empieza en j",
+      "CUADRADA = fil()==col()",
+      "FILA = fil()==1",
+      "COLUMNA = col()==1"
+    ]
+  },
+  "base": "./base.json",
+  "shared": [
+    "./shared/matriz.json",
+    "./shared/submatriz.json"
+  ],
+  "exercises": [
+    "./exercises/cuadradas.json",
+    "./exercises/fila.json",
+    "./exercises/columna.json"
+  ],
+  "classExam": {
+    "enabled": true,
+    "randomOrder": true,
+    "includeBase": true,
+    "includeVariants": true,
+    "hints": false,
+    "minimumAccuracy": 0.95,
+    "minimumMastery": 0.85
+  },
+  "speedrun": {
+    "enabled": true,
+    "unlock": {
+      "minimumAccuracy": 0.95,
+      "minimumSuccessfulRecalls": 1
+    }
+  },
+  "relatedClasses": [
+    {
+      "id": "determinante",
+      "relation": "matrix-family",
+      "note": "Ambas clases trabajan con Matriz. Determinante usa menor(); SubMatrices usa subMatriz(i,j,a,b)."
+    }
+  ],
+  "assumePriorKnowledge": false,
+  "standaloneLearning": true,
+  "fromZero": {
+    "startHere": "Una submatriz es un rectángulo recortado de una matriz original. Aquí trabajamos con submatrices contiguas.",
+    "everydayAnalogy": "Piensa en seleccionar con el mouse un rectángulo dentro de una hoja de cálculo: eliges la esquina superior izquierda y la esquina inferior derecha.",
+    "vocabulary": [
+      {
+        "term": "i",
+        "meaning": "fila inicial"
+      },
+      {
+        "term": "j",
+        "meaning": "columna inicial"
+      },
+      {
+        "term": "a",
+        "meaning": "fila final"
+      },
+      {
+        "term": "b",
+        "meaning": "columna final"
+      },
+      {
+        "term": "M",
+        "meaning": "matriz original"
+      },
+      {
+        "term": "R",
+        "meaning": "submatriz recortada"
+      },
+      {
+        "term": "L",
+        "meaning": "lista de todas las submatrices generadas"
+      }
+    ],
+    "firstWorkedExample": {
+      "setup": "M=[[1,2,3],[4,5,6],[7,8,9]], inicio=(0,1), final=(1,2)",
+      "goal": "Recortar ese rectángulo.",
+      "result": [
+        [
+          2,
+          3
+        ],
+        [
+          5,
+          6
+        ]
+      ]
+    },
+    "beforeSeeingCode": [
+      "Primero necesito un método que recorte UNA submatriz.",
+      "Su tamaño es final-inicio+1.",
+      "Después, para generar TODAS, pruebo todas las esquinas iniciales i,j.",
+      "Para cada inicio pruebo todas las esquinas finales a,b.",
+      "a empieza en i y b empieza en j para no terminar antes de empezar."
+    ],
+    "teachingPromise": "No se pregunta nada que todavía no haya sido explicado en esta misma clase."
+  },
+  "lessonOrder": [
+    "welcome",
+    "meaning-from-zero",
+    "vocabulary",
+    "concrete-example",
+    "manual-simulation",
+    "code-build",
+    "line-by-line",
+    "guided-copy",
+    "guided-rebuild",
+    "variant-lessons",
+    "recall",
+    "speedrun",
+    "class-exam"
+  ]
+}
