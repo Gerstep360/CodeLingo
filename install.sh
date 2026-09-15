@@ -73,7 +73,7 @@ print_menu() {
     echo -e "${B}|${W}  7 ${B}|${NC}  [+]  ${O}Instalar / Reparar Node.js${NC} (scripts/deploy/07_install_node.sh) ${B}|${NC}"
     echo -e "${B}|${W}  8 ${B}|${NC}  [X]  ${R}Limpiar Cache y Reset Total${NC} (scripts/deploy/08_clean_rebuild.sh)${B}|${NC}"
     echo -e "${B}|${W}  9 ${B}|${NC}  [#]  ${W}Ver Logs de Nginx en Vivo${NC} (scripts/deploy/09_nginx_logs.sh)    ${B}|${NC}"
-    echo -e "${B}|${W} 10 ${B}|${NC}  Instalar API Laravel, PHP-FPM y MySQL (primera vez)                  ${B}|${NC}"
+    echo -e "${B}|${W} 10 ${B}|${NC}  Instalar API Laravel, PHP-FPM y SQLite (primera vez)                  ${B}|${NC}"
     echo -e "${B}|${W} 11 ${B}|${NC}  [A]  ${P}Promover usuario a Administrador${NC} (por correo electrónico)      ${B}|${NC}"
     echo -e "${B}|${W}  0 ${B}|${NC}  [-]  ${GRAY}Salir del Administrador${NC}                                         ${B}|${NC}"
     echo -e "${B}+----+---------------------------------------------------------------------+${NC}"
@@ -145,28 +145,7 @@ main() {
                 read -r -p "Presione Enter para continuar..." dummy
                 ;;
             11)
-                echo ""
-                echo -e "  ${P}[ADMIN] Promover usuario a Administrador${NC}"
-                echo -e "  ${GRAY}Ejemplo: alumno@example.com${NC}"
-                echo -ne "  Correo del usuario: "
-                read -r admin_email
-                if [ -z "$admin_email" ]; then
-                    echo -e "  ${R}Correo vacío. Operación cancelada.${NC}"
-                else
-                    DEST=/var/www/CodeLingo/backend
-                    if sudo test -f "$DEST/.env"; then
-                        sudo php "$DEST/artisan" tinker --execute="\
-\\App\\Models\\User::where('email', '$admin_email')\
-->first()\
-? \\App\\Models\\User::where('email', '$admin_email')->update(['is_admin' => true])\
-  && print(\"✅ $admin_email ahora es admin.\\n\")\
-: print(\"❌ No se encontró el correo $admin_email.\\n\");\
-"
-                    else
-                        echo -e "  ${Y}API no desplegada. Ejecuta la opcion 10 primero.${NC}"
-                    fi
-                fi
-                echo ""
+                bash "$SCRIPT_DIR/scripts/deploy/12_manage_admin.sh"
                 read -r -p "Presione Enter para continuar..." dummy
                 ;;
             0)

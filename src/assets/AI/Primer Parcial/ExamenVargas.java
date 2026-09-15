@@ -74,7 +74,7 @@ public class ExamenVargas {
         for(int k=i;k<=n;k++)
             if(k%2==0){
                 L.add(k);
-                sumPar(L,n,k+1);
+                sumPar(L,n,k);
                 L.removeLast();
             }
     }
