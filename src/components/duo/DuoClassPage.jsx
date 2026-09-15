@@ -9,7 +9,9 @@ import {
   Sparkles,
   Trophy,
   BookOpen,
-  Timer
+  Timer,
+  Wrench,
+  Code2
 } from 'lucide-react';
 import { DUO_UNITS, getNodeLockStatus } from '../../data/duoLessonsData';
 
@@ -150,10 +152,10 @@ export function DuoClassPage({ completedNodeIds = [] }) {
               const isLocked = lockStatus.isLocked;
 
               const roleNames = {
-                base: 'ALGORITMO BASE CANÓNICO',
+                base: 'ALGORITMO BASE CAN\u00d3NICO',
                 variant: 'VARIANTE DE EXAMEN',
                 speedrun: 'ENTRENAMIENTO SPEEDRUN',
-                exam: 'EVALUACIÓN DE CLASE'
+                exam: 'EVALUACI\u00d3N DE CLASE (OPCIONAL)'
               };
 
               return (
@@ -233,6 +235,50 @@ export function DuoClassPage({ completedNodeIds = [] }) {
             })}
           </div>
         </section>
+
+        {/* Sección: Métodos Auxiliares */}
+        {unit.sharedHelpers && unit.sharedHelpers.length > 0 && (
+          <section className="class-shared-section">
+            <h2 className="section-title">
+              <Wrench size={20} color="var(--duo-orange)" style={{ verticalAlign: 'middle', marginRight: 8 }} />
+              <span>Métodos Auxiliares de esta Clase</span>
+            </h2>
+            <p className="section-desc">
+              Funciones de soporte que el algoritmo usa internamente. Aprendelos de memoria: son los cimientos que el examen da por descontados.
+            </p>
+
+            <div className="shared-helpers-list">
+              {unit.sharedHelpers.map((helper) => (
+                <div key={helper.id || helper.title} className="shared-helper-card">
+                  <div className="helper-header">
+                    <div className="helper-icon-wrap">
+                      <Code2 size={18} color="var(--duo-orange)" />
+                    </div>
+                    <div className="helper-meta">
+                      <span className="helper-tag">AUXILIAR</span>
+                      <h4 className="helper-title">{helper.title}</h4>
+                      {helper.purpose && (
+                        <p className="helper-purpose">{helper.purpose}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {helper.code?.target && (
+                    <pre className="helper-code-block"><code>{helper.code.target}</code></pre>
+                  )}
+
+                  {helper.memory?.anchors && helper.memory.anchors.length > 0 && (
+                    <div className="helper-anchors">
+                      {helper.memory.anchors.map((anchor, i) => (
+                        <span key={i} className="helper-anchor-chip">{anchor}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       <style>{`
@@ -546,6 +592,105 @@ export function DuoClassPage({ completedNodeIds = [] }) {
           .node-card-action .btn-node-go {
             width: 100%;
           }
+        }
+
+        /* === M\u00e9todos Auxiliares === */
+        .class-shared-section {
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+        }
+
+        .shared-helpers-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .shared-helper-card {
+          background: var(--card-bg);
+          border: 2px solid var(--duo-swan);
+          border-left: 4px solid var(--duo-orange);
+          border-radius: var(--radius-lg);
+          padding: 16px 18px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .helper-header {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+        }
+
+        .helper-icon-wrap {
+          width: 38px;
+          height: 38px;
+          border-radius: var(--radius-md);
+          background: var(--duo-orange-soft, rgba(255,150,0,.12));
+          border: 1px solid var(--duo-swan);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .helper-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .helper-tag {
+          font-size: 10px;
+          font-weight: 900;
+          color: var(--duo-orange);
+          letter-spacing: 0.6px;
+        }
+
+        .helper-title {
+          font-size: 15px;
+          font-weight: 900;
+          color: var(--duo-eel);
+          margin: 0;
+        }
+
+        .helper-purpose {
+          font-size: 12px;
+          color: var(--duo-wolf);
+          margin: 0;
+          line-height: 1.35;
+        }
+
+        .helper-code-block {
+          background: var(--bg-subtle);
+          border: 1px solid var(--duo-swan);
+          border-radius: var(--radius-md);
+          padding: 12px 14px;
+          margin: 0;
+          font-family: 'Fira Code', 'Cascadia Code', monospace;
+          font-size: 12px;
+          color: var(--text-primary);
+          line-height: 1.55;
+          overflow-x: auto;
+          white-space: pre;
+        }
+
+        .helper-anchors {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+
+        .helper-anchor-chip {
+          font-size: 11px;
+          font-weight: 700;
+          color: var(--duo-orange);
+          background: var(--duo-orange-soft, rgba(255,150,0,.1));
+          border: 1px solid rgba(255,150,0,.25);
+          padding: 2px 8px;
+          border-radius: var(--radius-full);
         }
       `}</style>
     </div>

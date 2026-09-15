@@ -105,3 +105,29 @@
 }
 @media(prefers-reduced-motion:reduce) {*,*::before,*::after {animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
 
+/* === Toast de salto adaptativo === */
+.skip-toast {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--duo-blue-shadow, #1899d6);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  z-index: 1100;
+  animation: toast-pop 0.25s ease;
+  pointer-events: none;
+}
+@keyframes toast-pop {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.92); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0)   scale(1); }
+}
+
+

@@ -153,7 +153,7 @@ export function getClassById(classId) {
 }
 
 /**
- * Busca un algoritmo específico (base o variante) por su ID.
+ * Busca un algoritmo especifico (base, variante o auxiliar shared) por su ID.
  */
 export function getAlgorithmById(algorithmId) {
   for (const c of contentTree.classes) {
@@ -164,16 +164,27 @@ export function getAlgorithmById(algorithmId) {
     if (foundVar) {
       return { ...foundVar, classId: c.id, className: c.title, isBase: false };
     }
+    // Tambien buscar en auxiliares (shared/)
+    const foundShared = (c.shared || []).find((s) => s.id === algorithmId);
+    if (foundShared) {
+      return { ...foundShared, classId: c.id, className: c.title, isBase: false, isShared: true };
+    }
   }
   return null;
 }
 
 /**
- * Devuelve todos los algoritmos del curso en una lista plana.
+ * Devuelve todos los algoritmos del curso en lista plana (incluye auxiliares shared).
  */
 export function getAllAlgorithms() {
   const result = [];
   for (const c of contentTree.classes) {
+    // Auxiliares primero (se muestran al inicio del selector)
+    for (const s of (c.shared || [])) {
+      if (s.code?.target) {
+        result.push({ ...s, classId: c.id, className: c.title, isBase: false, isShared: true });
+      }
+    }
     if (c.base) {
       result.push({ ...c.base, classId: c.id, className: c.title, isBase: true });
     }

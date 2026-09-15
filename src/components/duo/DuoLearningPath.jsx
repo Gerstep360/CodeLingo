@@ -100,6 +100,7 @@ export function DuoLearningPath({
       {/* Renderizado de las 7 Clases Jerárquicas */}
       {DUO_UNITS.map((unit, unitIdx) => {
         const baseNode = unit.nodes.find((n) => n.nodeRole === 'base');
+        const sharedNodes = unit.nodes.filter((n) => n.nodeRole === 'shared');
         const variantNodes = unit.nodes.filter((n) => n.nodeRole === 'variant');
         const speedrunNode = unit.nodes.find((n) => n.nodeRole === 'speedrun');
         const examNode = unit.nodes.find((n) => n.nodeRole === 'exam');
@@ -147,6 +148,39 @@ export function DuoLearningPath({
 
             {/* ÁRBOL JERÁRQUICO DE NODOS */}
             <div className="hierarchy-tree-container">
+              {/* =======================================================
+                  NIVEL 0: AUXILIARES (shared) — ANTES del base
+                  ======================================================= */}
+              {sharedNodes.length > 0 && (
+                <div className="hierarchy-level level-shared">
+                  <div className="level-tag level-tag-shared">NIVEL 0: AUXILIARES — aprende primero</div>
+                  <div className="shared-nodes-row">
+                    {sharedNodes.map((sNode) => (
+                      <div key={sNode.id} className="shared-cell">
+                        <NodeItem
+                          node={sNode}
+                          completedNodeIds={completedNodeIds}
+                          activeNodeId={activeNodeId}
+                          onNodeClick={handleNodeClick}
+                          selectedNode={selectedNode}
+                          lockTooltipNode={lockTooltipNode}
+                          onCloseModal={() => {
+                            setSelectedNode(null);
+                            setLockTooltipNode(null);
+                          }}
+                          onStartLesson={onStartLesson}
+                          badgeText="AUX"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  {/* Conector hacia abajo */}
+                  <div className="tree-connector-stem">
+                    <div className="stem-line" />
+                  </div>
+                </div>
+              )}
+
               {/* =======================================================
                   NIVEL 1: ALGORITMO BASE
                   ======================================================= */}
@@ -610,6 +644,36 @@ export function DuoLearningPath({
           flex-direction: column;
           align-items: center;
           min-width: 130px;
+        }
+
+        /* Grid de Auxiliares (NIVEL 0) */
+        .level-shared {
+          border: 2px dashed var(--duo-orange, #FF9600);
+          border-radius: 16px;
+          padding: 12px 16px 0;
+          background: rgba(255,150,0,.05);
+        }
+
+        .level-tag-shared {
+          color: var(--duo-orange, #FF9600) !important;
+          background: rgba(255,150,0,.12) !important;
+        }
+
+        .shared-nodes-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 20px;
+          width: 100%;
+          max-width: 600px;
+          padding-bottom: 8px;
+        }
+
+        .shared-cell {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-width: 120px;
         }
 
         /* Fila de Speedrun y Examen */

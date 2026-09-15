@@ -226,7 +226,7 @@ export default function CodeInput({
         />
       </div>
       <p id={id + '-help'} className="code-help">
-        Tab indenta · Shift+Tab desindenta · Ctrl+Z/Y deshace/rehace · Ctrl+Enter comprueba · Esc libera Tab para navegar
+        Tab indenta · Shift+Tab desindenta · Ctrl+Z/Y deshace/rehace · <strong>Ctrl+Enter comprueba</strong> · Alt+← paso anterior · Esc libera Tab
       </p>
     </div>
   );

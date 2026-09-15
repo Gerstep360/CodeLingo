@@ -247,7 +247,25 @@ function buildAdaptedUnits() {
       ]
     };
 
-    const allNodesInUnit = [baseNode, ...variantNodes, speedrunNode, examNode];
+    // 0. Nodos Auxiliares (shared/) — mini-lecciones enseñables ANTES del base
+    const sharedNodes = (classData.shared || [])
+      .filter((h) => h.code?.target && Array.isArray(h.trainingSequence) && h.trainingSequence.length > 0)
+      .map((helper) => ({
+        id: `node-${helper.id}`,
+        unitId: `unit-${classData.id}`,
+        classId: classData.id,
+        nodeRole: 'shared',
+        rawAlgorithmId: helper.id,
+        title: helper.title,
+        shortDesc: helper.purpose || 'Metodo auxiliar requerido por el algoritmo base.',
+        icon: 'wrench',
+        xp: 15,
+        type: 'shared',
+        theory: null,
+        exercises: []
+      }));
+
+    const allNodesInUnit = [...sharedNodes, baseNode, ...variantNodes, speedrunNode, examNode];
 
     return {
       id: `unit-${classData.id}`,
@@ -255,16 +273,19 @@ function buildAdaptedUnits() {
       dirName: classData.dirName,
       order: classData.order,
       unitIndex: classNum,
-      title: `TEMA ${classNum} · ${classData.title.toUpperCase()}`,
+      title: `TEMA ${classNum} \u00b7 ${classData.title.toUpperCase()}`,
       subtitle: classData.objective,
       parcial: 'Primer Parcial',
       color: unitColor,
-      badge: `Tema ${classNum} · Parcial 1`,
+      badge: `Tema ${classNum} \u00b7 Parcial 1`,
       mentalModel: classData.mentalModel,
       baseNodeId,
+      sharedNodeIds: sharedNodes.map((s) => s.id),
       variantNodeIds: variantNodes.map((v) => v.id),
       speedrunNodeId: speedrunNode.id,
       examNodeId: examNode.id,
+      // Auxiliares (shared/) expuestos para la UI de clase
+      sharedHelpers: classData.shared || [],
       nodes: allNodesInUnit
     };
   });
@@ -294,11 +315,13 @@ export function isFinalExamNode(node) {
 }
 
 /**
- * Reglas de Desbloqueo (FASE 8):
- * 1. Base: Desbloqueado si es Unidad 1 o la unidad anterior completó su base o examen.
- * 2. Variantes: BLOQUEADAS hasta dominar la Base. Al dominar la Base, se desbloquean TODAS en paralelo.
- * 3. Speedrun y Examen: BLOQUEADOS hasta completar la Base Y todas las Variantes de la clase.
- * 4. Siguiente Clase: Desbloqueada tras completar el examen o la base+variantes de la clase actual.
+ * Reglas de Desbloqueo:
+ * 1. Base: Libre en Unidad 1. En las siguientes, requiere que la clase anterior tenga Base + todas sus Variantes.
+ * 2. Variantes: Bloqueadas hasta dominar la Base. Al dominar la Base, se desbloquean TODAS en paralelo.
+ * 3. Speedrun y Examen: Bloqueados hasta completar la Base Y todas las Variantes de la clase.
+ *    El Examen es OPCIONAL: no bloquea la siguiente clase.
+ * 4. Siguiente Clase: Desbloqueada cuando la clase anterior tiene Base + TODAS las Variantes completadas.
+ *    El examen NO es requisito para avanzar.
  */
 export function getNodeLockStatus(nodeId, completedNodeIds = []) {
   const node = getNodeById(nodeId);
@@ -312,18 +335,28 @@ export function getNodeLockStatus(nodeId, completedNodeIds = []) {
     return { isLocked: false, isCompleted: true };
   }
 
+  // Helper: clase anterior completada (base + TODAS las variantes; examen opcional)
+  const prevClassUnlocked = (prevUnit) => {
+    const baseDone = completedNodeIds.includes(prevUnit.baseNodeId);
+    if (!baseDone) return false;
+    return prevUnit.variantNodeIds.every((vId) => completedNodeIds.includes(vId));
+  };
+
   // Verificar si la unidad previa está aprobada (la Unidad 1 siempre está accesible)
   const unitIndex = unit.unitIndex - 1;
   if (unitIndex > 0) {
     const prevUnit = DUO_UNITS[unitIndex - 1];
-    const prevUnitExamDone = completedNodeIds.includes(prevUnit.examNodeId);
-    const prevUnitBaseDone = completedNodeIds.includes(prevUnit.baseNodeId);
-    if (!prevUnitExamDone && !prevUnitBaseDone) {
+    if (!prevClassUnlocked(prevUnit)) {
       return {
         isLocked: true,
-        reason: `Debes completar primero el ${prevUnit.title} del Primer Parcial.`
+        reason: `Completa Base + Variantes de ${prevUnit.title} para desbloquear este tema.`
       };
     }
+  }
+
+  // Regla 0: Nodos Auxiliares (shared) — siempre desbloqueados, son preparacion opcional
+  if (node.nodeRole === 'shared') {
+    return { isLocked: false, isCompleted: false };
   }
 
   // Regla 1: Nodo Base
