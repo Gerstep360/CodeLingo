@@ -11,6 +11,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$(dirname "${BASH_SOURCE[0]}")/../common.sh"
 
 main() {
+    if [ ! -f /etc/nginx/snippets/codelingo-php.conf ]; then
+        echo "Primero ejecuta la opcion 10 para configurar PHP-FPM y la API."
+        return 1
+    fi
     local silent_mode=false
     [ "$1" == "--silent" ] && silent_mode=true
 
@@ -40,9 +44,9 @@ main() {
 EOF
     fi
     if id "www-data" >/dev/null 2>&1; then
-        sudo chown -R www-data:www-data "$TARGET_DIR" 2>/dev/null || true
+        sudo chown -R www-data:www-data "$TARGET_DIR/dist" 2>/dev/null || true
     fi
-    sudo chmod -R 755 "$TARGET_DIR"
+    sudo chmod -R 755 "$TARGET_DIR/dist"
 
     # 2. Recolectar todas las configuraciones activas (sites-enabled, conf.d y donde mencione taji)
     local raw_files=()

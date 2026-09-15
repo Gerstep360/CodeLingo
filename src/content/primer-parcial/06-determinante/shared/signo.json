@@ -22,6 +22,13 @@
       "expected": "(i+j)%2==0 ? 1:-1",
       "concept": "cofactor-sign",
       "errorMessage": "El signo depende de la paridad de i+j."
+    },
+    {
+      "id": "helper-1",
+      "anchor": "helper-1",
+      "expected": "return (i+j)%2==0 ? 1:-1;",
+      "concept": "paridad",
+      "errorMessage": "Suma los índices: si el resultado es par devuelve 1; si es impar, -1."
     }
   ],
   "trainingSequence": [
@@ -39,5 +46,58 @@
     "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
     "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
   },
-  "canonicalSource": "ExamenVargas.java"
+  "canonicalSource": "ExamenVargas.java",
+  "logic": {
+    "idea": "Decide si el cofactor lleva +1 o -1 mirando si i+j es par o impar.",
+    "goldenRule": "i+j par → +1; impar → -1",
+    "anchors": [
+      {
+        "id": "helper-1",
+        "label": "PARIDAD",
+        "code": "return (i+j)%2==0 ? 1:-1;",
+        "memory": "Suma los índices: si el resultado es par devuelve 1; si es impar, -1."
+      }
+    ]
+  },
+  "teachingExample": {
+    "input": {
+      "i": 1,
+      "j": 2
+    },
+    "output": -1,
+    "caption": "1 + 2 = 3. Como es impar, el signo es negativo.",
+    "states": [
+      "i + j = 3",
+      "3 % 2 = 1",
+      "Devuelve -1"
+    ]
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué hace signo()",
+      "explanation": "Decide si el cofactor lleva +1 o -1 mirando si i+j es par o impar."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "1 + 2 = 3. Como es impar, el signo es negativo."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "return (i+j)%2==0 ? 1:-1;",
+          "explanation": "Suma los índices: si el resultado es par devuelve 1; si es impar, -1.",
+          "label": "PARIDAD"
+        }
+      ]
+    }
+  },
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "return (i+j)%2==0 ? ____:-1;",
+      "answer": "1",
+      "reason": "1 + 2 = 3. Como es impar, el signo es negativo."
+    }
+  ]
 }

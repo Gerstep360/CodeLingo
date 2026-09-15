@@ -8,11 +8,42 @@
     "idea": "Recorro la matriz original y copio todo excepto la fila fi y la columna co.",
     "goldenRule": "MENOR = salto una fila + salto una columna.",
     "anchors": [
-      "n=M.fil()",
-      "R de tamaño n-1",
-      "si i!=fi copio fila",
-      "si j!=co copio columna",
-      "a,b son índices de R"
+      {
+        "id": "helper-1",
+        "label": "DIMENSIÓN",
+        "code": "int n=M.fil(),a=0;",
+        "memory": "Lee el tamaño y prepara la primera fila del resultado."
+      },
+      {
+        "id": "helper-2",
+        "label": "RESERVAR",
+        "code": "int[][] R=new int[n-1][n-1];",
+        "memory": "Al quitar una fila y una columna, ambas dimensiones disminuyen en uno."
+      },
+      {
+        "id": "helper-3",
+        "label": "SALTAR FILA",
+        "code": "if(i!=fi){",
+        "memory": "Solo copia filas distintas de la que se elimina."
+      },
+      {
+        "id": "helper-4",
+        "label": "SALTAR COLUMNA",
+        "code": "if(j!=co)",
+        "memory": "Solo copia columnas distintas de la que se elimina."
+      },
+      {
+        "id": "helper-5",
+        "label": "COPIAR",
+        "code": "R[a][b++]=M.get(i,j);",
+        "memory": "Copia la celda y avanza la columna de destino."
+      },
+      {
+        "id": "helper-6",
+        "label": "DEVOLVER",
+        "code": "return new Matriz(R);",
+        "memory": "Entrega la matriz menor."
+      }
     ]
   },
   "code": {
@@ -37,6 +68,34 @@
       "expected": "if(j!=co)",
       "concept": "remove-column",
       "errorMessage": "No copies la columna co."
+    },
+    {
+      "id": "helper-1",
+      "anchor": "helper-1",
+      "expected": "int n=M.fil(),a=0;",
+      "concept": "dimensión",
+      "errorMessage": "Lee el tamaño y prepara la primera fila del resultado."
+    },
+    {
+      "id": "helper-3",
+      "anchor": "helper-3",
+      "expected": "if(i!=fi){",
+      "concept": "saltar fila",
+      "errorMessage": "Solo copia filas distintas de la que se elimina."
+    },
+    {
+      "id": "helper-5",
+      "anchor": "helper-5",
+      "expected": "R[a][b++]=M.get(i,j);",
+      "concept": "copiar",
+      "errorMessage": "Copia la celda y avanza la columna de destino."
+    },
+    {
+      "id": "helper-6",
+      "anchor": "helper-6",
+      "expected": "return new Matriz(R);",
+      "concept": "devolver",
+      "errorMessage": "Entrega la matriz menor."
     }
   ],
   "trainingSequence": [
@@ -54,5 +113,90 @@
     "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
     "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
   },
-  "canonicalSource": "ExamenVargas.java"
+  "canonicalSource": "ExamenVargas.java",
+  "teachingExample": {
+    "input": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6
+      ],
+      [
+        7,
+        8,
+        9
+      ]
+    ],
+    "output": [
+      [
+        4,
+        6
+      ],
+      [
+        7,
+        9
+      ]
+    ],
+    "removeRow": 0,
+    "removeColumn": 1,
+    "caption": "Quita la fila 0 y la columna 1. Conserva las demás celdas en su orden."
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué hace menor()",
+      "explanation": "Recorro la matriz original y copio todo excepto la fila fi y la columna co."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "Quita la fila 0 y la columna 1. Conserva las demás celdas en su orden."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "int n=M.fil(),a=0;",
+          "explanation": "Lee el tamaño y prepara la primera fila del resultado.",
+          "label": "DIMENSIÓN"
+        },
+        {
+          "code": "int[][] R=new int[n-1][n-1];",
+          "explanation": "Al quitar una fila y una columna, ambas dimensiones disminuyen en uno.",
+          "label": "RESERVAR"
+        },
+        {
+          "code": "if(i!=fi){",
+          "explanation": "Solo copia filas distintas de la que se elimina.",
+          "label": "SALTAR FILA"
+        },
+        {
+          "code": "if(j!=co)",
+          "explanation": "Solo copia columnas distintas de la que se elimina.",
+          "label": "SALTAR COLUMNA"
+        },
+        {
+          "code": "R[a][b++]=M.get(i,j);",
+          "explanation": "Copia la celda y avanza la columna de destino.",
+          "label": "COPIAR"
+        },
+        {
+          "code": "return new Matriz(R);",
+          "explanation": "Entrega la matriz menor.",
+          "label": "DEVOLVER"
+        }
+      ]
+    }
+  },
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "int[][] R=new int[____][n-1];",
+      "answer": "n-1",
+      "reason": "Quita la fila 0 y la columna 1. Conserva las demás celdas en su orden."
+    }
+  ]
 }

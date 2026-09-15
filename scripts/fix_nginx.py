@@ -19,7 +19,7 @@ def main():
     print("\n\033[38;5;39m=== [Diagnóstico y Reparación Quirúrgica de Nginx para CodeLingo] ===\033[0m\n")
 
     # Limpiar inmediatamente cualquier archivo de respaldo previo para evitar colisiones
-    run_cmd("sudo rm -f /etc/nginx/sites-enabled/*.bak* /etc/nginx/conf.d/*.bak* /etc/nginx/sites-available/*.bak*")
+    # Preserve backups belonging to other applications.
 
     # 1. Asegurar snippet
     script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,8 +42,8 @@ def main():
         with open(index_path, "w") as f:
             f.write("<!DOCTYPE html><html><head><title>CodeLingo</title></head><body><h1>CodeLingo listo</h1></body></html>")
 
-    run_cmd(f"chown -R www-data:www-data /var/www/CodeLingo 2>/dev/null || true")
-    run_cmd(f"chmod -R 755 /var/www/CodeLingo")
+    run_cmd(f"chown -R www-data:www-data /var/www/CodeLingo/dist 2>/dev/null || true")
+    run_cmd(f"chmod -R 755 /var/www/CodeLingo/dist")
 
     # 2. Ejecutar nginx -T para ver qué vhosts están activos
     rc, stdout, stderr = run_cmd("sudo nginx -T")
@@ -151,7 +151,7 @@ def main():
         new_lines = final_lines
 
     # Limpiar cualquier archivo de respaldo previo en sites-enabled o conf.d
-    run_cmd("sudo rm -f /etc/nginx/sites-enabled/*.bak* /etc/nginx/conf.d/*.bak* /etc/nginx/sites-available/*.bak*")
+    # Preserve backups belonging to other applications.
 
     # Resolver enlace simbólico a la ruta real
     real_target_file = os.path.realpath(target_file)

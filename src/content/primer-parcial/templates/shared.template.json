@@ -1,18 +1,21 @@
 {
   "schemaVersion": 2,
-  "id": "nombre-shared",
+  "id": "nombre-helper-suma",
   "type": "shared",
-  "title": "Auxiliar",
-  "purpose": "Para qué sirve.",
-  "fromZero": {
-    "title": "Qué hace este auxiliar",
-    "explanation": "Explicación sin asumir conocimiento.",
-    "beforeCode": "Mostrar primero un ejemplo ejecutado.",
-    "practiceRule": "Después del ejemplo, explicar línea por línea y recién entonces pedir escritura."
-  },
+  "title": "Auxiliar suma",
+  "purpose": "Calcular la suma actual de los elementos de L.",
   "code": {
     "language": "java",
-    "target": "CÓDIGO CANÓNICO"
+    "target": "static int suma(LinkedList<Integer>L){\n    int s=0;\n    for(int x:L)s+=x;\n    return s;\n}"
+  },
+  "memory": {
+    "phrase": "recorro L y acumulo en s",
+    "anchors": [
+      "s empieza en 0",
+      "for-each sobre L",
+      "s+=x",
+      "return s"
+    ]
   },
   "trainingSequence": [
     "meaning-from-zero",
@@ -22,5 +25,111 @@
     "fill-token",
     "fill-line",
     "recall"
+  ],
+  "fromZero": {
+    "title": "Qué hace suma()",
+    "explanation": "Recorre L y acumula todos sus números en s. Empieza en 0 porque 0 es el neutro de la suma.",
+    "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
+    "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
+  },
+  "logic": {
+    "idea": "Recorre L y acumula todos sus números en s. Empieza en 0 porque 0 es el neutro de la suma.",
+    "goldenRule": "recorro L y acumulo en s",
+    "anchors": [
+      {
+        "id": "helper-1",
+        "label": "INICIAR",
+        "code": "int s=0;",
+        "memory": "La suma comienza en cero."
+      },
+      {
+        "id": "helper-2",
+        "label": "ACUMULAR",
+        "code": "for(int x:L)s+=x;",
+        "memory": "Recorre cada número y lo añade al acumulador."
+      },
+      {
+        "id": "helper-3",
+        "label": "DEVOLVER",
+        "code": "return s;",
+        "memory": "Entrega la suma total."
+      }
+    ]
+  },
+  "teachingExample": {
+    "input": [
+      2,
+      3,
+      4
+    ],
+    "output": 9,
+    "caption": "Empieza en 0. Acumula 2, luego 3 y después 4.",
+    "states": [
+      "s = 0",
+      "s = 2",
+      "s = 5",
+      "s = 9"
+    ]
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué hace suma()",
+      "explanation": "Recorre L y acumula todos sus números en s. Empieza en 0 porque 0 es el neutro de la suma."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "Empieza en 0. Acumula 2, luego 3 y después 4."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "int s=0;",
+          "explanation": "La suma comienza en cero.",
+          "label": "INICIAR"
+        },
+        {
+          "code": "for(int x:L)s+=x;",
+          "explanation": "Recorre cada número y lo añade al acumulador.",
+          "label": "ACUMULAR"
+        },
+        {
+          "code": "return s;",
+          "explanation": "Entrega la suma total.",
+          "label": "DEVOLVER"
+        }
+      ]
+    }
+  },
+  "criticalFragments": [
+    {
+      "id": "helper-1",
+      "anchor": "helper-1",
+      "expected": "int s=0;",
+      "concept": "iniciar",
+      "errorMessage": "La suma comienza en cero."
+    },
+    {
+      "id": "helper-2",
+      "anchor": "helper-2",
+      "expected": "for(int x:L)s+=x;",
+      "concept": "acumular",
+      "errorMessage": "Recorre cada número y lo añade al acumulador."
+    },
+    {
+      "id": "helper-3",
+      "anchor": "helper-3",
+      "expected": "return s;",
+      "concept": "devolver",
+      "errorMessage": "Entrega la suma total."
+    }
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "int s=____;",
+      "answer": "0",
+      "reason": "Empieza en 0. Acumula 2, luego 3 y después 4."
+    }
   ]
 }

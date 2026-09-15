@@ -10,28 +10,34 @@
     "mentalModel": "Recorto un rectángulo de la matriz original.",
     "anchors": [
       {
-        "id": "size",
+        "id": "helper-1",
         "label": "TAMAÑO",
-        "code": "new Matriz(a-i+1,b-j+1)",
-        "memory": "final - inicio + 1"
+        "code": "new Matriz(a-i+1,b-j+1);",
+        "memory": "Final menos inicio más uno incluye las dos esquinas."
       },
       {
-        "id": "rows",
-        "label": "RECORRER FILAS",
+        "id": "helper-2",
+        "label": "FILAS",
         "code": "for(int f=i,x=0;f<=a;f++,x++)",
-        "memory": "f recorre M; x recorre R"
+        "memory": "f recorre el origen; x recorre las filas del resultado."
       },
       {
-        "id": "cols",
-        "label": "RECORRER COLUMNAS",
+        "id": "helper-3",
+        "label": "COLUMNAS",
         "code": "for(int c=j,y=0;c<=b;c++,y++)",
-        "memory": "c recorre M; y recorre R"
+        "memory": "c recorre el origen; y recorre las columnas del resultado."
       },
       {
-        "id": "copy",
+        "id": "helper-4",
         "label": "COPIAR",
         "code": "R.e[x][y]=M.e[f][c];",
-        "memory": "origen M → destino R"
+        "memory": "Copia cada celda al rectángulo nuevo."
+      },
+      {
+        "id": "helper-5",
+        "label": "DEVOLVER",
+        "code": "return R;",
+        "memory": "Entrega el recorte."
       }
     ]
   },
@@ -64,6 +70,20 @@
       "expected": "R.e[x][y]=M.e[f][c];",
       "concept": "copy",
       "errorMessage": "Copias de M[f][c] hacia R[x][y]."
+    },
+    {
+      "id": "helper-1",
+      "anchor": "helper-1",
+      "expected": "new Matriz(a-i+1,b-j+1);",
+      "concept": "tamaño",
+      "errorMessage": "Final menos inicio más uno incluye las dos esquinas."
+    },
+    {
+      "id": "helper-5",
+      "anchor": "helper-5",
+      "expected": "return R;",
+      "concept": "devolver",
+      "errorMessage": "Entrega el recorte."
     }
   ],
   "trainingSequence": [
@@ -123,5 +143,89 @@
     "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
     "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
   },
-  "canonicalSource": "ExamenVargas.java"
+  "canonicalSource": "ExamenVargas.java",
+  "teachingExample": {
+    "input": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6
+      ],
+      [
+        7,
+        8,
+        9
+      ]
+    ],
+    "output": [
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        6
+      ]
+    ],
+    "selection": {
+      "i": 0,
+      "j": 1,
+      "a": 1,
+      "b": 2
+    },
+    "caption": "Recorta desde (0,1) hasta (1,2), incluyendo ambas esquinas."
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué representa Matriz",
+      "explanation": "Creo una matriz del tamaño exacto del recorte y copio desde la esquina inicial hasta la esquina final."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "Recorta desde (0,1) hasta (1,2), incluyendo ambas esquinas."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "new Matriz(a-i+1,b-j+1);",
+          "explanation": "Final menos inicio más uno incluye las dos esquinas.",
+          "label": "TAMAÑO"
+        },
+        {
+          "code": "for(int f=i,x=0;f<=a;f++,x++)",
+          "explanation": "f recorre el origen; x recorre las filas del resultado.",
+          "label": "FILAS"
+        },
+        {
+          "code": "for(int c=j,y=0;c<=b;c++,y++)",
+          "explanation": "c recorre el origen; y recorre las columnas del resultado.",
+          "label": "COLUMNAS"
+        },
+        {
+          "code": "R.e[x][y]=M.e[f][c];",
+          "explanation": "Copia cada celda al rectángulo nuevo.",
+          "label": "COPIAR"
+        },
+        {
+          "code": "return R;",
+          "explanation": "Entrega el recorte.",
+          "label": "DEVOLVER"
+        }
+      ]
+    }
+  },
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "new Matriz(a-i____,b-j+1);",
+      "answer": "+1",
+      "reason": "Recorta desde (0,1) hasta (1,2), incluyendo ambas esquinas."
+    }
+  ]
 }

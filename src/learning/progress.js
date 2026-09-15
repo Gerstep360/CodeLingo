@@ -1,6 +1,7 @@
+import { accountStorage } from '../account/accountStorage.js';
 export const PROGRESS_KEY='vargas_learning_v2';
 export const REVIEW_INTERVALS=[600000,86400000,259200000,604800000];
-export function readProgress(storage=globalThis.localStorage) {
+export function readProgress(storage=accountStorage) {
   try { const data=JSON.parse(storage.getItem(PROGRESS_KEY)||'{}');return data&&typeof data==='object'&&!Array.isArray(data)?data:{}; } catch{return {};}
 }
 export function supportLevel(record={}) {
@@ -28,7 +29,7 @@ export function updateRecord(previous={}, result, now=Date.now()) {
     nextReview:new Date(now+REVIEW_INTERVALS[reviewIndex]).toISOString(),reviewIndex,
     status:mastery>=.85&&successfulRecalls>=2?'MASTERED':successfulRecalls?'REVIEW':'LEARNING'};
 }
-export function saveAttempt(id,result,storage=globalThis.localStorage) {
+export function saveAttempt(id,result,storage=accountStorage) {
   const all=readProgress(storage);all[id]=updateRecord(all[id],result);
   try {storage.setItem(PROGRESS_KEY,JSON.stringify(all));} catch {console.warn('No se pudo guardar el progreso en este navegador.');}
   if(typeof window!=='undefined')window.dispatchEvent(new Event('learning-progress'));

@@ -31,5 +31,146 @@
     "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
     "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
   },
-  "canonicalSource": "ExamenVargas.java"
+  "canonicalSource": "ExamenVargas.java",
+  "logic": {
+    "idea": "Es una envoltura sencilla alrededor de int[][] para preguntar filas, columnas y elementos.",
+    "goldenRule": "MATRIZ = e[][] + fil + col + get + toString",
+    "anchors": [
+      {
+        "id": "helper-1",
+        "label": "GUARDAR",
+        "code": "int[][] e;",
+        "memory": "Una matriz guarda una tabla de enteros."
+      },
+      {
+        "id": "helper-2",
+        "label": "CREAR",
+        "code": "e=new int[f][c];",
+        "memory": "Reserva f filas y c columnas."
+      },
+      {
+        "id": "helper-3",
+        "label": "FILAS",
+        "code": "return e.length;",
+        "memory": "El tamaño exterior es el número de filas."
+      },
+      {
+        "id": "helper-4",
+        "label": "COLUMNAS",
+        "code": "return e[0].length;",
+        "memory": "La primera fila indica el número de columnas."
+      },
+      {
+        "id": "helper-5",
+        "label": "LEER",
+        "code": "return e[i][j];",
+        "memory": "Lee la celda en la fila i y columna j."
+      }
+    ]
+  },
+  "teachingExample": {
+    "input": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6
+      ]
+    ],
+    "output": {
+      "fil()": 2,
+      "col()": 3,
+      "get(1,2)": 6
+    },
+    "caption": "Los índices empiezan en cero: la celda (1,2) contiene el 6."
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué representa Matriz",
+      "explanation": "Es una envoltura sencilla alrededor de int[][] para preguntar filas, columnas y elementos."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "Los índices empiezan en cero: la celda (1,2) contiene el 6."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "int[][] e;",
+          "explanation": "Una matriz guarda una tabla de enteros.",
+          "label": "GUARDAR"
+        },
+        {
+          "code": "e=new int[f][c];",
+          "explanation": "Reserva f filas y c columnas.",
+          "label": "CREAR"
+        },
+        {
+          "code": "return e.length;",
+          "explanation": "El tamaño exterior es el número de filas.",
+          "label": "FILAS"
+        },
+        {
+          "code": "return e[0].length;",
+          "explanation": "La primera fila indica el número de columnas.",
+          "label": "COLUMNAS"
+        },
+        {
+          "code": "return e[i][j];",
+          "explanation": "Lee la celda en la fila i y columna j.",
+          "label": "LEER"
+        }
+      ]
+    }
+  },
+  "criticalFragments": [
+    {
+      "id": "helper-1",
+      "anchor": "helper-1",
+      "expected": "int[][] e;",
+      "concept": "guardar",
+      "errorMessage": "Una matriz guarda una tabla de enteros."
+    },
+    {
+      "id": "helper-2",
+      "anchor": "helper-2",
+      "expected": "e=new int[f][c];",
+      "concept": "crear",
+      "errorMessage": "Reserva f filas y c columnas."
+    },
+    {
+      "id": "helper-3",
+      "anchor": "helper-3",
+      "expected": "return e.length;",
+      "concept": "filas",
+      "errorMessage": "El tamaño exterior es el número de filas."
+    },
+    {
+      "id": "helper-4",
+      "anchor": "helper-4",
+      "expected": "return e[0].length;",
+      "concept": "columnas",
+      "errorMessage": "La primera fila indica el número de columnas."
+    },
+    {
+      "id": "helper-5",
+      "anchor": "helper-5",
+      "expected": "return e[i][j];",
+      "concept": "leer",
+      "errorMessage": "Lee la celda en la fila i y columna j."
+    }
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "return e[0].____;",
+      "answer": "length",
+      "reason": "Los índices empiezan en cero: la celda (1,2) contiene el 6."
+    }
+  ]
 }

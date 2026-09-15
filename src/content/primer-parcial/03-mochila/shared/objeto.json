@@ -29,6 +29,27 @@
       "expected": "String color;",
       "concept": "attributes",
       "errorMessage": "El color se guarda como String."
+    },
+    {
+      "id": "helper-3",
+      "anchor": "helper-3",
+      "expected": "peso=p;",
+      "concept": "construir",
+      "errorMessage": "El constructor copia p en el atributo peso."
+    },
+    {
+      "id": "helper-4",
+      "anchor": "helper-4",
+      "expected": "color=c;",
+      "concept": "construir",
+      "errorMessage": "Copia el color recibido."
+    },
+    {
+      "id": "helper-5",
+      "anchor": "helper-5",
+      "expected": "tam=t;",
+      "concept": "construir",
+      "errorMessage": "Copia el tamaño recibido."
     }
   ],
   "trainingSequence": [
@@ -46,5 +67,102 @@
     "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
     "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
   },
-  "canonicalSource": "ExamenVargas.java"
+  "canonicalSource": "ExamenVargas.java",
+  "logic": {
+    "idea": "Es una pequeña estructura que guarda juntos peso, color y tamaño.",
+    "goldenRule": "OBJETO = peso + color + tamaño",
+    "anchors": [
+      {
+        "id": "helper-1",
+        "label": "ATRIBUTOS",
+        "code": "int peso,tam;",
+        "memory": "Peso y tamaño son números enteros."
+      },
+      {
+        "id": "helper-2",
+        "label": "COLOR",
+        "code": "String color;",
+        "memory": "El color se guarda como texto."
+      },
+      {
+        "id": "helper-3",
+        "label": "CONSTRUIR",
+        "code": "peso=p;",
+        "memory": "El constructor copia p en el atributo peso."
+      },
+      {
+        "id": "helper-4",
+        "label": "CONSTRUIR",
+        "code": "color=c;",
+        "memory": "Copia el color recibido."
+      },
+      {
+        "id": "helper-5",
+        "label": "CONSTRUIR",
+        "code": "tam=t;",
+        "memory": "Copia el tamaño recibido."
+      }
+    ]
+  },
+  "teachingExample": {
+    "input": {
+      "p": 3,
+      "c": "rojo",
+      "t": 2
+    },
+    "output": {
+      "peso": 3,
+      "color": "rojo",
+      "tam": 2
+    },
+    "caption": "El constructor convierte los argumentos en atributos del mismo objeto."
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué representa Objeto",
+      "explanation": "Es una pequeña estructura que guarda juntos peso, color y tamaño."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "El constructor convierte los argumentos en atributos del mismo objeto."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "int peso,tam;",
+          "explanation": "Peso y tamaño son números enteros.",
+          "label": "ATRIBUTOS"
+        },
+        {
+          "code": "String color;",
+          "explanation": "El color se guarda como texto.",
+          "label": "COLOR"
+        },
+        {
+          "code": "peso=p;",
+          "explanation": "El constructor copia p en el atributo peso.",
+          "label": "CONSTRUIR"
+        },
+        {
+          "code": "color=c;",
+          "explanation": "Copia el color recibido.",
+          "label": "CONSTRUIR"
+        },
+        {
+          "code": "tam=t;",
+          "explanation": "Copia el tamaño recibido.",
+          "label": "CONSTRUIR"
+        }
+      ]
+    }
+  },
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "____ color;",
+      "answer": "String",
+      "reason": "El constructor convierte los argumentos en atributos del mismo objeto."
+    }
+  ]
 }

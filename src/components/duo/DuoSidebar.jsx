@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass, Zap, Terminal, BookOpen, Target, Moon, Sun } from 'lucide-react';
+import { Compass, Zap, Terminal, BookOpen, Target, Moon, Sun, UserRound } from 'lucide-react';
 import { DuoOwlIcon, DuoFlameIcon, DuoTrophyIcon } from './DuoIcons';
 
 export function DuoSidebar({
@@ -11,6 +11,7 @@ export function DuoSidebar({
   onToggleTheme
 }) {
   const navItems = [
+    { id: 'account', label: 'Mi cuenta', icon: UserRound, badge: null },
     { id: 'path', label: 'Aprender', icon: Compass, badge: null },
     { id: 'practice', label: 'Practicar', icon: Target, badge: null },
     { id: 'flash', label: 'Test Flash', icon: Zap, badge: '10 Q' },

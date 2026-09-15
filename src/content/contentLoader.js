@@ -144,7 +144,7 @@ export const contentTree = buildContentTree();
 export function getClasses() {
   return contentTree.classes;
 }
-
+ 
 /**
  * Busca una clase por su ID.
  */

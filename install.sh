@@ -73,6 +73,7 @@ print_menu() {
     echo -e "${B}|${W}  7 ${B}|${NC}  [+]  ${O}Instalar / Reparar Node.js${NC} (scripts/deploy/07_install_node.sh) ${B}|${NC}"
     echo -e "${B}|${W}  8 ${B}|${NC}  [X]  ${R}Limpiar Cache y Reset Total${NC} (scripts/deploy/08_clean_rebuild.sh)${B}|${NC}"
     echo -e "${B}|${W}  9 ${B}|${NC}  [#]  ${W}Ver Logs de Nginx en Vivo${NC} (scripts/deploy/09_nginx_logs.sh)    ${B}|${NC}"
+    echo -e "${B}|${W} 10 ${B}|${NC}  Instalar API Laravel, PHP-FPM y MySQL (primera vez)                  ${B}|${NC}"
     echo -e "${B}|${W}  0 ${B}|${NC}  [-]  ${GRAY}Salir del Administrador${NC}                                         ${B}|${NC}"
     echo -e "${B}+----+---------------------------------------------------------------------+${NC}"
     echo ""
@@ -85,13 +86,13 @@ main() {
     # Soporte para despliegue no interactivo (--auto o --deploy)
     if [ "$1" == "--auto" ] || [ "$1" == "--deploy" ]; then
         bash "$SCRIPT_DIR/scripts/deploy/01_full_deploy.sh"
-        exit 0
+        exit $?
     fi
 
     while true; do
         print_header
         print_menu
-        echo -ne "  ${P}-->${NC} ${W}Seleccione una opcion [0-9]:${NC} "
+        echo -ne "  ${P}-->${NC} ${W}Seleccione una opcion [0-10]:${NC} "
         read -r opt
 
         case "$opt" in
@@ -137,6 +138,10 @@ main() {
                 ;;
             9)
                 bash "$SCRIPT_DIR/scripts/deploy/09_nginx_logs.sh"
+                ;;
+            10)
+                bash "$SCRIPT_DIR/scripts/deploy/10_install_api.sh"
+                read -r -p "Presione Enter para continuar..." dummy
                 ;;
             0)
                 echo -e "\n${G}Sesion finalizada. CodeLingo listo para seguir practicando.${NC}\n"

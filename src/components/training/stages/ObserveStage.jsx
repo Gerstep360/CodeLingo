@@ -1,3 +1,4 @@
+import HelperObserveStage from './HelperObserveStage';
 import CodeReference from '../CodeReference';
 import { INTRO_CHAPTERS } from '../trainingSequence';
 
@@ -11,6 +12,7 @@ function Content({ value }) {
 }
 
 export default function ObserveStage({ classData, lessonData, stageId, onComplete }) {
+  if(lessonData.isShared||lessonData.type==='shared') return <HelperObserveStage classData={classData} lessonData={lessonData} stageId={stageId} onComplete={onComplete}/>;
   const chapter = lessonData.teachBeforePractice?.[INTRO_CHAPTERS[stageId]];
   const base = classData?.base;
   const showBase = ['base-recap', 'base-vs-variant', 'build-from-base'].includes(stageId);

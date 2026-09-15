@@ -22,6 +22,16 @@ for(const file of files){
    const dir=path.join(path.dirname(file),'exercises');
    if(existsSync(dir)){const orders=new Set();for(const f of readdirSync(dir).filter(f=>f.endsWith('.json'))){const d=JSON.parse(readFileSync(path.join(dir,f),'utf8'));if(!Number.isInteger(d.order)||orders.has(d.order))fail(file,'Orden de variantes ausente o duplicado');orders.add(d.order);}}
  }
+ if(data.type==='shared'){
+   if(!data.fromZero?.explanation?.trim())fail(file,'Auxiliar sin explicación inicial');
+   if(!data.teachingExample || !Object.hasOwn(data.teachingExample,'input') || !Object.hasOwn(data.teachingExample,'output') || !data.teachingExample.caption?.trim())fail(file,'Auxiliar sin ejemplo de entrada/salida');
+   const lines=data.teachBeforePractice?.chapter5_lineByLine?.lines;
+   if(!lines?.length || lines.some(line=>!line.code?.trim()||!line.explanation?.trim()))fail(file,'Auxiliar sin bloques explicados');
+   for(const line of lines||[])if(!containsTokens(data.code?.target||'',line.code))fail(file,'Bloque explicado fuera del target');
+   if(!data.logic?.anchors?.length || data.logic.anchors.some(a=>!a.id||!a.label||!a.code||!a.memory))fail(file,'Anclas del auxiliar incompletas');
+   if(data.trainingSequence?.includes('fill-token')&&!data.microDrills?.some(d=>d.type==='fill-token'&&d.prompt?.includes('____')&&String(d.answer??'').trim()))fail(file,'Auxiliar sin ejercicio de token');
+   if(data.trainingSequence?.includes('fill-line')&&!data.criticalFragments?.some(f=>f.expected))fail(file,'Auxiliar sin fragmentos para practicar');
+ }
  if(!data.trainingSequence)continue;
  const seq=getSequence(data);
  if(!seq.length||seq.some(s=>!supported.has(s.kind)))fail(file,'trainingSequence inválida');

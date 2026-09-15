@@ -22,6 +22,20 @@
       "expected": "if(n%i==0)return false;",
       "concept": "primality",
       "errorMessage": "Si n tiene un divisor exacto antes de llegar a n, no es primo."
+    },
+    {
+      "id": "helper-1",
+      "anchor": "helper-1",
+      "expected": "for(int i=2;i<n;i++)",
+      "concept": "probar",
+      "errorMessage": "Prueba divisores desde 2 hasta n-1."
+    },
+    {
+      "id": "helper-3",
+      "anchor": "helper-3",
+      "expected": "return n>1;",
+      "concept": "confirmar",
+      "errorMessage": "Si no hay divisores, solo queda excluir cero, uno y negativos."
     }
   ],
   "trainingSequence": [
@@ -39,5 +53,79 @@
     "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
     "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
   },
-  "canonicalSource": "ExamenVargas.java"
+  "canonicalSource": "ExamenVargas.java",
+  "logic": {
+    "idea": "Busca si n tiene algún divisor entre 2 y n-1. Si encuentra uno, no es primo.",
+    "goldenRule": "si encuentro divisor entre 2 y n-1, no es primo",
+    "anchors": [
+      {
+        "id": "helper-1",
+        "label": "PROBAR",
+        "code": "for(int i=2;i<n;i++)",
+        "memory": "Prueba divisores desde 2 hasta n-1."
+      },
+      {
+        "id": "helper-2",
+        "label": "DESCARTAR",
+        "code": "if(n%i==0)return false;",
+        "memory": "Un divisor exacto basta para saber que no es primo."
+      },
+      {
+        "id": "helper-3",
+        "label": "CONFIRMAR",
+        "code": "return n>1;",
+        "memory": "Si no hay divisores, solo queda excluir cero, uno y negativos."
+      }
+    ]
+  },
+  "teachingExample": {
+    "input": 7,
+    "output": true,
+    "caption": "Ningún número entre 2 y 6 divide exactamente a 7.",
+    "states": [
+      "7 % 2 = 1",
+      "7 % 3 = 1",
+      "7 % 4 = 3",
+      "7 % 5 = 2",
+      "7 % 6 = 1"
+    ]
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué hace primo()",
+      "explanation": "Busca si n tiene algún divisor entre 2 y n-1. Si encuentra uno, no es primo."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "Ningún número entre 2 y 6 divide exactamente a 7."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "for(int i=2;i<n;i++)",
+          "explanation": "Prueba divisores desde 2 hasta n-1.",
+          "label": "PROBAR"
+        },
+        {
+          "code": "if(n%i==0)return false;",
+          "explanation": "Un divisor exacto basta para saber que no es primo.",
+          "label": "DESCARTAR"
+        },
+        {
+          "code": "return n>1;",
+          "explanation": "Si no hay divisores, solo queda excluir cero, uno y negativos.",
+          "label": "CONFIRMAR"
+        }
+      ]
+    }
+  },
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "if(n%i____0)return false;",
+      "answer": "==",
+      "reason": "Ningún número entre 2 y 6 divide exactamente a 7."
+    }
+  ]
 }

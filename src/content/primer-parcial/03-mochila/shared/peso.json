@@ -32,5 +32,107 @@
     "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
     "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
   },
-  "canonicalSource": "ExamenVargas.java"
+  "canonicalSource": "ExamenVargas.java",
+  "logic": {
+    "idea": "Suma el atributo peso de cada Objeto que está dentro de la lista.",
+    "goldenRule": "recorro objetos y acumulo x.peso",
+    "anchors": [
+      {
+        "id": "helper-1",
+        "label": "INICIAR",
+        "code": "int s=0;",
+        "memory": "Empieza con peso total cero."
+      },
+      {
+        "id": "helper-2",
+        "label": "ACUMULAR",
+        "code": "for(Objeto x:L)s+=x.peso;",
+        "memory": "Recorre objetos y suma su atributo peso."
+      },
+      {
+        "id": "helper-3",
+        "label": "DEVOLVER",
+        "code": "return s;",
+        "memory": "Devuelve el peso total."
+      }
+    ]
+  },
+  "teachingExample": {
+    "input": [
+      {
+        "peso": 2
+      },
+      {
+        "peso": 5
+      }
+    ],
+    "output": 7,
+    "caption": "Suma el peso de los objetos; no su tamaño ni su cantidad.",
+    "states": [
+      "s = 0",
+      "s = 2",
+      "s = 7"
+    ]
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué hace peso()",
+      "explanation": "Suma el atributo peso de cada Objeto que está dentro de la lista."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "Suma el peso de los objetos; no su tamaño ni su cantidad."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "int s=0;",
+          "explanation": "Empieza con peso total cero.",
+          "label": "INICIAR"
+        },
+        {
+          "code": "for(Objeto x:L)s+=x.peso;",
+          "explanation": "Recorre objetos y suma su atributo peso.",
+          "label": "ACUMULAR"
+        },
+        {
+          "code": "return s;",
+          "explanation": "Devuelve el peso total.",
+          "label": "DEVOLVER"
+        }
+      ]
+    }
+  },
+  "criticalFragments": [
+    {
+      "id": "helper-1",
+      "anchor": "helper-1",
+      "expected": "int s=0;",
+      "concept": "iniciar",
+      "errorMessage": "Empieza con peso total cero."
+    },
+    {
+      "id": "helper-2",
+      "anchor": "helper-2",
+      "expected": "for(Objeto x:L)s+=x.peso;",
+      "concept": "acumular",
+      "errorMessage": "Recorre objetos y suma su atributo peso."
+    },
+    {
+      "id": "helper-3",
+      "anchor": "helper-3",
+      "expected": "return s;",
+      "concept": "devolver",
+      "errorMessage": "Devuelve el peso total."
+    }
+  ],
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "for(Objeto x:L)s+=x.____;",
+      "answer": "peso",
+      "reason": "Suma el peso de los objetos; no su tamaño ni su cantidad."
+    }
+  ]
 }

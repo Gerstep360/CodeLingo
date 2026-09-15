@@ -1,3 +1,4 @@
+import { accountStorage } from '../account/accountStorage';
 import { useRef, useState } from 'react';
 import { codeTokens } from '../components/training/trainingSequence';
 
@@ -26,7 +27,7 @@ export function useTrainingTyping(target, options = null) {
   const [value, setValue] = useState(() => {
     if (!storageKey) return '';
     try {
-      return localStorage.getItem(storageKey) || '';
+      return accountStorage.getItem(storageKey) || '';
     } catch {
       return '';
     }
@@ -59,9 +60,9 @@ export function useTrainingTyping(target, options = null) {
     if (storageKey) {
       try {
         if (next) {
-          localStorage.setItem(storageKey, next);
+          accountStorage.setItem(storageKey, next);
         } else {
-          localStorage.removeItem(storageKey);
+          accountStorage.removeItem(storageKey);
         }
       } catch {}
     }
@@ -81,7 +82,7 @@ export function useTrainingTyping(target, options = null) {
 
   function clearDraft() {
     if (storageKey) {
-      try { localStorage.removeItem(storageKey); } catch {}
+      try { accountStorage.removeItem(storageKey); } catch {}
     }
   }
 

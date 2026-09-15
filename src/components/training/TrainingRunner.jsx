@@ -1,3 +1,4 @@
+import { accountStorage } from '../../account/accountStorage';
 import { useEffect, useRef, useState } from 'react';
 import { X, Volume2, VolumeX, Trophy, Moon, Sun, Zap, ChevronLeft } from 'lucide-react';
 import { readProgress, saveAttempt, stageXp } from '../../learning/progress';
@@ -56,7 +57,7 @@ function TrainingSession({ classData, lessonData, masteryData = {}, onClose, onC
   const [record, setRecord] = useState(initialMastery);
   const [results, setResults] = useState(() => {
     try {
-      const saved = JSON.parse(localStorage.getItem(sessionKey) || 'null');
+      const saved = JSON.parse(accountStorage.getItem(sessionKey) || 'null');
       return saved?.signature === signature && Array.isArray(saved.results) && saved.results.length <= sequence.length
         ? saved.results : [];
     } catch { return []; }
@@ -86,7 +87,7 @@ function TrainingSession({ classData, lessonData, masteryData = {}, onClose, onC
   useEffect(() => { panel.current?.focus(); panel.current?.scrollTo(0, 0); }, [index]);
 
   useEffect(() => {
-    try { localStorage.setItem(sessionKey, JSON.stringify({ signature, results })); } catch { /* Storage may be unavailable. */ }
+    try { accountStorage.setItem(sessionKey, JSON.stringify({ signature, results })); } catch { /* Storage may be unavailable. */ }
   }, [sessionKey, signature, results]);
 
   // Limpiar timer de toast al desmontar
@@ -134,7 +135,7 @@ function TrainingSession({ classData, lessonData, masteryData = {}, onClose, onC
     if (completed.current) return;
     completed.current = true;
     try {
-      localStorage.removeItem(sessionKey);
+      accountStorage.removeItem(sessionKey);
       duoStorage.clearActiveLesson();
       duoStorage.clearLessonDrafts(lessonData.id);
     } catch { /* Optional persistence. */ }

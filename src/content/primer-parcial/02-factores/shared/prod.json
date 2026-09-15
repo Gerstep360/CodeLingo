@@ -23,6 +23,20 @@
       "expected": "int p=1;",
       "concept": "product-identity",
       "errorMessage": "El producto debe empezar en 1, no en 0."
+    },
+    {
+      "id": "helper-2",
+      "anchor": "helper-2",
+      "expected": "for(int x:L)p*=x;",
+      "concept": "multiplicar",
+      "errorMessage": "Multiplica el acumulador por cada elemento."
+    },
+    {
+      "id": "helper-3",
+      "anchor": "helper-3",
+      "expected": "return p;",
+      "concept": "devolver",
+      "errorMessage": "Entrega el producto total."
     }
   ],
   "trainingSequence": [
@@ -40,5 +54,82 @@
     "beforeCode": "Primero mostrar un ejemplo pequeño con valores concretos. Después recorrer el código línea por línea.",
     "practiceRule": "No pedir recall del auxiliar hasta que el alumno haya visto al menos un ejemplo ejecutado."
   },
-  "canonicalSource": "ExamenVargas.java"
+  "canonicalSource": "ExamenVargas.java",
+  "logic": {
+    "idea": "Recorre L y multiplica todos sus números en p. Empieza en 1 porque 1 es el neutro del producto.",
+    "goldenRule": "producto empieza en 1",
+    "anchors": [
+      {
+        "id": "helper-1",
+        "label": "INICIAR",
+        "code": "int p=1;",
+        "memory": "El producto comienza en uno, no en cero."
+      },
+      {
+        "id": "helper-2",
+        "label": "MULTIPLICAR",
+        "code": "for(int x:L)p*=x;",
+        "memory": "Multiplica el acumulador por cada elemento."
+      },
+      {
+        "id": "helper-3",
+        "label": "DEVOLVER",
+        "code": "return p;",
+        "memory": "Entrega el producto total."
+      }
+    ]
+  },
+  "teachingExample": {
+    "input": [
+      2,
+      3,
+      4
+    ],
+    "output": 24,
+    "caption": "Empieza en 1. Multiplica por 2, por 3 y por 4.",
+    "states": [
+      "p = 1",
+      "p = 2",
+      "p = 6",
+      "p = 24"
+    ]
+  },
+  "teachBeforePractice": {
+    "chapter1_meaning": {
+      "title": "Qué hace prod()",
+      "explanation": "Recorre L y multiplica todos sus números en p. Empieza en 1 porque 1 es el neutro del producto."
+    },
+    "chapter3_example": {
+      "title": "Míralo con un ejemplo",
+      "explanation": "Empieza en 1. Multiplica por 2, por 3 y por 4."
+    },
+    "chapter5_lineByLine": {
+      "title": "Construye la idea, bloque a bloque",
+      "lines": [
+        {
+          "code": "int p=1;",
+          "explanation": "El producto comienza en uno, no en cero.",
+          "label": "INICIAR"
+        },
+        {
+          "code": "for(int x:L)p*=x;",
+          "explanation": "Multiplica el acumulador por cada elemento.",
+          "label": "MULTIPLICAR"
+        },
+        {
+          "code": "return p;",
+          "explanation": "Entrega el producto total.",
+          "label": "DEVOLVER"
+        }
+      ]
+    }
+  },
+  "microDrills": [
+    {
+      "type": "fill-token",
+      "prompt": "int p=____;",
+      "answer": "1",
+      "reason": "Empieza en 1. Multiplica por 2, por 3 y por 4."
+    }
+  ]
 }

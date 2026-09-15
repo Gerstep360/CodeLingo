@@ -1,3 +1,4 @@
+import HelperLessons from './HelperLessons';
 import React, { useState, useEffect } from 'react';
 import { Star, Check, Lock, Zap, Sparkles, Play, Brain, BookOpen } from 'lucide-react';
 import { DUO_UNITS, getNodeLockStatus } from '../../data/duoLessonsData';
@@ -151,36 +152,8 @@ export function DuoLearningPath({
               {/* =======================================================
                   NIVEL 0: AUXILIARES (shared) — ANTES del base
                   ======================================================= */}
-              {sharedNodes.length > 0 && (
-                <div className="hierarchy-level level-shared">
-                  <div className="level-tag level-tag-shared">NIVEL 0: AUXILIARES — aprende primero</div>
-                  <div className="shared-nodes-row">
-                    {sharedNodes.map((sNode) => (
-                      <div key={sNode.id} className="shared-cell">
-                        <NodeItem
-                          node={sNode}
-                          completedNodeIds={completedNodeIds}
-                          activeNodeId={activeNodeId}
-                          onNodeClick={handleNodeClick}
-                          selectedNode={selectedNode}
-                          lockTooltipNode={lockTooltipNode}
-                          onCloseModal={() => {
-                            setSelectedNode(null);
-                            setLockTooltipNode(null);
-                          }}
-                          onStartLesson={onStartLesson}
-                          badgeText="AUX"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  {/* Conector hacia abajo */}
-                  <div className="tree-connector-stem">
-                    <div className="stem-line" />
-                  </div>
-                </div>
-              )}
-
+              <HelperLessons compact helpers={unit.sharedHelpers} nodes={sharedNodes} completedNodeIds={completedNodeIds} onStart={onStartLesson}/>
+              
               {/* =======================================================
                   NIVEL 1: ALGORITMO BASE
                   ======================================================= */}
