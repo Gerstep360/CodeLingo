@@ -1,3 +1,76 @@
- .account-page{max-width:640px;margin:0 auto;padding:54px 28px 100px;color:var(--text-primary);width:100%;box-sizing:border-box}.account-emblem{width:76px;height:76px;border:2px solid var(--duo-blue,#1cb0f6);border-bottom-width:5px;background:var(--bg-subtle);color:var(--duo-blue,#1cb0f6);border-radius:24px;display:grid;place-items:center;margin-bottom:24px}.account-eyebrow{font-weight:800;font-size:12px;letter-spacing:1.3px;color:var(--text-secondary)}.account-page h1{font-size:34px;line-height:1.15;margin:12px 0 16px;letter-spacing:-.7px}.account-lead{color:var(--text-secondary);line-height:1.6;margin-bottom:30px;overflow-wrap:anywhere}.account-tabs{display:flex;border-bottom:2px solid var(--card-border);margin-bottom:26px}.account-tabs button{flex:1;padding:15px 8px;background:none;color:var(--text-secondary);border:0;border-bottom:3px solid transparent;font:inherit;font-weight:800;cursor:pointer}.account-tabs button[aria-pressed=true]{color:var(--duo-blue,#1cb0f6);border-bottom-color:var(--duo-blue,#1cb0f6)}.account-form{display:grid;gap:20px}.account-form label{display:grid;gap:8px;font-size:14px;font-weight:800}.account-form input{min-height:50px;padding:12px 16px;box-sizing:border-box;border:2px solid var(--card-border);border-radius:14px;background:var(--bg-main);color:var(--text-primary);font:inherit;width:100%}.account-page button:focus-visible,.account-form input:focus-visible{outline:3px solid #1cb0f6;outline-offset:3px}.account-page .duo-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;white-space:normal}.account-note{display:flex;align-items:center;gap:9px;font-size:12px;line-height:1.5;color:var(--text-secondary);margin-top:25px}.account-note svg,.account-error svg{flex-shrink:0}.account-summary,.account-migration,.account-conflict{border:2px solid var(--card-border);border-bottom-width:5px;border-radius:20px;padding:24px;margin:24px 0}.account-summary>div{display:flex;gap:12px;align-items:center}.account-summary p,.account-migration p,.account-conflict p{color:var(--text-secondary);line-height:1.6}.account-conflict{border-color:#ff9600}.account-conflict button{margin-top:12px;width:100%}.account-page h2{font-size:21px}.account-error{display:flex;align-items:center;gap:10px;padding:14px;background:var(--bg-subtle);border:2px solid #ff9600;border-radius:12px;line-height:1.5}.account-sync-notice{display:flex;align-items:center;justify-content:center;gap:8px;position:sticky;top:0;z-index:20;padding:10px 16px;font-size:13px;background:var(--bg-subtle);color:var(--text-primary);border-bottom:1px solid var(--card-border);text-decoration:none}.account-logout{margin-top:12px}@media(max-width:500px){.account-page{padding:30px 20px 110px}.account-page h1{font-size:29px}.account-summary,.account-migration,.account-conflict{padding:19px}}
-
-.account-sync-notice{position:fixed;top:auto;bottom:78px;right:16px;left:auto;max-width:340px;z-index:2000;border:2px solid var(--card-border);border-radius:14px;box-shadow:0 4px 0 var(--card-border)}
+ .account-page{max-width:640px;margin:0 auto;padding:54px 28px 100px;color:var(--text-primary);width:100%;box-sizing:border-box}.account-emblem{width:76px;height:76px;border:2px solid var(--duo-blue,#1cb0f6);border-bottom-width:5px;background:var(--bg-subtle);color:var(--duo-blue,#1cb0f6);border-radius:24px;display:grid;place-items:center;margin-bottom:24px}.account-eyebrow{font-weight:800;font-size:12px;letter-spacing:1.3px;color:var(--text-secondary)}.account-page h1{font-size:34px;line-height:1.15;margin:12px 0 16px;letter-spacing:-.7px}.account-lead{color:var(--text-secondary);line-height:1.6;margin-bottom:30px;overflow-wrap:anywhere}.account-tabs{display:flex;border-bottom:2px solid var(--card-border);margin-bottom:26px}.account-tabs button{flex:1;padding:15px 8px;background:none;color:var(--text-secondary);border:0;border-bottom:3px solid transparent;font:inherit;font-weight:800;cursor:pointer}.account-tabs button[aria-pressed=true]{color:var(--duo-blue,#1cb0f6);border-bottom-color:var(--duo-blue,#1cb0f6)}.account-form{display:grid;gap:20px}.account-form label{display:grid;gap:8px;font-size:14px;font-weight:800}.account-form input{min-height:50px;padding:12px 16px;box-sizing:border-box;border:2px solid var(--card-border);border-radius:14px;background:var(--bg-main);color:var(--text-primary);font:inherit;width:100%}.account-page button:focus-visible,.account-form input:focus-visible{outline:3px solid #1cb0f6;outline-offset:3px}.account-page .duo-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;white-space:normal}.account-note{display:flex;align-items:center;gap:9px;font-size:12px;line-height:1.5;color:var(--text-secondary);margin-top:25px}.account-note svg,.account-error svg{flex-shrink:0}.account-summary,.account-migration,.account-conflict{border:2px solid var(--card-border);border-bottom-width:5px;border-radius:20px;padding:24px;margin:24px 0}.account-summary>div{display:flex;gap:12px;align-items:center}.account-summary p,.account-migration p,.account-conflict p{color:var(--text-secondary);line-height:1.6}.account-conflict{border-color:#ff9600}.account-conflict button{margin-top:12px;width:100%}.account-page h2{font-size:21px}.account-error{display:flex;align-items:center;gap:10px;padding:14px;background:var(--bg-subtle);border:2px solid #ff9600;border-radius:12px;line-height:1.5}.account-sync-notice{display:flex;align-items:center;justify-content:center;gap:8px;position:sticky;top:0;z-index:20;padding:10px 16px;font-size:13px;background:var(--bg-subtle);color:var(--text-primary);border-bottom:1px solid var(--card-border);text-decoration:none}.account-logout{margin-top:12px}@media(max-width:500px){.account-page{padding:30px 20px 110px}.account-page h1{font-size:29px}.account-summary,.account-migration,.account-conflict{padding:19px}}
+
+.account-sync-notice{position:fixed;top:auto;bottom:78px;right:16px;left:auto;max-width:340px;z-index:2000;border:2px solid var(--card-border);border-radius:14px;box-shadow:0 4px 0 var(--card-border)}
+
+/* ?? Env badge ???????????????????????????????????? */
+.account-env-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: rgba(28, 176, 246, .1);
+  color: var(--duo-blue, #1cb0f6);
+  border: 1px solid rgba(28, 176, 246, .25);
+  margin-bottom: 20px;
+  letter-spacing: .02em;
+}
+
+/* ?? Status row ??????????????????????????????????? */
+.account-status-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* ?? Sync tip ????????????????????????????????????? */
+.account-sync-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  border: 1.5px solid var(--card-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.account-sync-tip code {
+  font-family: monospace;
+  background: rgba(255,255,255,.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* ?? Admin link ??????????????????????????????????? */
+.account-admin-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff !important;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 20px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity .15s;
+  width: 100%;
+  justify-content: center;
+}
+.account-admin-link:hover { opacity: .9; }
+
+/* ?? Spin animation ??????????????????????????????? */
+@keyframes account-spin { to { transform: rotate(360deg); } }
+.account-spin { animation: account-spin .9s linear infinite; }
+
+/* ?? Pulsing emblem ??????????????????????????????? */
+.account-emblem-pulse { animation: account-spin 1.2s linear infinite; }

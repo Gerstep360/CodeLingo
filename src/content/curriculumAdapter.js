@@ -342,8 +342,20 @@ export function getNodeLockStatus(nodeId, completedNodeIds = []) {
     return prevUnit.variantNodeIds.every((vId) => completedNodeIds.includes(vId));
   };
 
-  // Verificar si la unidad previa está aprobada (la Unidad 1 siempre está accesible)
   const unitIndex = unit.unitIndex - 1;
+
+  // Regla 0: Nodos Auxiliares (shared) — siempre desbloqueados, son preparacion opcional
+  if (node.nodeRole === 'shared') {
+    return { isLocked: false, isCompleted: false };
+  }
+
+  // Regla 1: Nodo Base — siempre desbloqueado (punto de entrada de cada clase).
+  // No requiere completar la clase anterior; cualquier usuario puede comenzar cualquier clase.
+  if (node.nodeRole === 'base') {
+    return { isLocked: false, isCompleted: false };
+  }
+
+  // Para variantes, speedrun y examen: la clase anterior debe estar completada.
   if (unitIndex > 0) {
     const prevUnit = DUO_UNITS[unitIndex - 1];
     if (!prevClassUnlocked(prevUnit)) {
@@ -352,16 +364,6 @@ export function getNodeLockStatus(nodeId, completedNodeIds = []) {
         reason: `Completa Base + Variantes de ${prevUnit.title} para desbloquear este tema.`
       };
     }
-  }
-
-  // Regla 0: Nodos Auxiliares (shared) — siempre desbloqueados, son preparacion opcional
-  if (node.nodeRole === 'shared') {
-    return { isLocked: false, isCompleted: false };
-  }
-
-  // Regla 1: Nodo Base
-  if (node.nodeRole === 'base') {
-    return { isLocked: false, isCompleted: false };
   }
 
   // Regla 2: Nodos Variantes (bloqueados hasta completar la Base de esta misma clase)

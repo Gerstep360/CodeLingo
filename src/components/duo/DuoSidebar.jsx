@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass, Zap, Terminal, BookOpen, Target, Moon, Sun, UserRound } from 'lucide-react';
+import { Compass, Zap, Terminal, BookOpen, Target, Moon, Sun, UserRound, ShieldCheck } from 'lucide-react';
 import { DuoOwlIcon, DuoFlameIcon, DuoTrophyIcon } from './DuoIcons';
 
 export function DuoSidebar({
@@ -8,7 +8,8 @@ export function DuoSidebar({
   streak = 4,
   totalXp = 120,
   theme = 'dark',
-  onToggleTheme
+  onToggleTheme,
+  isAdmin = false,
 }) {
   const navItems = [
     { id: 'account', label: 'Mi cuenta', icon: UserRound, badge: null },
@@ -17,6 +18,7 @@ export function DuoSidebar({
     { id: 'flash', label: 'Test Flash', icon: Zap, badge: '10 Q' },
     { id: 'editor', label: 'Taller Java', icon: Terminal, badge: 'Java' },
     { id: 'cheatsheet', label: 'Guía Mental', icon: BookOpen, badge: 'Vargas' },
+    ...(isAdmin ? [{ id: 'admin', label: 'Admin', icon: ShieldCheck, badge: null }] : []),
   ];
 
   return (

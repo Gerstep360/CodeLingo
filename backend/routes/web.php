@@ -1,6 +1,8 @@
 <?php
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProgressController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // JSON-only endpoints with Laravel's session and CSRF middleware.
@@ -12,5 +14,14 @@ Route::prefix('api')->middleware('throttle:api-requests')->group(function () {
         Route::post('logout', [AccountController::class, 'logout']);
         Route::get('progress', [ProgressController::class, 'show']);
         Route::put('progress', [ProgressController::class, 'update']);
+
+        // Rutas de administración — solo para is_admin = true.
+        Route::prefix('admin')->group(function () {
+            Route::get('users', [AdminController::class, 'users']);
+            Route::get('users/{id}/progress', [AdminController::class, 'userProgress']);
+            Route::put('users/{id}/progress', [AdminController::class, 'setUserProgress']);
+            Route::delete('users/{id}/progress', [AdminController::class, 'resetUserProgress']);
+            Route::patch('users/{id}', [AdminController::class, 'updateUser']);
+        });
     });
 });
