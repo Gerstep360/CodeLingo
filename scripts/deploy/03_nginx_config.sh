@@ -44,6 +44,8 @@ main() {
 EOF
     fi
     # Nginx sirve directo del repo (root-owned) — solo necesita permisos de lectura.
+    # chmod o+x en los directorios padre permite que www-data traverse hasta dist/.
+    sudo chmod o+x /root /root/app /root/app/CodeLingo 2>/dev/null || true
     sudo chmod -R 755 "$TARGET_DIR/dist"
 
     # 2. Recolectar todas las configuraciones activas (sites-enabled, conf.d y donde mencione taji)

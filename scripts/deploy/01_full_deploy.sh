@@ -8,8 +8,10 @@ cd "$ROOT"
 "$NPM_BIN" run validate:content
 "$NPM_BIN" test
 VITE_BASE_PATH=/CodeLingo/ "$NPM_BIN" run build
-# Nginx sirve directo de $ROOT/dist — no hay copia a /var/www.
-# Solo permisos para que www-data pueda leer los archivos estaticos.
+
+# Nginx (www-data) necesita permiso de traversal hasta el dist.
+# chmod o+x solo agrega la bandera de ejecucion (entrar al dir), no lectura del listing.
+sudo chmod o+x /root /root/app /root/app/CodeLingo 2>/dev/null || true
 sudo find "$ROOT/dist" -type d -exec chmod 755 {} +
 sudo find "$ROOT/dist" -type f -exec chmod 644 {} +
 echo "Frontend compilado en $ROOT/dist"
