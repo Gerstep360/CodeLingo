@@ -11,6 +11,51 @@ import { AccountScreen } from './AccountScreen';
 
 import { AccountContext as Context } from './AccountContext';
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers: contar nodos completados en un objeto de valores
+// ─────────────────────────────────────────────────────────────────────────────
+function countNodes(values) {
+  try {
+    const raw = values?.vargas_duo_completed ?? values?.['vargas_duo_completed'];
+    if (!raw) return 0;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+// Combina dos sets de progreso: une los nodos completados y toma el máximo de XP.
+// Para claves que no son nodos/xp, gana el valor local (más reciente por defecto).
+function mergeProgress(localValues, remoteValues) {
+  const merged = { ...remoteValues, ...localValues };
+
+  // Unir nodos completados (union de ambos arrays)
+  try {
+    const localNodes  = new Set(JSON.parse(localValues?.vargas_duo_completed  || '[]'));
+    const remoteNodes = new Set(JSON.parse(remoteValues?.vargas_duo_completed || '[]'));
+    const union = [...new Set([...localNodes, ...remoteNodes])];
+    merged.vargas_duo_completed = JSON.stringify(union);
+  } catch { /* si algo falla, queda el local */ }
+
+  // XP: tomar el mayor
+  try {
+    const lxp = parseInt(localValues?.vargas_duo_xp  || '0', 10);
+    const rxp = parseInt(remoteValues?.vargas_duo_xp || '0', 10);
+    merged.vargas_duo_xp = String(Math.max(lxp, rxp));
+  } catch { /* queda local */ }
+
+  // Racha: tomar la mayor
+  try {
+    const ls = parseInt(localValues?.vargas_duo_streak  || '0', 10);
+    const rs = parseInt(remoteValues?.vargas_duo_streak || '0', 10);
+    merged.vargas_duo_streak = String(Math.max(ls, rs));
+  } catch { /* queda local */ }
+
+  return merged;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 export function AccountProvider({ children }) {
 
   useTheme();
@@ -32,7 +77,7 @@ export function AccountProvider({ children }) {
 
     try { localStorage.setItem(pendingKey(c.user.id), JSON.stringify({ revision: c.revision, values: accountStorage.snapshot() })); }
 
-    catch { setError('No se pudo crear la copia de recuperaciÃ³n. MantÃ©n esta pestaÃ±a abierta hasta guardar.'); }
+    catch { setError('No se pudo crear la copia de recuperacion. Mantén esta pestaña abierta hasta guardar.'); }
 
   }
 
@@ -76,25 +121,77 @@ export function AccountProvider({ children }) {
 
   }
 
+  // ─── activate: el núcleo de la sincronización inteligente ─────────────────
+  // Regla: gana quien tenga MÁS nodos completados. Si hay empate, se fusionan.
+  // Si local gana → se sube al servidor automáticamente (forzando la revisión
+  // del servidor para evitar el 409).
   async function activate(account) {
 
     setAccountId(account.id);
 
     const remote = await api('progress');
 
+    // Leer progreso local pendiente (si existe de una sesión anterior sin subir)
     let cached = null;
+    try {
+      cached = JSON.parse(localStorage.getItem(pendingKey(account.id)) || 'null');
+      if (cached) validateValues(cached.values);
+    } catch { cached = null; }
 
-    try { cached = JSON.parse(localStorage.getItem(pendingKey(account.id)) || 'null'); if (cached) validateValues(cached.values); } catch { cached = null; }
+    const localValues  = cached?.values ?? {};
+    const remoteValues = remote.values ?? {};
 
-    accountStorage.hydrate(cached?.values || remote.values);
+    const localCount  = countNodes(localValues);
+    const remoteCount = countNodes(remoteValues);
 
-    current.current = { user: account, revision: remote.revision, generation: 0, dirty: !!cached, busy: false, conflict: !!cached && cached.revision !== remote.revision };
+    let finalValues;
+    let needsUpload = false;
 
-    setConflict(current.current.conflict ? remote : null);
+    if (localCount === 0 && remoteCount === 0) {
+      // Sin progreso en ningún lado → vacío, no subir nada
+      finalValues  = remoteValues;
+      needsUpload  = false;
 
-    setUser(account); setStatus(cached ? 'pending' : 'saved'); setError(''); setEpoch(e => e + 1);
+    } else if (localCount === 0) {
+      // Solo el servidor tiene progreso → bajar del servidor
+      finalValues = remoteValues;
+      needsUpload = false;
 
-    if (cached && !current.current.conflict) await flush();
+    } else if (remoteCount === 0) {
+      // Solo local tiene progreso → subir al servidor
+      finalValues = localValues;
+      needsUpload = true;
+
+    } else {
+      // Ambos tienen progreso → fusionar (union de nodos, max de XP)
+      finalValues = mergeProgress(localValues, remoteValues);
+      // Subir si el merge tiene más nodos que el servidor
+      needsUpload = countNodes(finalValues) > remoteCount;
+    }
+
+    accountStorage.hydrate(finalValues);
+
+    // Usar la revisión del servidor como base para poder subir sin 409
+    current.current = {
+      user:       account,
+      revision:   remote.revision,
+      generation: 0,
+      dirty:      needsUpload,
+      busy:       false,
+      conflict:   false,
+    };
+
+    setConflict(null);
+    setUser(account);
+    setStatus(needsUpload ? 'pending' : 'saved');
+    setError('');
+    setEpoch(e => e + 1);
+
+    // Si necesitamos subir, hacerlo de inmediato
+    if (needsUpload) {
+      preserve();
+      await flush();
+    }
 
   }
 
@@ -154,7 +251,7 @@ export function AccountProvider({ children }) {
 
     await flush();
 
-    if (current.current.dirty) throw new Error('Hay cambios sin guardar. Resuelve la sincronizaciÃ³n antes de salir.');
+    if (current.current.dirty) throw new Error('Hay cambios sin guardar. Resuelve la sincronizacion antes de salir.');
 
     await api('logout', { method: 'POST' });
 
@@ -166,10 +263,7 @@ export function AccountProvider({ children }) {
 
     if (current.current.busy) return;
 
-    await flush();
-
-    if (current.current.dirty) return;
-
+    // Obtener el estado actual del servidor y volver a aplicar la lógica de merge
     await activate(current.current.user);
 
   }
@@ -192,11 +286,11 @@ export function AccountProvider({ children }) {
 
   async function migrate() {
 
-    if (Object.keys(accountStorage.snapshot()).length) throw new Error('La cuenta ya tiene progreso. La migraciÃ³n inicial solo estÃ¡ disponible en una cuenta vacÃ­a.');
+    if (Object.keys(accountStorage.snapshot()).length) throw new Error('La cuenta ya tiene progreso. La migracion inicial solo esta disponible en una cuenta vacia.');
 
     const old = legacyProgress();
 
-    if (!Object.keys(old).length) throw new Error('No se encontrÃ³ progreso anterior en este navegador.');
+    if (!Object.keys(old).length) throw new Error('No se encontro progreso anterior en este navegador.');
 
     accountStorage.hydrate(old); current.current.dirty = true; current.current.generation++; preserve(); await flush(); setEpoch(e => e + 1);
 
@@ -207,4 +301,3 @@ export function AccountProvider({ children }) {
   return <Context.Provider value={value}>{!user ? <AccountScreen /> : <div key={`${user.id}:${epoch}`}>{children}</div>}</Context.Provider>;
 
 }
-
