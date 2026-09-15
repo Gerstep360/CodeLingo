@@ -5,7 +5,7 @@
 
 # Variables de entorno y rutas globales
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TARGET_DIR="/var/www/CodeLingo"
+TARGET_DIR="/root/app/CodeLingo"
 SNIPPET_DEST="/etc/nginx/snippets/codelingo.conf"
 SERVER_IP="167.86.106.105"
 

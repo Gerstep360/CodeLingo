@@ -8,23 +8,15 @@ cd "$ROOT"
 "$NPM_BIN" run validate:content
 "$NPM_BIN" test
 VITE_BASE_PATH=/CodeLingo/ "$NPM_BIN" run build
+# Nginx sirve directo de $ROOT/dist — no hay copia a /var/www.
+# Solo permisos para que www-data pueda leer los archivos estaticos.
+sudo find "$ROOT/dist" -type d -exec chmod 755 {} +
+sudo find "$ROOT/dist" -type f -exec chmod 644 {} +
+echo "Frontend compilado en $ROOT/dist"
 
-# ── 1. Frontend: copiar a produccion PRIMERO (independiente del API) ──────────
-# Hacerlo antes del deploy de Laravel evita que un fallo de PHP deje el
-# frontend viejo en produccion. Los assets con hash son inmutables; el
-# index.html se reemplaza al final para que las pestanas abiertas no rompan.
-sudo mkdir -p "$TARGET_DIR/dist"
-if [[ "$(realpath "$ROOT/dist")" != "$(realpath -m "$TARGET_DIR/dist")" ]]; then
-    sudo rsync -a --exclude=index.html "$ROOT/dist/" "$TARGET_DIR/dist/"
-    sudo install -m 644 "$ROOT/dist/index.html" "$TARGET_DIR/dist/index.html"
-fi
-sudo find "$TARGET_DIR/dist" -type d -exec chmod 755 {} +
-sudo find "$TARGET_DIR/dist" -type f -exec chmod 644 {} +
-echo "Frontend copiado a $TARGET_DIR/dist"
-
-# ── 2. API Laravel: desplegar codigo y correr migraciones ────────────────────
+# API Laravel
 bash "$ROOT/scripts/deploy/11_deploy_api.sh"
 
-# ── 3. Nginx: recargar configuracion ─────────────────────────────────────────
+# Recargar Nginx con config actualizada
 bash "$ROOT/scripts/deploy/03_nginx_config.sh"
 echo "Actualizado: https://$SERVER_IP/CodeLingo/"

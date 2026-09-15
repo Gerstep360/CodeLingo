@@ -43,9 +43,7 @@ main() {
 </html>
 EOF
     fi
-    if id "www-data" >/dev/null 2>&1; then
-        sudo chown -R www-data:www-data "$TARGET_DIR/dist" 2>/dev/null || true
-    fi
+    # Nginx sirve directo del repo (root-owned) — solo necesita permisos de lectura.
     sudo chmod -R 755 "$TARGET_DIR/dist"
 
     # 2. Recolectar todas las configuraciones activas (sites-enabled, conf.d y donde mencione taji)
